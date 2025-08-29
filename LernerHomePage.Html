@@ -1,5 +1,239 @@
 <DOCTYPE html>
-    <head>
-        <meta charset="utf-8">
-        <title>HOME PAGE</title>
-    </head>
+
+    <html>
+        <head>
+              <style>
+                :root{
+  --brand:#2563eb;/* sapphire blue */
+  --brand-600:#1d4ed8;
+  --accent:#14b8a6;/* teal */
+  --bg:#f8fafc;/* slate-50 */
+  --text:#0f172a;/* slate-900 */
+  --muted:#64748b;/* slate-500 */
+  --card:#ffffff;
+  --ring: rgba(37,99,235,.2);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1100px;margin:0 auto;padding:24px}
+.header{background:linear-gradient(90deg,var(--brand),var(--accent));color:white}
+.header .container{display:flex;align-items:center;justify-content:space-between;padding:16px 24px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+.logo-mark{width:36px;height:36px;border-radius:12px;background:white;color:var(--brand);display:grid;place-items:center;font-weight:900}
+.nav a{color:white;margin-left:16px;font-weight:600;opacity:.95}
+.nav a:hover{opacity:1}
+.main{padding:24px}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:900px){.grid{grid-template-columns: 1.2fr .8fr}}
+.card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,.06);border:1px solid #e5e7eb}
+.card h2{margin:0 0 10px 0;font-size:1.1rem}
+.card .muted{color:var(--muted);font-size:.92rem}
+.user{display:flex;gap:16px;align-items:center}
+.avatar{width:60px;height:60px;border-radius:50%;overflow:hidden;border:3px solid var(--ring);background:#eef2ff;display:grid;place-items:center}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#eff6ff;color:var(--brand);font-weight:700;font-size:.75rem}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:12px 10px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}
+.table th{font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:2px;padding:2px 6px;border-radius:6px}
+.btn{appearance:none;border:0;background:var(--brand);color:white;font-weight:700;padding:10px 14px;border-radius:12px;box-shadow:0 8px 20px rgba(37,99,235,.25);cursor:pointer}
+.btn:hover{background:var(--brand-600)}
+.btn-outline{background:white;color:var(--brand);border:2px solid var(--brand)}
+.input,.select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;background:white}
+label{font-weight:600;font-size:.92rem;margin-bottom:6px;display:block}
+.row{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:700px){.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:repeat(3,1fr)}}
+.helper{font-size:.85rem;color:var(--muted)}
+.footer{padding:24px;text-align:center;color:var(--muted)}
+.status{font-weight:800}
+.status.pending{color:#a16207}
+.status.approved{color:#15803d}
+.status.disapproved{color:#b91c1c}
+.tag{display:inline-block;background:#f1f5f9;border:1px solid #e2e8f0;padding:4px 8px;border-radius:999px;font-size:.8rem;margin-right:8px}
+.right{display:flex;justify-content:flex-end}
+.inline{display:flex;align-items:center;gap:10px}
+.filterbar{display:flex;gap:10px;align-items:center;margin:6px 0 10px 0}
+.small{font-size:.9rem;color:var(--muted)}
+.comment{padding:14px;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:12px;background:white}
+.comment .meta{font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.star{font-size:18px}
+hr{border:0;border-top:1px solid #e5e7eb;margin:12px 0}
+
+
+avatar_svg = data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>
+  <rect width='120' height='120' rx='20' fill='%232563eb' />
+  <circle cx='60' cy='46' r='22' fill='white'/>
+  <rect x='18' y='74' width='84' height='30' rx='15' fill='white'/>
+</svg>
+              </style>
+            <meta charset="utf-8">
+            <title>HOME PAGE</title>
+        </head>
+        <body>
+                    <header class="header">
+        <div class="container">
+            <div class="logo-mark"><img src="logo.png" alt="logo" width="30"></div>
+            <div>CodeLand <span class="badge">IT</span></div>
+            <nav class="nav">
+            <a href="learner-home.html">Home</a>
+            <a href="recommend-question.html">Recommend Question</a>
+            <a href="comments.html">Comments</a>
+            <a href="index.html">Sign out</a>
+            </nav>
+        </div>
+        </header>
+
+        <main class="container main">
+        <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName">Sara</span> 👋</h1>
+        <p class="small">This is your learner dashboard. Browse quizzes, track your suggested questions, and keep learning.</p>
+
+        <div class="grid">
+            <!-- Left column -->
+            <section class="card">
+            <h2>Your Info</h2>
+            <div class="user">
+                <div class="avatar"><img src="{avatar_svg}" alt="Profile"/></div>
+                <div>
+                <div><strong id="fullName">Sara Al-Qahtani</strong></div>
+                <div class="muted">sara@example.edu</div>
+                <div style="margin-top:6px">
+                    <span class="tag">Learner</span>
+                    <span class="tag">CS · Level 6</span>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- Right column -->
+            <section class="card">
+            <h2>Quick Actions</h2>
+            <div class="row row-2">
+                <a class="btn" href="recommend-question.html">+ Recommend a Question</a>
+                <a class="btn btn-outline" href="comments.html">View Quiz Comments</a>
+            </div>
+            </section>
+        </div>
+
+        <section class="card" style="margin-top:16px">
+            <div class="inline" style="justify-content:space-between">
+            <h2>Available Quizzes</h2>
+            <div class="filterbar">
+                <label for="topicFilter" class="small">Filter by topic</label>
+                <select id="topicFilter" class="select">
+                <option value="all">All Topics</option>
+                <option value="databases">Databases</option>
+                <option value="webdev">Web Development</option>
+                <option value="networks">Computer Networks</option>
+                </select>
+                <button class="btn" id="filterBtn" type="button">Filter</button>
+            </div>
+            </div>
+            <table class="table" id="quizzesTable">
+            <thead>
+                <tr><th>Topic</th><th>Educator</th><th># Questions</th><th>Take Quiz</th></tr>
+            </thead>
+            <tbody>
+                <tr data-topic="databases">
+                <td>Databases</td>
+                <td class="inline"><div class="avatar" style="width:36px;height:36px"><img src="{avatar_svg}" alt=""></div> Dr. Amal</td>
+                <td>12</td>
+                <td><a class="btn" href="take-quiz.html">Take Quiz</a></td>
+                </tr>
+                <tr data-topic="webdev">
+                <td>Web Development</td>
+                <td class="inline"><div class="avatar" style="width:36px;height:36px"><img src="{avatar_svg}" alt=""></div> Eng. Noura</td>
+                <td>0</td>
+                <td class="muted">—</td>
+                </tr>
+                <tr data-topic="networks">
+                <td>Computer Networks</td>
+                <td class="inline"><div class="avatar" style="width:36px;height:36px"><img src="{avatar_svg}" alt=""></div> Dr. Reem</td>
+                <td>8</td>
+                <td><a class="btn" href="take-quiz.html">Take Quiz</a></td>
+                </tr>
+            </tbody>
+            </table>
+            <p class="helper">Note: Filtering is coming in Phase 2.</p>
+        </section>
+
+        <section class="card" style="margin-top:16px">
+            <h2>Your Recommended Questions</h2>
+            <table class="table">
+            <thead>
+                <tr><th>Topic</th><th>Educator</th><th>Question</th><th>Status</th><th>Educator Comments</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>Databases</td>
+                <td class="inline"><div class="avatar" style="width:32px;height:32px"><img src="{avatar_svg}" alt=""></div> Dr. Amal</td>
+                <td>
+                    <div class="muted">Figure (optional)</div>
+                    <div><strong>Which SQL clause is used to filter rows before grouping?</strong></div>
+                    <ol style="margin:6px 0 0 18px">
+                    <li>ORDER BY</li>
+                    <li style="font-weight:800;background:#ecfeff;padding:2px 6px;border-radius:6px;display:inline-block">WHERE (Correct)</li>
+                    <li>GROUP BY</li>
+                    <li>HAVING</li>
+                    </ol>
+                </td>
+                <td><span class="status approved">Approved</span></td>
+                <td>Nice! Added to Chapter 3 quiz.</td>
+                </tr>
+                <tr>
+                <td>Web Development</td>
+                <td class="inline"><div class="avatar" style="width:32px;height:32px"><img src="{avatar_svg}" alt=""></div> Eng. Noura</td>
+                <td>
+                    <div><strong>Which HTML element is semantic?</strong></div>
+                    <ol style="margin:6px 0 0 18px">
+                    <li>div</li>
+                    <li>span</li>
+                    <li style="font-weight:800;background:#ecfeff;padding:2px 6px;border-radius:6px;display:inline-block">header (Correct)</li>
+                    <li>b</li>
+                    </ol>
+                </td>
+                <td><span class="status pending">Pending</span></td>
+                <td class="muted">—</td>
+                </tr>
+                <tr>
+                <td>Computer Networks</td>
+                <td class="inline"><div class="avatar" style="width:32px;height:32px"><img src="{avatar_svg}" alt=""></div> Dr. Reem</td>
+                <td>
+                    <div><strong>Which device operates at OSI Layer 3?</strong></div>
+                    <ol style="margin:6px 0 0 18px">
+                    <li>Switch</li>
+                    <li style="font-weight:800;background:#fee2e2;padding:2px 6px;border-radius:6px;display:inline-block">Hub (Marked Correct)</li>
+                    <li>Repeater</li>
+                    <li>Router</li>
+                    </ol>
+                </td>
+                <td><span class="status disapproved">Disapproved</span></td>
+                <td>Correct answer should be <span class="kbd">Router</span>.</td>
+                </tr>
+            </tbody>
+            </table>
+            <div class="right" style="margin-top:10px">
+            <a class="btn" href="recommend-question.html">Recommend another question</a>
+            </div>
+        </section>
+        </main>
+
+        <footer class="footer small">
+        © 2025 QuizLoop · Front-end prototype
+        </footer>
+
+        <script>
+        // Dummy filter interaction (no real data change in Phase 1)
+        document.getElementById('filterBtn').addEventListener('click', function () {{
+        const val = document.getElementById('topicFilter').value;
+        const rows = document.querySelectorAll('#quizzesTable tbody tr');
+        rows.forEach(r => {{
+            if(val === 'all') r.style.display = '';
+            else r.style.display = (r.dataset.topic === val) ? '' : 'none';
+        }});
+        }});
+        </script>
+        </body>
+    </html>
