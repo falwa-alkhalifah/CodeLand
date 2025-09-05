@@ -1,0 +1,68 @@
+
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;  
+  max-width: 1200px;
+  margin: 50px auto;
+  background: #FFFFFF;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.text-side {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+}
+
+.image-side {
+  width: 100%;
+  height: 100%;  
+}
+
+.image-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  
+}
+.form-side {
+  padding: 40px;
+   display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #3D1308;
+}
+
+form input, form select {
+  padding: 10px;
+  border: 1px solid #9F2042;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Hide unused */
+.hidden {
+  display: none;
+}
+
+/* Button group */
+.btn-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
