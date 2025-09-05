@@ -125,6 +125,12 @@
         .quizzes-container a:hover {
         background: #a87f7f;
         }
+        
+        .quizzes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
 
 
@@ -153,17 +159,20 @@
                 </div>
             </div>
             </div>
-
+<!-- --------------------first table --------------------------->
             <div class="quizzes-container">
+                <div class="quizzes-header">
                 <h2>All Available Quizzes</h2>
-                    <label for="topicFilter">Filter by topic</label>
+                <div class="filter-controls">
                     <select id="topicFilter">
-                    <option value="all">All Topics</option>
-                    <option value="databases">Databases</option>
-                    <option value="webdev">Web Development</option>
-                    <option value="networks">Computer Networks</option>
+                        <option value="all">All Topics</option>
+                        <option value="databases">Databases</option>
+                        <option value="webdev">Web Development</option>
+                        <option value="networks">Computer Networks</option>
                     </select>
                     <button class="btn" id="filterBtn" type="button">Filter</button>
+                </div>
+            </div>
                 <table>
                     <thead>
                         <tr>
@@ -194,7 +203,7 @@
                             <td><a href="#">Take Quiz</a></td>
                         </tr>
                         <tr>
-                            <td>Databases</BAse></td>
+                            <td>Databases</td>
                             <td>
                                 dr.nora <br>
                                 <img src="images/user.png" alt="" style="width: 20px;">
@@ -205,10 +214,88 @@
                     </tbody>
                 </table>
             </div>
-            </div>
+<!-- --------------------Second table --------------------------->
+          <div class="quizzes-container">
+                <div class="quizzes-header">
+                <h2>Recomended Questions</h2>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Educator</th>
+                            <th>Question</th>
+                            <th>Status</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Computer Networks</td>
+                            <td>
+                                dr.lama <br>
+                                <img src="images/user.png" alt="" style="width: 20px;">
+                            </td> 
+                            <td>
+                                <strong>Which device operates at OSI Layer 3?</strong>
+                                <ol>
+                                    <li>Switch</li>
+                                    <li style="font-weight:800;background:#e26e6e;padding:2px 6px;border-radius:6px;display:inline-block">Hub</li>
+                                    <li>Repeater</li>
+                                    <li>Router</li>
+                                </ol>
+                            </td>
+                            <td>Disapproved <span style='width:15px;'>&#10060;</span></td>
+                            <td>Router !</td>
+                        </tr>
 
-        
-        </main>
+                        <tr>
+                            <td>web Development</td>
+                            <td>
+                                dr.lama <br>
+                                <img src="images/user.png" alt="" style="width: 20px;">
+                            </td>
+                            <td>
+                                <strong>Which HTML element is semantic?</strong>
+                                <ol style="margin:6px 0 0 18px">
+                                    <li>div</li>
+                                    <li>span</li>
+                                    <li style="font-weight:800;background:#97e6a6;padding:2px 6px;border-radius:6px;display:inline-block">header</li>
+                                    <li>b</li>
+                                </ol>
+                            </td>
+                            <td>Approved <span style='width:15px;'>&#9989;</span></td>
+                            <td>Nice!</td>
+                        </tr>
+                        <tr>  
+                           <td>Databases</td>
+                         <td>
+                                dr.nora <br>
+                                <img src="images/user.png" alt="" style="width: 20px;">
+                            </td> 
+                            <td>
+                                <strong>Which SQL clause is used to filter rows before grouping?</strong>
+                                <ol style="margin:6px 0 0 18px">
+                                    <li>ORDER BY</li>
+                                    <li style="font-weight:800;background:#97e6a6;padding:2px 6px;border-radius:6px;display:inline-block">WHERE</li>
+                                    <li>GROUP BY</li>
+                                    <li>HAVING</li>
+                                </ol>
+                            </td>
+                            <td>Approved <span style='width:15px;'>&#9989;</span></td>
+                            <td>Great Question!</td>
+                        </tr>  
+                    </tbody>
+                </table>
+            </div>  
+                        
+
+
+
+
+
+
+      </main>
 
         <footer>
 
