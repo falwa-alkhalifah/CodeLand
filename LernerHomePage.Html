@@ -4,22 +4,129 @@
         <title>HOME PAGE</title>
         <link rel="stylesheet" href="style.css">
         <style>
-            .card {
-                background: rgb(142, 89, 89);
-                padding: 16px;
-                box-shadow: 0 4px 10px rgba(0,0,0,.05);
-                width: fit-content;
-                display: flex;
+        body {
+            margin: 2px;
+            padding: 2px;
+       }   
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px; 
+        }
 
-            }
-            .learner-info{
-                line-height: 1px;
-            }
-            .photo{
-                width: 50px;
-                height: 50px;
-                align-self: flex-end;
-            }
+        .card {
+            background: #ffffff; 
+            width: 90%;
+            max-width: 800px;
+            padding: 24px;
+            box-shadow: 0 6px 18px rgba(0,0,0,.1); 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover, .quizzes-container:hover{
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,.15);
+        }
+
+        .learner-info {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            color: #333;
+            font-family: "Segoe UI", Arial, sans-serif;
+            flex: 1;
+            text-align: left;
+        }
+
+        .learner-info p {
+            margin: 6px 0;
+            line-height: 1.6;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .learner-info p:first-child {
+            font-weight: bold;
+            font-size: 20px;
+            color: #222;
+        }
+
+        .photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%; 
+            margin-left: 30px;
+            object-fit: cover; 
+            border: 3px solid #be9a9a; 
+        }
+
+        /*avalable quises */
+        .quizzes-container {
+        width: 90%;
+        margin: 30px auto;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .quizzes-container h2 {
+        margin-bottom: 16px;
+        font-size: 22px;
+        color: #222;
+        border-bottom: 2px solid #be9a9a; 
+        padding-bottom: 8px;
+        }
+
+        .quizzes-container table {
+        width: 100%;
+        border-collapse: collapse;
+        }
+
+        .quizzes-container th,
+        .quizzes-container td {
+        text-align: left;
+        padding: 12px 10px;
+        font-size: 15px;
+        color: #444;
+        }
+
+        .quizzes-container th {
+        background: #f9fafb;
+        color: #333;
+        font-weight: bold;
+        border-bottom: 2px solid #ddd;
+        }
+
+        .quizzes-container tr:nth-child(even) {
+        background: #fdfdfd;
+        }
+
+        .quizzes-container tr:hover {
+        background: #f9f2f2; 
+        }
+
+        .quizzes-container a {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #be9a9a;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: background 0.2s ease;
+        }
+
+        .quizzes-container a:hover {
+        background: #a87f7f;
+        }
+
+
 
         </style>
     </head>
@@ -33,11 +140,11 @@
             
             <h1>welcom sara👋</h1>
             <p>This is your learner dashboard. Browse quizzes, track your suggested questions, and keep learning</p>
-
+            
+            <div class="centered-container">
             <div class="card">
                 <div class="learner-info">
-                    <h2>Your Info</h2><br>
-                    <h4>sara Alqhtani</h4><br>
+                    <p>sara Alqhtani</p><br>
                     <p>IT student</p><br>
                     <p>level 6</p>
                 </div>
@@ -45,6 +152,61 @@
                     <img src="images/user.png" alt="photo" class="photo">
                 </div>
             </div>
+            </div>
+
+            <div class="quizzes-container">
+                <h2>All Available Quizzes</h2>
+                    <label for="topicFilter">Filter by topic</label>
+                    <select id="topicFilter">
+                    <option value="all">All Topics</option>
+                    <option value="databases">Databases</option>
+                    <option value="webdev">Web Development</option>
+                    <option value="networks">Computer Networks</option>
+                    </select>
+                    <button class="btn" id="filterBtn" type="button">Filter</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Educator</th>
+                            <th>Number of Questions</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Computer Networks</td>
+                            <td>
+                                dr.maha <br>
+                                <img src="images/user.png" alt="" style="width: 20px;">
+                            </td>
+                            <td>40</td>
+                            <td><a href="#">Take Quiz</a></td>
+                        </tr>
+                        <tr>
+                            <td>web Development</td>
+                            <td>
+                                dr.lama <br>
+                                <img src="images/user.png" alt="" style="width: 20px;">
+                            </td>
+                            <td>30</td>
+                            <td><a href="#">Take Quiz</a></td>
+                        </tr>
+                        <tr>
+                            <td>Databases</BAse></td>
+                            <td>
+                                dr.nora <br>
+                                <img src="images/user.png" alt="" style="width: 20px;">
+                            </td>
+                            <td>25</td>
+                            <td><a href="#">Take Quiz</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+
         
         </main>
 
