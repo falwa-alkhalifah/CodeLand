@@ -125,3 +125,21 @@
             justify-content: space-between;
             align-items: center;
         }
+        .comment {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .comments{
+            display: flex;
+            justify-content: left;
+        }
+
+        .star {
+            color: #f5c518;            
+            font-size: 18px;
+            min-width: 70px;          
+        }
