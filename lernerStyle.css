@@ -131,7 +131,9 @@
             align-items: center;
             margin-bottom: 12px;
             padding: 10px;
+            background: #fff;
             border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
         .comments{
             display: flex;
