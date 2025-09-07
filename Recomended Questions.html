@@ -1,1 +1,67 @@
 <!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>recommend a question</title>
+    <link rel="stylesheet" href="lernerStyle.css">
+   <link rel="stylesheet" href="style.css">
+ </head>
+<body>
+  <div class="container">
+    <div class="header header-user"></div>
+    <div id="toast" class="toast"></div>
+
+    <section class="card page-header">
+      <h1>Add Question</h1>
+      <a id="cancel-link" class="btn-outline">Cancel</a>
+    </section>
+
+    <section class="card">
+      <form id="question-form">
+        <label>Question Text</label>
+        <textarea name="text" rows="3" class="input" required></textarea>
+
+        <label>Choice A</label><input name="c0" class="input" required>
+        <label>Choice B</label><input name="c1" class="input" required>
+        <label>Choice C</label><input name="c2" class="input" required>
+        <label>Choice D</label><input name="c3" class="input" required>
+
+        <label>Correct Choice</label>
+        <select name="correctIndex" class="input" required>
+          <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
+        </select>
+
+        <label>Figure (optional)</label>
+        <input type="file" name="figure" accept="image/*" class="input">
+
+        <hr class="sep">
+        <div class="flex">
+          <button type="submit" class="btn">Save</button>
+          <span class="helper">Phase 1: mock save, then redirect to Quiz page.</span>
+        </div>
+      </form>
+    </section>
+  </div>
+ <script src="js-deema/utils.nomodule.js"></script>
+<script src="js-deema/storage.nomodule.js"></script>
+<script src="js-deema/data.nomodule.js"></script>
+<script src="js-deema/add-question.nomodule.js"></script>
+
+</body>
+
+    <footer>
+    <div class="vision">
+      <p>OUR VISION</p>
+      <p>At CodeLand,we make coding education simple, engaging, and accessible for everyone</p>
+    </div>
+    <p>&copy; 2025 Website. All rights reserved.</p>
+    <div class="social-icons">
+    <a href="#"><img src="images/facebook.png" alt="Facebook logo" /></a>
+      <a href="#"><img src="images/instagram.png" alt="Instagram logo" /></a>
+      <a href="#"><img src="images/xpng.jpg" alt="X logo" /></a>
+    </div>
+  </footer>
+
+</html>
