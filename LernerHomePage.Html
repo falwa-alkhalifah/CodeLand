@@ -10,12 +10,31 @@
 
     <body>
         <header>
-            <img src="images/logo.png" alt="CodeLand Logo" class="logo">
-            <nav>
-            <a href="index.html">Home</a>
-            <a href="signup.html">Sign Up</a>
-            </nav>
-        </header>
+       <div class="header-container">
+           <img src="images/logo.png" alt="Codeland Logo" class="logo">
+           
+           <div class="search-bar">
+               <input type="text" placeholder="Search courses, topics...">
+           </div>
+           
+           <nav class="nav-links">
+
+               <div class="profile-dropdown">
+                   <button class="profile-btn" onclick="toggleDropdown()">
+                       <img src="images/user.png" alt="Profile">
+                   </button>
+                   <div class="dropdown-menu" id="profileDropdown">
+                       <a href="#" onclick="signOut()">Sign Out</a>
+                   </div>
+               </div>
+               
+               <button class="theme-toggle" onclick="toggleTheme()">
+                   <span id="themeIcon">🌙</span>
+                   <span id="themeText">Dark</span>
+               </button>
+           </nav>
+       </div>
+   </header>
 
         <main>
             

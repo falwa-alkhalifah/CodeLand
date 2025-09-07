@@ -6,8 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>recommend a question</title>
     <link rel="stylesheet" href="lernerStyle.css">
-   <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
  </head>
+ <header>
+       <div class="header-container">
+           <img src="images/logo.png" alt="Codeland Logo" class="logo">
+           
+           <div class="search-bar">
+               <input type="text" placeholder="Search courses, topics...">
+           </div>
+           
+           <nav class="nav-links">
+
+               <div class="profile-dropdown">
+                   <button class="profile-btn" onclick="toggleDropdown()">
+                       <img src="images/user.png" alt="Profile">
+                   </button>
+                   <div class="dropdown-menu" id="profileDropdown">
+                       <a href="#" onclick="signOut()">Sign Out</a>
+                   </div>
+               </div>
+               
+               <button class="theme-toggle" onclick="toggleTheme()">
+                   <span id="themeIcon">🌙</span>
+                   <span id="themeText">Dark</span>
+               </button>
+           </nav>
+       </div>
+   </header>
 <body>
   <div class="container">
     <div class="header header-user"></div>
