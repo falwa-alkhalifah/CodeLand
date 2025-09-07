@@ -1,93 +1,110 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>recommend a question</title>
-    <link rel="stylesheet" href="lernerStyle.css">
-    <link rel="stylesheet" href="style.css">
- </head>
- <header>
-       <div class="header-container">
-           <img src="images/logo.png" alt="Codeland Logo" class="logo">
-           
-           <div class="search-bar">
-               <input type="text" placeholder="Search courses, topics...">
-           </div>
-           
-           <nav class="nav-links">
-
-               <div class="profile-dropdown">
-                   <button class="profile-btn" onclick="toggleDropdown()">
-                       <img src="images/user.png" alt="Profile">
-                   </button>
-                   <div class="dropdown-menu" id="profileDropdown">
-                       <a href="#" onclick="signOut()">Sign Out</a>
-                   </div>
-               </div>
-               
-               <button class="theme-toggle" onclick="toggleTheme()">
-                   <span id="themeIcon">🌙</span>
-                   <span id="themeText">Dark</span>
-               </button>
-           </nav>
-       </div>
-   </header>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizLoop · Recommend Question</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="lernerStyle.css">
+</head>
 <body>
+<header class="header">
   <div class="container">
-    <div class="header header-user"></div>
-    <div id="toast" class="toast"></div>
-
-    <section class="card page-header">
-      <h1>Add Question</h1>
-      <a id="cancel-link" class="btn-outline">Cancel</a>
-    </section>
-
-    <section class="card">
-      <form id="question-form">
-        <label>Question Text</label>
-        <textarea name="text" rows="3" class="input" required></textarea>
-
-        <label>Choice A</label><input name="c0" class="input" required>
-        <label>Choice B</label><input name="c1" class="input" required>
-        <label>Choice C</label><input name="c2" class="input" required>
-        <label>Choice D</label><input name="c3" class="input" required>
-
-        <label>Correct Choice</label>
-        <select name="correctIndex" class="input" required>
-          <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
-        </select>
-
-        <label>Figure (optional)</label>
-        <input type="file" name="figure" accept="image/*" class="input">
-
-        <hr class="sep">
-        <div class="flex">
-          <button type="submit" class="btn">Save</button>
-          <span class="helper">Phase 1: mock save, then redirect to Quiz page.</span>
-        </div>
-      </form>
-    </section>
+    <div class="logo">
+      <div class="logo-mark">Q</div>
+      <div>QuizLoop <span class="badge">IT</span></div>
+    </div>
+    <nav class="nav">
+      <a href="learner-home.html">Home</a>
+      <a href="recommend-question.html">Recommend Question</a>
+      <a href="comments.html">Comments</a>
+      <a href="index.html">Sign out</a>
+    </nav>
   </div>
- <script src="js-deema/utils.nomodule.js"></script>
-<script src="js-deema/storage.nomodule.js"></script>
-<script src="js-deema/data.nomodule.js"></script>
-<script src="js-deema/add-question.nomodule.js"></script>
+</header>
 
+<main class="container main">
+  <h1>Recommend a Question</h1>
+  <p class="small">Suggest a new multiple-choice question for a quiz. Fields marked with * are required.</p>
+
+  <form class="card" action="learner-home.html" method="get" enctype="multipart/form-data">
+    <div class="row row-2">
+      <div>
+        <label for="topic">* Topic</label>
+        <select id="topic" name="topic" class="select" required>
+          <option value="">Choose a topic</option>
+          <option>Databases</option>
+          <option>Web Development</option>
+          <option>Computer Networks</option>
+        </select>
+      </div>
+      <div>
+        <label for="educator">* Educator</label>
+        <select id="educator" name="educator" class="select" required>
+          <option value="">Choose an educator</option>
+          <option>Dr. Amal</option>
+          <option>Eng. Noura</option>
+          <option>Dr. Reem</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <div>
+        <label for="figure">Question Figure (optional)</label>
+        <input id="figure" name="figure" type="file" accept="image/*" class="input"/>
+        <div class="helper">PNG, JPG, or SVG.</div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <div>
+        <label for="qtext">* Question Text</label>
+        <textarea id="qtext" name="qtext" rows="3" class="input" required placeholder="Write your question here..."></textarea>
+      </div>
+    </div>
+
+    <div class="row row-2" style="margin-top:12px">
+      <div>
+        <label for="c1">* Choice A</label>
+        <input id="c1" name="c1" class="input" required/>
+      </div>
+      <div>
+        <label for="c2">* Choice B</label>
+        <input id="c2" name="c2" class="input" required/>
+      </div>
+    </div>
+    <div class="row row-2" style="margin-top:12px">
+      <div>
+        <label for="c3">* Choice C</label>
+        <input id="c3" name="c3" class="input" required/>
+      </div>
+      <div>
+        <label for="c4">* Choice D</label>
+        <input id="c4" name="c4" class="input" required/>
+      </div>
+    </div>
+
+    <div class="row" style="margin:12px 0">
+      <label>* Correct Choice</label>
+      <div class="inline">
+        <label><input type="radio" name="correct" value="A" required/> A</label>
+        <label><input type="radio" name="correct" value="B"/> B</label>
+        <label><input type="radio" name="correct" value="C"/> C</label>
+        <label><input type="radio" name="correct" value="D"/> D</label>
+      </div>
+      <div class="helper">Exactly one correct answer is allowed.</div>
+    </div>
+
+    <div class="right" style="gap:10px">
+      <a class="btn btn-outline" href="learner-home.html">Cancel</a>
+      <button class="btn" type="submit">Submit Recommendation</button>
+    </div>
+  </form>
+</main>
+
+<footer class="footer small">
+  © 2025 QuizLoop · Front-end prototype
+</footer>
 </body>
-
-    <footer>
-    <div class="vision">
-      <p>OUR VISION</p>
-      <p>At CodeLand,we make coding education simple, engaging, and accessible for everyone</p>
-    </div>
-    <p>&copy; 2025 Website. All rights reserved.</p>
-    <div class="social-icons">
-    <a href="#"><img src="images/facebook.png" alt="Facebook logo" /></a>
-      <a href="#"><img src="images/instagram.png" alt="Instagram logo" /></a>
-      <a href="#"><img src="images/xpng.jpg" alt="X logo" /></a>
-    </div>
-  </footer>
-
 </html>

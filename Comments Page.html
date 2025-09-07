@@ -1,70 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Comments Page</title>
-        <link rel="stylesheet" href="lernerStyle.css">
-        <link rel="stylesheet" href="style.css">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizLoop · Comments</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="lernerStyle.css">
+</head>
+<body>
+<header class="header">
+  <div class="container">
+    <div class="logo">
+      <div class="logo-mark">Q</div>
+      <div>QuizLoop <span class="badge">IT</span></div>
+    </div>
+    <nav class="nav">
+      <a href="learner-home.html">Home</a>
+      <a href="recommend-question.html">Recommend Question</a>
+      <a href="comments.html">Comments</a>
+      <a href="index.html">Sign out</a>
+    </nav>
+  </div>
+</header>
 
-    </head>
-<header>
-       <div class="header-container">
-           <img src="images/logo.png" alt="Codeland Logo" class="logo">
-           
-           <div class="search-bar">
-               <input type="text" placeholder="Search courses, topics...">
-           </div>
-           
-           <nav class="nav-links">
+<main class="container main">
+  <h1>Comments · <span class="badge">Databases</span> with <span class="badge">Dr. Amal</span></h1>
+  <p class="small">Anonymous feedback from newest to oldest.</p>
 
-               <div class="profile-dropdown">
-                   <button class="profile-btn" onclick="toggleDropdown()">
-                       <img src="images/user.png" alt="Profile">
-                   </button>
-                   <div class="dropdown-menu" id="profileDropdown">
-                       <a href="#" onclick="signOut()">Sign Out</a>
-                   </div>
-               </div>
-               
-               <button class="theme-toggle" onclick="toggleTheme()">
-                   <span id="themeIcon">🌙</span>
-                   <span id="themeText">Dark</span>
-               </button>
-           </nav>
-       </div>
-   </header>
+  <section class="card">
+    <div class="comment">
+      <div class="meta">2025-08-20 · Rating: <span class="star">★★★★★</span></div>
+      <div>Very clear explanations. Loved the examples before each question.</div>
+    </div>
+    <div class="comment">
+      <div class="meta">2025-08-12 · Rating: <span class="star">★★★★☆</span></div>
+      <div>Good coverage but a few questions were too easy.</div>
+    </div>
+    <div class="comment">
+      <div class="meta">2025-08-05 · Rating: <span class="star">★★★☆☆</span></div>
+      <div>More ERD diagrams please.</div>
+    </div>
+  </section>
 
-    <main>
-        <h1>Comments · Databases with Dr.Nora</h1>
+  <p class="helper">Note: Comments are anonymous. New comments are added from the quiz score & feedback page.</p>
+</main>
 
-        <section class="card">
-            <div class="comments">
-            <div class="comment">
-                <span class="star">★★★★★</span>
-                <span>Very clear explanations. Loved the examples before each question.</span>
-            </div>
-            <div class="comment">
-                <span class="star">★★★★☆</span>
-                <span>Good coverage but a few questions were too easy.</span>
-            </div>
-            <div class="comment">
-                <span class="star">★★★☆☆</span>
-                <span>More ERD diagrams please.</span>
-            </div>
-        </div>
-        </section>
-
-    </main>
-   <footer>
-        <div class="vision">
-            <p>OUR VISION</p>
-            <p>At CodeLand,we make coding education simple, engaging, and accessible for everyone</p>
-        </div>
-        <p>&copy; 2025 Website. All rights reserved.</p>
-        <div class="social-icons">
-            <a href="#"><img src="images/facebook.png" alt="Facebook logo" /></a>
-            <a href="#"><img src="images/instagram.png" alt="Instagram logo" /></a>
-            <a href="#"><img src="images/xpng.jpg" alt="X logo" /></a>
-        </div>
-  </footer>
+<footer class="footer small">
+  © 2025 QuizLoop · Front-end prototype
+</footer>
+</body>
 </html>
