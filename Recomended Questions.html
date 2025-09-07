@@ -8,20 +8,32 @@
   <link rel="stylesheet" href="lernerStyle.css">
 </head>
 <body>
-<header class="header">
-  <div class="container">
-    <div class="logo">
-      <div class="logo-mark">Q</div>
-      <div>QuizLoop <span class="badge">IT</span></div>
-    </div>
-    <nav class="nav">
-      <a href="learner-home.html">Home</a>
-      <a href="recommend-question.html">Recommend Question</a>
-      <a href="comments.html">Comments</a>
-      <a href="index.html">Sign out</a>
-    </nav>
-  </div>
-</header>
+   <header>
+       <div class="header-container">
+           <img src="images/logo.png" alt="Codeland Logo" class="logo">
+           
+           <div class="search-bar">
+               <input type="text" placeholder="Search courses, topics...">
+           </div>
+           
+           <nav class="nav-links">
+
+               <div class="profile-dropdown">
+                   <button class="profile-btn" onclick="toggleDropdown()">
+                       <img src="images/user.png" alt="Profile">
+                   </button>
+                   <div class="dropdown-menu" id="profileDropdown">
+                       <a href="#" onclick="signOut()">Sign Out</a>
+                   </div>
+               </div>
+               
+               <button class="theme-toggle" onclick="toggleTheme()">
+                   <span id="themeIcon">🌙</span>
+                   <span id="themeText">Dark</span>
+               </button>
+           </nav>
+       </div>
+   </header>
 
 <main class="container main">
   <h1>Recommend a Question</h1>
