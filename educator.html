@@ -4,38 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Codeland • Educator</title>
-  <!-- ملفات CSS -->
+  <!-- ملف تنسيقاتك -->
   <link rel="stylesheet" href="styleDeema.css">
+  <!-- ملف الهيدر والفوتر -->
   <link rel="stylesheet" href="HF.css">
 </head>
 <body>
 
-  <!-- ====== HEADER ====== -->
-  <header class="cl-header">
+  <!-- ===== الهيدر ===== -->
+  <header class="header-simple">
     <div class="brand">
-      <img src="images/logo.png" alt="Logo">
+      <img src="images/logo-codeland.png" alt="Logo" class="logo-img">
       <span>Codeland</span>
     </div>
-    <div class="search-box">
+    <div class="search-bar">
       <input type="text" placeholder="Search courses, topics...">
     </div>
     <div class="actions">
-      <img src="images/user.png" alt="User" class="avatar">
-      <button class="mode-toggle">🌙 Dark</button>
+      <img src="images/avatar.png" alt="User" class="avatar">
+      <button class="toggle-theme">🌙 Dark</button>
     </div>
   </header>
 
-  <!-- ====== MAIN CONTENT ====== -->
+  <!-- ===== المحتوى ===== -->
   <div class="container">
-    <div id="toast" class="toast"></div>
-
-    <!-- Welcome section -->
     <section id="welcome"></section>
-
-    <!-- Educator info -->
     <section class="card" id="educator-info"></section>
 
-    <!-- Quizzes table -->
     <section class="card">
       <h2>Your Quizzes</h2>
       <table class="table" id="quizzes-table">
@@ -48,12 +43,11 @@
           </tr>
         </thead>
         <tbody>
-          <!-- محتوى يتم توليده بالجافاسكربت -->
+          <!-- يجي من الجافاسكربت -->
         </tbody>
       </table>
     </section>
 
-    <!-- Recommended questions -->
     <section class="card">
       <h2>Recommended Questions</h2>
       <table class="table" id="recommended-table">
@@ -66,29 +60,26 @@
           </tr>
         </thead>
         <tbody>
-          <!-- محتوى يتم توليده بالجافاسكربت -->
+          <!-- يجي من الجافاسكربت -->
         </tbody>
       </table>
     </section>
   </div>
 
-  <!-- ====== FOOTER ====== -->
-  <footer class="cl-footer">
-    <p>© <span id="year"></span> Codeland</p>
-    <div class="social">
-      <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+  <!-- ===== الفوتر ===== -->
+  <footer class="footer-simple">
+    <div class="social-icons">
+      <a href="#"><img src="images/x.png" alt="X"></a>
       <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
       <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
     </div>
+    <div class="copy">© 2025 Codeland</div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- سكربتاتك -->
   <script src="js-deema/utils.nomodule.js"></script>
   <script src="js-deema/storage.nomodule.js"></script>
   <script src="js-deema/data.nomodule.js"></script>
   <script src="js-deema/educator.nomodule.js"></script>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
