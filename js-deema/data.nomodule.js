@@ -1,14 +1,14 @@
 
 (function(){
   window.currentEducator = {
-    id: 1, firstName: "Deema", lastName: "Alfarhud",
+    id: 1, firstName: "Deema", lastName: "Alfarhoud",
     email: "deema@ksu.edu.sa", photo: "assets/img/avatar-default.svg",
     topics: ["Networking","Web","AI"]
   };
   window.quizzes = [
-    { id:101, topic:"Networking", educatorId:1, questionCount:2, takers:12, avgScore:78, avgRating:4.2 },
-    { id:102, topic:"Web",        educatorId:1, questionCount:0, takers:0,  avgScore:null, avgRating:null },
-    { id:103, topic:"AI",         educatorId:1, questionCount:1, takers:7,  avgScore:85,  avgRating:4.6 }
+    { id:101, topic:"HTML", educatorId:1, questionCount:2, takers:12, avgScore:78, avgRating:4.2 },
+    { id:102, topic:"JAVA",        educatorId:1, questionCount:0, takers:0,  avgScore:null, avgRating:null },
+    { id:103, topic:"DATABASES",         educatorId:1, questionCount:1, takers:7,  avgScore:85,  avgRating:4.6 }
   ];
   window.questionsByQuiz = {
     101: [
