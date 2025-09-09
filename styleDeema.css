@@ -50,3 +50,54 @@ hr.sep{ border:0; height:1px; background:linear-gradient(90deg,transparent,rgba(
 
 .toast{ position:fixed; right:18px; bottom:18px; background:#111827; color:#e5e7eb; padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.1); box-shadow:var(--shadow); display:none }
 .toast.show{ display:block }
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #ffffff; /* Example background color */
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for distinction */
+}
+
+.logo {
+  height: 50px; /* Adjust size as needed */
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #007bff; /* Example hover color */
+}
+
+.main-footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f8f8; /* A light background color */
+  color: #555;
+  border-top: 1px solid #ddd;
+  margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #555;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
