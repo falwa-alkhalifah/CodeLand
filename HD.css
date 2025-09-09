@@ -84,3 +84,6 @@
   .clx-header { flex-wrap: wrap; }
   .clx-search { order: 3; flex: 1 0 100%; margin-top: 10px; }
 }
+
+/* hide old JS header placeholder */
+.header-user{ display:none !important; }
