@@ -1,5 +1,10 @@
-<!-- ====== Codeland Header (scoped) ====== -->
-<style>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codeland • Educator</title>
+  <link rel="stylesheet" href="styleDeema.css">
+  <style>
   /* ===== Header (scoped) ===== */
   .cl-header-wrap{position:sticky;top:0;z-index:1000}
   .cl-header{
@@ -61,47 +66,35 @@
   }
 </style>
 
-<div class="cl-header-wrap">
-  <header class="cl-header">
-    <a class="cl-brand" href="index.html" aria-label="Codeland home">
-      <img src="images/logo-codeland.png" alt="Codeland logo" onerror="this.style.display='none'">
-      <span>Codeland</span>
-    </a>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header header-user"></div>
+    <div id="toast" class="toast"></div>
 
-    <div class="cl-search" role="search">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 21l-3.6-3.6M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      <input type="search" placeholder="Search courses, topics..." aria-label="Search">
-    </div>
+    <section id="welcome"></section>
+    <section class="card" id="educator-info"></section>
 
-    <div class="cl-actions">
-      <img class="cl-avatar" src="images/avatar-default.svg" alt="Profile">
-      <a class="cl-pill cl-toggle" id="cl-theme-toggle" title="Toggle dark mode">
-        <span>🌙</span> <strong>Dark</strong>
-      </a>
-    </div>
-  </header>
-</div>
+    <section class="card">
+      <h2>Your Quizzes</h2>
+      <table class="table" id="quizzes-table">
+        <thead><tr><th>Topic</th><th>#Questions</th><th>Stats</th><th>Feedback</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-<!-- Badge تحت الهيدر (اختياري) -->
-<div class="container" style="margin-top: -6px;">
-  <div class="cl-badge">Tip: You can add / edit / delete questions in Phase 1 (local only)</div>
-</div>
+    <section class="card">
+      <h2>Recommended Questions</h2>
+      <table class="table" id="recommended-table">
+        <thead><tr><th>Topic</th><th>Learner</th><th>Question</th><th>Review</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
 
-<script>
-  // Theme toggle with localStorage
-  (function(){
-    const KEY = 'cl-theme';
-    const apply = t => {
-      if(t === 'dark'){ document.body.classList.add('cl-dark'); }
-      else { document.body.classList.remove('cl-dark'); }
-      const btn = document.getElementById('cl-theme-toggle');
-      if(btn){ btn.querySelector('strong').textContent = (t==='dark'?'Light':'Dark'); btn.firstElementChild.textContent = (t==='dark'?'☀️':'🌙'); }
-    };
-    let mode = localStorage.getItem(KEY) || 'dark'; // يبدأ داكن لأن خلفيتك داكنة
-    apply(mode);
-    document.getElementById('cl-theme-toggle')?.addEventListener('click', ()=>{
-      mode = (mode==='dark'?'light':'dark'); localStorage.setItem(KEY, mode); apply(mode);
-    });
-  })();
-</script>
-<!-- ====== /Header ====== -->
+  <script src="js-deema/utils.nomodule.js"></script>
+  <script src="js-deema/storage.nomodule.js"></script>
+  <script src="js-deema/data.nomodule.js"></script>
+  <script src="js-deema/educator.nomodule.js"></script>
+</body>
+</html>
