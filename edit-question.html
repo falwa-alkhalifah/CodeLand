@@ -3,13 +3,11 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Codeland • Edit Question</title>
-<link rel="stylesheet" href="styleDeema.css">
-
-
+  <link rel="stylesheet" href="styleDeema.css">
 </head>
 <body>
   <div class="container">
-    <div class="header header-user"></div>
+    <div class="page-header header-user"></div>
     <div id="toast" class="toast"></div>
 
     <section class="card page-header">
@@ -19,9 +17,7 @@
 
     <section class="card">
       <form id="question-form">
-        <label>Question Text</label>
-        <textarea name="text" rows="3" class="input" required></textarea>
-
+        <label>Question Text</label><textarea name="text" rows="3" class="input" required></textarea>
         <label>Choice A</label><input name="c0" class="input" required>
         <label>Choice B</label><input name="c1" class="input" required>
         <label>Choice C</label><input name="c2" class="input" required>
@@ -32,21 +28,17 @@
           <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
         </select>
 
-        <label>Figure (optional)</label>
-        <input type="file" name="figure" accept="image/*" class="input">
+        <label>Figure (optional)</label><input type="file" name="figure" accept="image/*" class="input">
 
         <hr class="sep">
-        <div class="flex">
-          <button type="submit" class="btn">Save</button>
-          <span class="helper">Phase 1: mock update, then redirect to Quiz page.</span>
-        </div>
+        <div class="flex"><button type="submit" class="btn">Save</button><span class="helper">Phase 1: mock update, then redirect to Quiz page.</span></div>
       </form>
     </section>
   </div>
- <script src="js-deema/utils.nomodule.js"></script>
-<script src="js-deema/storage.nomodule.js"></script>
-<script src="js-deema/data.nomodule.js"></script>
-<script src="js-deema/edit-question.nomodule.js"></script>
 
+  <script src="js-deema/utils.nomodule.js"></script>
+  <script src="js-deema/storage.nomodule.js"></script>
+  <script src="js-deema/data.nomodule.js"></script>
+  <script src="js-deema/edit-question.nomodule.js"></script>
 </body>
 </html>
