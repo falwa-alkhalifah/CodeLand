@@ -1,14 +1,84 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Codeland • Educator</title>
-<link rel="stylesheet" href="styleDeema.css">
+  <link rel="stylesheet" href="styleDeema.css">
+  <style>
+    /* إخفاء الهيدر القديم اللي يضيفه الجافاسكربت */
+    .header-user { display: none !important; }
 
+    /* هيدر */
+    .header-simple {
+      max-width: 1100px;
+      margin: 16px auto;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-simple .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
+    .header-simple .brand img {
+      width: 28px; height: 28px; object-fit: contain;
+    }
+    .header-simple nav a {
+      margin-left: 14px;
+      text-decoration: none;
+      color: var(--text);
+      opacity: .9;
+    }
+    .header-simple nav a:hover { text-decoration: underline; }
+
+    /* فوتر */
+    .footer-simple {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer-simple nav a {
+      margin-left: 12px;
+      opacity: .9;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .footer-simple nav a:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
+
+  <!-- الهيدر اليدوي -->
+  <header class="header-simple">
+    <div class="brand">
+      <img src="images/logo-codeland.png" alt="Logo" onerror="this.style.display='none'">
+      <span>Codeland</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="educator.html">Educator</a>
+      <a href="quiz.html">Quiz</a>
+    </nav>
+  </header>
+
   <div class="container">
-    <div class="header header-user"></div>
+    <div class="page-header header-user"></div>
     <div id="toast" class="toast"></div>
 
     <section id="welcome"></section>
@@ -17,7 +87,11 @@
     <section class="card">
       <h2>Your Quizzes</h2>
       <table class="table" id="quizzes-table">
-        <thead><tr><th>Topic</th><th>#Questions</th><th>Stats</th><th>Feedback</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Topic</th><th>#Questions</th><th>Stats</th><th>Feedback</th>
+          </tr>
+        </thead>
         <tbody></tbody>
       </table>
     </section>
@@ -25,17 +99,32 @@
     <section class="card">
       <h2>Recommended Questions</h2>
       <table class="table" id="recommended-table">
-        <thead><tr><th>Topic</th><th>Learner</th><th>Question</th><th>Review</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Topic</th><th>Learner</th><th>Question</th><th>Review</th>
+          </tr>
+        </thead>
         <tbody></tbody>
       </table>
     </section>
   </div>
 
-  
-<script src="js-deema/utils.nomodule.js"></script>
-<script src="js-deema/storage.nomodule.js"></script>
-<script src="js-deema/data.nomodule.js"></script>
-<script src="js-deema/educator.nomodule.js"></script>
+  <!-- الفوتر -->
+  <footer class="footer-simple">
+    <div>© <span id="year"></span> Codeland</div>
+    <nav>
+      <a href="#">About</a>
+      <a href="#">Help</a>
+      <a href="#">Privacy</a>
+    </nav>
+  </footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 
+  <script src="js-deema/utils.nomodule.js"></script>
+  <script src="js-deema/storage.nomodule.js"></script>
+  <script src="js-deema/data.nomodule.js"></script>
+  <script src="js-deema/educator.nomodule.js"></script>
 </body>
 </html>
