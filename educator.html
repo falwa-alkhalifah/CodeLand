@@ -5,74 +5,83 @@
   <title>Codeland • Educator</title>
   <link rel="stylesheet" href="styleDeema.css">
   <style>
-  /* ===== Header (scoped) ===== */
-  .cl-header-wrap{position:sticky;top:0;z-index:1000}
-  .cl-header{
-    margin:16px auto; max-width:1100px; padding:16px 20px; border-radius:16px;
-    background:linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.55));
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.15);
-    display:flex; align-items:center; gap:16px; justify-content:space-between;
-    border:1px solid rgba(255,255,255,.25)
-  }
-  .cl-brand{display:flex; align-items:center; gap:10px; font-weight:800; color:#0f1a2a}
-  .cl-brand img{width:42px; height:42px; object-fit:contain}
-  .cl-search{flex:1; max-width:540px; position:relative}
-  .cl-search input{
-    width:100%; padding:12px 16px 12px 46px; border-radius:999px; border:1px solid rgba(0,0,0,.08);
-    background: rgba(255,255,255,.9); color:#1f2937; outline:none
-  }
-  .cl-search svg{position:absolute; left:14px; top:50%; transform:translateY(-50%); opacity:.55}
-  .cl-actions{display:flex; align-items:center; gap:16px}
-  .cl-pill{
-    display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px;
-    background: rgba(255,255,255,.9); border:1px solid rgba(0,0,0,.08); color:#0f1a2a; text-decoration:none
-  }
-  .cl-avatar{width:36px; height:36px; border-radius:999px; border:2px solid rgba(0,0,0,.08); object-fit:cover}
-  .cl-toggle{cursor:pointer; user-select:none}
-  .cl-badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:12px;
-    background: rgba(232,92,91,.12); color:#e85c5b; font-weight:600; border:1px dashed rgba(232,92,91,.35)
-  }
-
-  /* ===== Footer (scoped) ===== */
-  .cl-footer{
-    margin:28px auto 20px; max-width:1100px; padding:22px 20px; border-radius:16px;
-    background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-    box-shadow: 0 8px 24px rgba(0,0,0,.18); color:var(--text)
-  }
-  .cl-footer-top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
-  .cl-footer .links{display:flex; gap:16px; flex-wrap:wrap}
-  .cl-footer .links a{color:var(--text); opacity:.85; text-decoration:none}
-  .cl-footer .links a:hover{text-decoration:underline}
-  .cl-footer .social{display:flex; gap:10px}
-  .cl-footer .social a{display:inline-flex; width:32px; height:32px; border-radius:999px; align-items:center; justify-content:center; background:rgba(255,255,255,.08)}
-  .cl-footer .copy{margin-top:10px; font-size:13px; opacity:.7}
-
-  /* ===== Dark/Light toggle (scoped vars) ===== */
-  :root{
-    --cl-light-header: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.55));
-    --cl-dark-header:  linear-gradient(180deg, rgba(20,34,53,.85), rgba(20,34,53,.75));
-  }
-  body.cl-dark .cl-header{ background: var(--cl-dark-header); border-color: rgba(255,255,255,.08) }
-  body.cl-dark .cl-brand{ color:#eaf2f7 }
-  body.cl-dark .cl-search input{ background: rgba(20,34,53,.9); color:#eaf2f7; border-color: rgba(255,255,255,.12) }
-  body.cl-dark .cl-pill{ background: rgba(20,34,53,.9); color:#eaf2f7; border-color: rgba(255,255,255,.12) }
-
-  /* Responsive */
-  @media (max-width: 768px){
-    .cl-header{padding:12px 14px}
-    .cl-brand span{display:none}
-    .cl-search{max-width:100%}
-  }
-</style>
-
+    .cl-header-wrap{position:sticky;top:0;z-index:1000}
+    .cl-header{
+      margin:16px auto; max-width:1100px; padding:16px 20px; border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.55));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
+      display:flex; align-items:center; gap:16px; justify-content:space-between;
+      border:1px solid rgba(255,255,255,.25)
+    }
+    .cl-brand{display:flex; align-items:center; gap:10px; font-weight:800; color:#0f1a2a}
+    .cl-brand img{width:42px; height:42px; object-fit:contain}
+    .cl-search{flex:1; max-width:540px; position:relative}
+    .cl-search input{
+      width:100%; padding:12px 16px 12px 46px; border-radius:999px; border:1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.9); color:#1f2937; outline:none
+    }
+    .cl-search svg{position:absolute; left:14px; top:50%; transform:translateY(-50%); opacity:.55}
+    .cl-actions{display:flex; align-items:center; gap:16px}
+    .cl-pill{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px;
+      background: rgba(255,255,255,.9); border:1px solid rgba(0,0,0,.08); color:#0f1a2a; text-decoration:none
+    }
+    .cl-avatar{width:36px; height:36px; border-radius:999px; border:2px solid rgba(0,0,0,.08); object-fit:cover}
+    .cl-toggle{cursor:pointer; user-select:none}
+    .cl-badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:12px;
+      background: rgba(232,92,91,.12); color:#e85c5b; font-weight:600; border:1px dashed rgba(232,92,91,.35)
+    }
+    .cl-footer{
+      margin:28px auto 20px; max-width:1100px; padding:22px 20px; border-radius:16px;
+      background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 8px 24px rgba(0,0,0,.18); color:var(--text)
+    }
+    .cl-footer-top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
+    .cl-footer .links{display:flex; gap:16px; flex-wrap:wrap}
+    .cl-footer .links a{color:var(--text); opacity:.85; text-decoration:none}
+    .cl-footer .links a:hover{text-decoration:underline}
+    .cl-footer .social{display:flex; gap:10px}
+    .cl-footer .social a{display:inline-flex; width:32px; height:32px; border-radius:999px; align-items:center; justify-content:center; background:rgba(255,255,255,.08)}
+    .cl-footer .copy{margin-top:10px; font-size:13px; opacity:.7}
+    :root{ --cl-light-header: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.55));
+           --cl-dark-header:  linear-gradient(180deg, rgba(20,34,53,.85), rgba(20,34,53,.75)); }
+    body.cl-dark .cl-header{ background: var(--cl-dark-header); border-color: rgba(255,255,255,.08) }
+    body.cl-dark .cl-brand{ color:#eaf2f7 }
+    body.cl-dark .cl-search input{ background: rgba(20,34,53,.9); color:#eaf2f7; border-color: rgba(255,255,255,.12) }
+    body.cl-dark .cl-pill{ background: rgba(20,34,53,.9); color:#eaf2f7; border-color: rgba(255,255,255,.12) }
+    @media (max-width: 768px){ .cl-header{padding:12px 14px} .cl-brand span{display:none} .cl-search{max-width:100%} }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="page-header header-user"></div>
-    <div id="toast" class="toast"></div>
 
-    <section id="welcome"></section>
+  <!-- Header -->
+  <div class="cl-header-wrap">
+    <header class="cl-header">
+      <a class="cl-brand" href="index.html">
+        <img src="images/logo-codeland.png" alt="Codeland logo" onerror="this.style.display='none'">
+        <span>Codeland</span>
+      </a>
+      <div class="cl-search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 21l-3.6-3.6M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input type="search" placeholder="Search courses, topics..." aria-label="Search">
+      </div>
+      <div class="cl-actions">
+        <img class="cl-avatar" src="images/avatar-default.svg" alt="Profile">
+        <a class="cl-pill cl-toggle" id="cl-theme-toggle"><span>🌙</span><strong>Dark</strong></a>
+      </div>
+    </header>
+  </div>
+
+  <div class="container" style="margin-top:-6px"><div class="cl-badge">Tip: You can add / edit / delete questions in Phase 1 (local only)</div></div>
+
+  <!-- Page Content -->
+  <div class="container">
+    <section id="welcome" class="card">
+      <h1>Welcome, Deema 👋</h1>
+      <p class="helper">Manage your quizzes and review learners’ recommendations.</p>
+    </section>
+
     <section class="card" id="educator-info"></section>
 
     <section class="card">
@@ -92,6 +101,29 @@
     </section>
   </div>
 
+  <!-- Footer -->
+  <footer class="cl-footer">
+    <div class="cl-footer-top">
+      <div class="brand"><strong>Codeland</strong></div>
+      <nav class="links"><a href="#">About</a><a href="#">Help</a><a href="#">Privacy</a></nav>
+      <div class="social"><a href="#">✖️</a><a href="#">🐙</a><a href="#">in</a></div>
+    </div>
+    <div class="copy">© <span id="cl-year"></span> Codeland</div>
+  </footer>
+
+  <!-- Header scripts -->
+  <script>
+    document.getElementById('cl-year').textContent = new Date().getFullYear();
+    (function(){
+      const btn=document.getElementById('cl-theme-toggle');
+      let mode=localStorage.getItem('cl-theme')||'dark';
+      const apply=()=>{document.body.classList.toggle('cl-dark',mode==='dark'); btn.querySelector('strong').textContent=(mode==='dark'?'Light':'Dark'); btn.firstElementChild.textContent=(mode==='dark'?'☀️':'🌙');}
+      apply();
+      btn.addEventListener('click',()=>{mode=(mode==='dark'?'light':'dark');localStorage.setItem('cl-theme',mode);apply();});
+    })();
+  </script>
+
+  <!-- Page scripts -->
   <script src="js-deema/utils.nomodule.js"></script>
   <script src="js-deema/storage.nomodule.js"></script>
   <script src="js-deema/data.nomodule.js"></script>
