@@ -64,5 +64,25 @@
   <script src="js-deema/storage.nomodule.js"></script>
   <script src="js-deema/data.nomodule.js"></script>
   <script src="js-deema/add-question.nomodule.js"></script>
+  <script>
+(function () {
+  const btn = document.querySelector('.mode-toggle');
+  if (!btn) return;
+
+  function apply() {
+    const isLight = localStorage.getItem('cl-mode') === 'light';
+    document.body.classList.toggle('light', isLight);
+    btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
+  }
+
+  apply();
+  btn.addEventListener('click', () => {
+    const isLight = !document.body.classList.contains('light');
+    localStorage.setItem('cl-mode', isLight ? 'light' : 'dark');
+    apply();
+  });
+})();
+</script>
+
 </body>
 </html>
