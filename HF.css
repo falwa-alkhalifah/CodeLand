@@ -50,17 +50,17 @@
   border: 2px solid #ddd;
   object-fit: cover;
 }
-.mode-toggle {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 20px;
-  background: #2aa6a0;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.3s;
+.mode-toggle{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;
+  padding:10px 22px;
+  border:none;border-radius:28px;
+  background:#2aa6a0;color:#fff;
+  font-weight:600;font-size:16px;line-height:1;
+  cursor:pointer;transition:.3s;
 }
-.mode-toggle:hover { background: #21807c; }
+.mode-toggle:hover{ background:#21807c; }
+
 
 /* ====== FOOTER ====== */
 .cl-footer {
@@ -125,15 +125,13 @@ body.light .cl-header{
   text-decoration: underline;
 }
 
-.logout-btn {
-  padding: 8px 16px;
-  border-radius: 20px;
-  background: #e85c5b;   /* لون زر الخروج */
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background 0.3s;
+.logout-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;
+  padding:10px 22px;
+  border-radius:28px;border:0;
+  background:#e85c5b;color:#fff;
+  font-weight:600;font-size:16px;line-height:1;
+  text-decoration:none;transition:background .3s;
 }
-.logout-btn:hover {
-  background: #c94a4a;
-}
+.logout-btn:hover{ background:#c94a4a; }
