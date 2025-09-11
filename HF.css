@@ -99,3 +99,18 @@
     align-self: flex-end;
   }
 }
+
+/* وضع فاتح عبر تبديل المتغيرات */
+body.light{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#0f1a2a;
+  --muted:#4b5563;
+  /* نفس الـ accent شغّال على الوضعين */
+}
+
+/* تحسين الهيدر مع الوضع الفاتح */
+body.light .cl-header{
+  background:#f3f4f6;
+  border-color:#e5e7eb;
+}
