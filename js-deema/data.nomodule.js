@@ -2,7 +2,7 @@
 (function(){
   window.currentEducator = {
     id: 1, firstName: "Deema", lastName: "Alfarhoud",
-    email: "deema@ksu.edu.sa", photo: "assets/img/avatar-default.svg",
+    email: "deema@ksu.edu.sa", photo: "images/educatorUser.jpeg",
     topics: ["HTML 101","JAVA SCRIPT","PHP BASICS"]
   };
   window.quizzes = [
@@ -11,7 +11,7 @@
 
   window.recommendedQuestions = [
     { id:9001, topic:"HTML 101", learner:{name:"Sara Abdullah.", photo:"images/WebSA.jpeg"},
-      figure:null, text:"Which protocol resolves names?",
-      choices:["FTP","DNS","SSH","SMTP"], correctIndex:1, status:"Pending" }
+      figure:null, text:"Which HTML tag is used to define a paragraph?",
+      choices:["<section>","<div>","<p>","<article>"], correctIndex:1, status:"Pending" }
   ];
 })();
