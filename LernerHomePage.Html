@@ -3,37 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QuizLoop · Learner Home</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>Home page</title>
   <link rel="stylesheet" href="lernerStyle.css">
+  <link rel="stylesheet" href="HF.css">
 </head>
 <body>
-   <header>
-       <div class="header-container">
-           <img src="images/logo.png" alt="Codeland Logo" class="logo">
-           
-           <div class="search-bar">
-               <input type="text" placeholder="Search courses, topics...">
-           </div>
-           
-           <nav class="nav-links">
+<!-- ====== HEADER ====== -->
+<header class="cl-header">
+  <div class="brand">
+    <img src="images/logo.png" alt="Logo">
+    <span>Codeland</span>
+  </div>
 
-               <div class="profile-dropdown">
-                   <button class="profile-btn" onclick="toggleDropdown()">
-                       <img src="images/user.png" alt="Profile">
-                   </button>
-                   <div class="dropdown-menu" id="profileDropdown">
-                       <a href="#" onclick="signOut()">Sign Out</a>
-                   </div>
-               </div>
-               
-               <button class="theme-toggle" onclick="toggleTheme()">
-                   <span id="themeIcon">🌙</span>
-                   <span id="themeText">Dark</span>
-               </button>
-           </nav>
-       </div>
-   </header>
+  <nav class="main-nav">
+    <a href="index.html">Home</a>
+  </nav>
+
+  <div class="actions">
+    <img src="images/user.png" alt="User" class="avatar">
+    <a href="LernerHomePage.Html" class="logout-btn">Logout</a>
+    <button class="mode-toggle">🌙 Dark</button>
+  </div>
+</header>
 
 <main class="container main">
   <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName">Sara</span> 👋</h1>
@@ -44,7 +35,7 @@
     <section class="card">
       <h2>Your Info</h2>
       <div class="user">
-        <div class="avatar"><img src="{avatar_svg}" alt="Profile"/></div>
+        <div class="avatar"><img src="images/user.png" alt="Profile"/></div>
         <div>
           <div><strong id="fullName">Sara Al-Qahtani</strong></div>
           <div class="muted">sara@example.edu</div>
@@ -60,8 +51,8 @@
     <section class="card">
       <h2>Quick Actions</h2>
       <div class="row row-2">
-        <a class="btn" href="recommend-question.html">+ Recommend a Question</a>
-        <a class="btn btn-outline" href="comments.html">View Quiz Comments</a>
+        <a class="btn" href="add-question.html">+ Recommend a Question</a>
+        <a class="btn btn-outline" href="Comments Page.html">View Quiz Comments</a>
       </div>
     </section>
   </div>
@@ -87,25 +78,24 @@
       <tbody>
         <tr data-topic="databases">
           <td>Databases</td>
-          <td class="inline"><div class="avatar" style="width:36px;height:36px"><img src="{avatar_svg}" alt=""></div> Dr. Amal</td>
+          <td class="inline"><div class="avatar"><img src="images/user.png" alt=""></div> Dr. Amal</td>
           <td>12</td>
-          <td><a class="btn" href="take-quiz.html">Take Quiz</a></td>
+          <td><a class="btn" href="Quiz.html">Take Quiz</a></td>
         </tr>
         <tr data-topic="webdev">
           <td>Web Development</td>
-          <td class="inline"><div class="avatar" style="width:36px;height:36px"><img src="{avatar_svg}" alt=""></div> Eng. Noura</td>
+          <td class="inline"><div class="avatar"><img src="images/user.png" alt=""></div> Eng. Noura</td>
           <td>0</td>
           <td class="muted">—</td>
         </tr>
         <tr data-topic="networks">
           <td>Computer Networks</td>
-          <td class="inline"><div class="avatar" style="width:36px;height:36px"><img src="{avatar_svg}" alt=""></div> Dr. Reem</td>
+          <td class="inline"><div class="avatar"><img src="images/user.png" alt=""></div> Dr. Reem</td>
           <td>8</td>
-          <td><a class="btn" href="take-quiz.html">Take Quiz</a></td>
+          <td><a class="btn" href="Quiz.html">Take Quiz</a></td>
         </tr>
       </tbody>
     </table>
-    <p class="helper">Note: Filtering is coming in Phase 2.</p>
   </section>
 
   <section class="card" style="margin-top:16px">
@@ -117,7 +107,7 @@
       <tbody>
         <tr>
           <td>Databases</td>
-          <td class="inline"><div class="avatar" style="width:32px;height:32px"><img src="{avatar_svg}" alt=""></div> Dr. Amal</td>
+          <td class="inline"><div class="avatar"><img src="images/user.png" alt=""></div> Dr. Amal</td>
           <td>
             <div class="muted">Figure (optional)</div>
             <div><strong>Which SQL clause is used to filter rows before grouping?</strong></div>
@@ -133,7 +123,7 @@
         </tr>
         <tr>
           <td>Web Development</td>
-          <td class="inline"><div class="avatar" style="width:32px;height:32px"><img src="{avatar_svg}" alt=""></div> Eng. Noura</td>
+          <td class="inline"><div class="avatar"><img src="images/user.png" alt=""></div> Eng. Noura</td>
           <td>
             <div><strong>Which HTML element is semantic?</strong></div>
             <ol style="margin:6px 0 0 18px">
@@ -148,7 +138,7 @@
         </tr>
         <tr>
           <td>Computer Networks</td>
-          <td class="inline"><div class="avatar" style="width:32px;height:32px"><img src="{avatar_svg}" alt=""></div> Dr. Reem</td>
+          <td class="inline"><div class="avatar"><img src="images/user.png" alt=""></div> Dr. Reem</td>
           <td>
             <div><strong>Which device operates at OSI Layer 3?</strong></div>
             <ol style="margin:6px 0 0 18px">
@@ -164,14 +154,20 @@
       </tbody>
     </table>
     <div class="right" style="margin-top:10px">
-      <a class="btn" href="recommend-question.html">Recommend another question</a>
+      <a class="btn" href="Recomended Questions.html">Recommend another question</a>
     </div>
   </section>
 </main>
 
-<footer class="footer small">
-  © 2025 QuizLoop · Front-end prototype
-</footer>
+<!-- ====== FOOTER ====== -->
+  <footer class="cl-footer">
+    <p>© <span id="year"></span> Codeland</p>
+    <div class="social">
+      <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+      <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+      <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+    </div>
+  </footer>
 
 <script>
 
