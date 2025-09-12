@@ -171,7 +171,7 @@
 
 <script>
 
-// Dummy filter interaction (no real data change in Phase 1)
+// Dummy filter interaction
 document.getElementById('filterBtn').addEventListener('click', function () {{
   const val = document.getElementById('topicFilter').value;
   const rows = document.querySelectorAll('#quizzesTable tbody tr');
@@ -181,5 +181,27 @@ document.getElementById('filterBtn').addEventListener('click', function () {{
   }});
 }});
 </script>
+
+<script>
+(function () {
+  const btn = document.querySelector('.mode-toggle');
+  if (!btn) return;
+
+  function apply() {
+    const isDark = localStorage.getItem('cl-mode') === 'dark';
+    document.body.classList.toggle('dark', isDark);
+    btn.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+  }
+
+  apply();
+  btn.addEventListener('click', () => {
+    const isDark = !document.body.classList.contains('dark');
+    localStorage.setItem('cl-mode', isDark ? 'dark' : 'light');
+    apply();
+  });
+})();
+</script>
+
+
 </body>
 </html>
