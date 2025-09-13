@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Sign Up - CodeLand</title>
-  <link rel="stylesheet" href="style.css">
-     <link rel="stylesheet" href="HomeStyle.css">
+  <link rel="stylesheet" href="HF.css">
+  <link rel="stylesheet" href="HomeStyle.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script>
     function showForm(role) {
@@ -19,74 +20,104 @@
   </script>
 </head>
 <body>
-  <header>
+
+<!-- ====== HEADER ====== -->
+<header class="public-header">
+  <a href="index.html" class="brand">
     <img src="images/logo.png" alt="CodeLand Logo" class="logo">
-    <nav>
-      <a href="index.html">Home</a>
+    <span>Codeland</span>
+  </a>
+
+  <div class="right-side">
+    <nav class="main-nav">
       <a href="login.html">Log In</a>
+      <a href="signup.html">Sign Up</a>
     </nav>
-  </header>
-
-  <div class="section">
-    <div class="form-side">
-      <h2>Create Your Account</h2>
-      <p>Select your role:</p>
-      <button onclick="showForm('learner')">Learner</button>
-      <button onclick="showForm('educator')">Educator</button>
-
-      <!-- Learner Form -->
-      <form id="learnerForm" class="hidden" action="LernerHomePage.Html">
-        <label>First Name:</label>
-        <input type="text" required>
-        <label>Last Name:</label>
-        <input type="text" required>
-        <label>Email:</label>
-        <input type="email" required>
-        <label>Password:</label>
-        <input type="password" required>
-        <label>Profile Image (optional):</label>
-        <input type="file" accept="image/*">
-        <button type="submit">Sign Up as Learner</button>
-      </form>
-
-      <!-- Educator Form -->
-      <form id="educatorForm" class="hidden" action="educator.html">
-        <label>First Name:</label>
-        <input type="text" required>
-        <label>Last Name:</label>
-        <input type="text" required>
-        <label>Email:</label>
-        <input type="email" required>
-        <label>Password:</label>
-        <input type="password" required>
-        <label>Profile Image (optional):</label>
-        <input type="file" accept="image/*">
-        <label>Topics:</label>
-        <input type="checkbox"> HTML
-        <input type="checkbox"> CSS
-        <input type="checkbox"> Python
-        <input type="checkbox"> Java
-        <button type="submit">Sign Up as Educator</button>
-      </form>
-    </div>
-
-    <div class="image-side">
-         <img src="images/logo.png" alt="CodeLand Logo">
-    </div>
+    <button class="mode-toggle">🌙 Dark</button>
   </div>
-  
-   <footer>
-    <div class="vision">
-      <p>OUR VISION</p>
-      <p>At CodeLand,we make coding education simple, engaging, and accessible for everyone</p>
+</header>
+
+<main class="section">
+  <div class="form-side">
+    <h2>Create Your Account</h2>
+    <p>Select your role:</p>
+    <div class="btn-group">
+      <button type="button" onclick="showForm('learner')">Learner</button>
+      <button type="button" onclick="showForm('educator')">Educator</button>
     </div>
-    <p>&copy; 2025 Website. All rights reserved.</p>
-    <div class="social-icons">
-    <a href="#"><img src="images/facebook.png" alt="Facebook logo" /></a>
-      <a href="#"><img src="images/instagram.png" alt="Instagram logo" /></a>
-      <a href="#"><img src="images/xpng.jpg" alt="X logo" /></a>
-    </div>
-  </footer>
-  
+
+    <!-- Learner Form -->
+    <form id="learnerForm" class="hidden" action="learner_home.html">
+      <label>First Name:</label>
+      <input type="text" required>
+      <label>Last Name:</label>
+      <input type="text" required>
+      <label>Email:</label>
+      <input type="email" required>
+      <label>Password:</label>
+      <input type="password" required>
+      <label>Profile Image (optional):</label>
+      <input type="file" accept="image/*">
+      <button type="submit">Sign Up as Learner</button>
+    </form>
+
+    <!-- Educator Form -->
+    <form id="educatorForm" class="hidden" action="educator_home.html">
+      <label>First Name:</label>
+      <input type="text" required>
+      <label>Last Name:</label>
+      <input type="text" required>
+      <label>Email:</label>
+      <input type="email" required>
+      <label>Password:</label>
+      <input type="password" required>
+      <label>Profile Image (optional):</label>
+      <input type="file" accept="image/*">
+      <label>Topics:</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox"> HTML</label>
+        <label><input type="checkbox"> CSS</label>
+        <label><input type="checkbox"> Python</label>
+        <label><input type="checkbox"> Java</label>
+      </div>
+      <button type="submit">Sign Up as Educator</button>
+    </form>
+  </div>
+
+  <div class="image-side">
+    <img src="images/logo.png" alt="CodeLand Logo">
+  </div>
+</main>
+
+<!-- ====== FOOTER ====== -->
+<footer class="cl-footer">
+  <p>© <span id="year"></span> Codeland</p>
+  <div class="social">
+    <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+  </div>
+</footer>
+
+  <script>
+(function () {
+  const btn = document.querySelector('.mode-toggle');
+  if (!btn) return;
+
+  function apply() {
+    const isLight = localStorage.getItem('cl-mode') === 'light';
+    document.body.classList.toggle('light', isLight);
+    btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
+  }
+
+  apply();
+  btn.addEventListener('click', () => {
+    const isLight = !document.body.classList.contains('light');
+    localStorage.setItem('cl-mode', isLight ? 'light' : 'dark');
+    apply();
+  });
+})();
+</script>
+
 </body>
 </html>
