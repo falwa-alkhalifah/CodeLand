@@ -245,6 +245,21 @@ hr {
   margin:12px 0;
 }
 
+.answer.correct {
+  background: #ecfeff;   /* light teal */
+  color: #0f766e;        /* dark teal text */
+  border: 1px solid #99f6e4;
+}
+
+.answer.wrong {
+  background: #fef2f2;   /* light red */
+  color: #b91c1c;        /* dark red text */
+  border: 1px solid #fecaca;
+}
+.tag {
+  color: #000;
+}
+
 /* 🌙 Dark mode */
 body.dark {
   --brand:#60a5fa;       /* lighter blue for contrast */
@@ -274,4 +289,39 @@ body.dark .kbd {
   border:1px solid #334155;
   color: var(--text);
 }
+body.dark .answer.correct {
+  background: #064e3b;   /* deep green background */
+  color: #d1fae5;        /* light green text */
+  border: 1px solid #10b981;
+}
 
+body.dark .answer.wrong {
+  background: #7f1d1d;   /* deep red background */
+  color: #fee2e2;        /* light red text */
+  border: 1px solid #ef4444;
+}
+
+/* 🌙 Dark Mode Header */
+body.dark .cl-header {
+  background: var(--card);          /* same as card background */
+  border-bottom: 1px solid #334155; /* subtle border */
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+
+body.dark .brand span {
+  color: var(--brand);              /* bright brand color */
+}
+
+body.dark .main-nav a {
+  color: var(--text);
+  transition: color 0.2s;
+}
+
+body.dark .main-nav a:hover {
+  color: var(--accent);             /* teal accent on hover */
+}
+
+body.dark .actions .logout-btn {
+  color: var(--danger);             /* red logout */
+  font-weight: 600;
+}
