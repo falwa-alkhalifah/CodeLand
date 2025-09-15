@@ -4,12 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Codeland • Educator</title>
-  <!-- ملفات CSS -->
+ 
   <link rel="stylesheet" href="styleDeema.css">
   <link rel="stylesheet" href="HF.css">
 </head>
 <body>
-
 <!-- ====== HEADER ====== -->
 <header class="cl-header">
   <div class="brand">
@@ -17,21 +16,19 @@
     <span>Codeland</span>
   </div>
 
-  <nav class="main-nav">
-    <a href="index.html">Home</a>
-  </nav>
-
   <div class="actions">
-    <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+      <a href="educator.html">
+        <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+    </a>
     <a href="login.html" class="logout-btn">Logout</a>
-    <button class="mode-toggle">🌙 Dark</button>
   </div>
 </header>
 
 
+
   <!-- ====== MAIN CONTENT ====== -->
   <div class="container">
-    <!-- داخل .container وقبل باقي الأقسام -->
+  
 <div class="header header-user"></div>
 
     <div id="toast" class="toast"></div>
@@ -55,7 +52,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- محتوى يتم توليده بالجافاسكربت -->
+         
         </tbody>
       </table>
     </section>
@@ -73,7 +70,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- محتوى يتم توليده بالجافاسكربت -->
+     
         </tbody>
       </table>
     </section>
@@ -97,25 +94,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
-  <script>
-(function () {
-  const btn = document.querySelector('.mode-toggle');
-  if (!btn) return;
 
-  function apply() {
-    const isLight = localStorage.getItem('cl-mode') === 'light';
-    document.body.classList.toggle('light', isLight);
-    btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
-  }
-
-  apply();
-  btn.addEventListener('click', () => {
-    const isLight = !document.body.classList.contains('light');
-    localStorage.setItem('cl-mode', isLight ? 'light' : 'dark');
-    apply();
-  });
-})();
-</script>
 
 </body>
 </html>

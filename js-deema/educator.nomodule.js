@@ -47,7 +47,7 @@
         <td><a href="quiz.html?id=${q.id}">${q.topic}</a></td>
         <td>${q.questionCount}</td>
         <td>${formatStat(q.takers, q.avgScore)}</td>
-        <td>${formatFeedback(q.avgRating)} • <a href="comments.html?quizId=${q.id}">comments</a></td>`;
+        <td>${formatFeedback(q.avgRating)} • <a href="Comments Page.html?quizId=${q.id}">comments</a></td>`;
       tb.appendChild(tr);
     });
   }

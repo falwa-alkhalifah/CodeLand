@@ -4,373 +4,146 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Quiz Management - HTML101</title>
-   <link rel="stylesheet" href="style.css">
-   <style>
-       :root {
-           --radius: 16px;
-           --shadow: 0 10px 30px rgba(0,0,0,.25);
-           --font: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-       }
-
-       * {
-           box-sizing: border-box;
-       }
-
-       html, body {
-           height: 100%;
-       }
-
-       body {
-           margin: 0;
-           background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-           color: #2c3e50;
-           font-family: var(--font);
-           padding: 20px;
-       }
-
-      .container {
-           max-width: 1100px;
-           margin: 32px auto;
-           padding: 0 16px;
-       }
-
-       /* Header Section */
-       .page-header {
-           background: white;
-           padding: 18px;
-           border-radius: var(--radius);
-           box-shadow: var(--shadow);
-           margin-bottom: 20px;
-           display: flex;
-           align-items: center;
-           justify-content: space-between;
-           gap: 12px;
-       }
-
-       .page-header h1 {
-           color: #2c3e50;
-           font-size: 28px;
-           margin: 8px 0 14px;
-       }
-
-       /* Button Styling */
-       .btn {
-           display: inline-block;
-           padding: 10px 16px;
-           background: #3498db;
-           color: white;
-           border-radius: 12px;
-           border: 0;
-           cursor: pointer;
-           transition: .2s;
-           box-shadow: var(--shadow);
-           text-decoration: none;
-           font-size: 16px;
-           font-weight: 600;
-       }
-
-       .btn:hover {
-           background: #2980b9;
-           transform: translateY(-1px);
-       }
-
-       .btn-edit {
-           background: #22c55e;
-           padding: 6px 12px;
-           font-size: 14px;
-       }
-
-       .btn-edit:hover {
-           background: #16a34a;
-       }
-
-       .btn-delete {
-           background: #ef4444;
-           padding: 6px 12px;
-           font-size: 14px;
-       }
-
-       .btn-delete:hover {
-           background: #dc2626;
-       }
-
-       /* Questions Table Section */
-       .table-section {
-           background: white;
-           padding: 18px;
-           border-radius: var(--radius);
-           box-shadow: var(--shadow);
-       }
-
-       /* Table Styling */
-       .table {
-           width: 100%;
-           border-collapse: collapse;
-       }
-
-       .table th,
-       .table td {
-           text-align: left;
-           padding: 12px 10px;
-           border-bottom: 1px dashed rgba(52, 73, 94, 0.12);
-           vertical-align: top;
-       }
-
-       .table th {
-           color: #2c3e50;
-           font-weight: 600;
-           background: #f8f9fa;
-       }
-
-       .table td {
-           color: #2c3e50;
-       }
-
-       .table .question-column {
-           max-width: 500px;
-           word-wrap: break-word;
-       }
-
-       .question-text {
-           font-weight: 600;
-           margin-bottom: 8px;
-       }
-
-       .choices-container {
-           display: flex;
-           flex-wrap: wrap;
-           gap: 8px;
-           margin-top: 8px;
-       }
-
-       .choice {
-           font-size: 14px;
-           padding: 2px 6px;
-           border-radius: 4px;
-           background: #f8f9fa;
-           color: #2c3e50;
-       }
-
-       .choice.correct {
-           background: #d1fae5;
-           color: #065f46;
-       }
-
-       .table .actions-column {
-           text-align: center;
-           width: 100px;
-       }
-
-       .action-button {
-           display: block;
-           width: 100%;
-           margin-bottom: 4px;
-       }
-
-       /* Toast Notification */
-       .toast {
-           position: fixed;
-           right: 18px;
-           bottom: 18px;
-           background: white;
-           color: #2c3e50;
-           padding: 10px 14px;
-           border-radius: 10px;
-           border: 1px solid rgba(52, 73, 94, 0.1);
-           box-shadow: var(--shadow);
-           display: none;
-       }
-
-       .toast.show {
-           display: block;
-       }
-
-       /* Responsive Design */
-       @media (max-width: 600px) {
-           .container {
-               padding: 0 10px;
-           }
-           
-           .page-header {
-               flex-direction: column;
-               text-align: center;
-               padding: 16px;
-           }
-           
-           .page-header h1 {
-               font-size: 24px;
-           }
-           
-           .table-section {
-               padding: 16px;
-           }
-
-           .table {
-               font-size: 14px;
-           }
-
-           .table th,
-           .table td {
-               padding: 8px 5px;
-           }
-
-           .table .question-column {
-               max-width: 200px;
-           }
-
-           .table .actions-column {
-               text-align: center;
-               width: 80px;
-           }
-
-           .action-button {
-               display: block;
-               width: 100%;
-               margin-bottom: 4px;
-               font-size: 12px;
-               padding: 4px 8px;
-           }
-
-           .choices-container {
-               flex-direction: column;
-               gap: 4px;
-           }
-       }
-   </style>
+   <link rel="stylesheet" href="HF.css">
+   <link rel="stylesheet" href="H-style.css">
 </head>
 <body>
-   <header>
-       <div class="header-container">
-           <img src="images/logo.png" alt="Codeland Logo" class="logo">
-           
-           <div class="search-bar">
-               <input type="text" placeholder="Search courses, topics...">
-           </div>
-           
-           <nav class="nav-links">
+    <!-- ====== HEADER ====== -->
+    <header class="cl-header">
+        <div class="brand">
+            <img src="images/logo.png" alt="Logo">
+            <span>Codeland</span>
+        </div>
 
-               <div class="profile-dropdown">
-                   <button class="profile-btn" onclick="toggleDropdown()">
-                       <img src="images/user.png" alt="Profile">
-                   </button>
-                   <div class="dropdown-menu" id="profileDropdown">
-                       <a href="#" onclick="signOut()">Sign Out</a>
-                   </div>
-               </div>
-               
-               <button class="theme-toggle" onclick="toggleTheme()">
-                   <span id="themeIcon">🌙</span>
-                   <span id="themeText">Dark</span>
-               </button>
-           </nav>
-       </div>
-   </header>
-   <div class="container">
-       <div id="toast" class="toast"></div>
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+        </nav>
 
-       <!-- Page Header -->
-       <section class="page-header">
-           <h1 id="quiz-title">HTML101 Quiz Questions</h1>
-           <a href="" id="add-question-btn" class="btn">+ Add Question</a>
-       </section>
+        <div class="actions">
+            <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+            <a href="login.html" class="logout-btn">Logout</a>
+            <button class="mode-toggle">🌙 Dark</button>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+        <div id="toast" class="toast"></div>
 
-       <!-- Questions Table -->
-       <section class="table-section">
-           <table class="table" id="questions-table">
-               <thead>
-                   <tr>
-                       <th>Question</th>
-                       <th>Edit</th>
-                       <th>Delete</th>
-                   </tr>
-               </thead>
-               <tbody>
-                   <tr>
-                       <td class="question-column">
-                           <div class="question-text">Which HTML tag is used to create a hyperlink?</div>
-                           <div class="choices-container">
-                               <span class="choice correct">A- &lt;a&gt;</span>
-                               <span class="choice">B- &lt;link&gt;</span>
-                               <span class="choice">C- &lt;href&gt;</span>
-                               <span class="choice">D- &lt;url&gt;</span>
-                           </div>
-                       </td>
-                       <td class="actions-column">
-                           <a href="" class="btn btn-edit action-button">Edit</a>
-                       </td>
-                       <td class="actions-column">
-                           <a href="#" class="btn btn-delete action-button">Delete</a>
-                       </td>
-                   </tr>
-                   <tr>
-                       <td class="question-column">
-                           <div class="question-text">What would be the output for this code? (Lists question with image)</div>
-                           <div class="choices-container">
-                               <span class="choice">A- Option A</span>
-                               <span class="choice correct">B- Option B</span>
-                               <span class="choice">C- Option C</span>
-                               <span class="choice">D- Option D</span>
-                           </div>
-                       </td>
-                       <td class="actions-column">
-                           <a href="" class="btn btn-edit action-button">Edit</a>
-                       </td>
-                       <td class="actions-column">
-                           <a href="#" class="btn btn-delete action-button">Delete</a>
-                       </td>
-                   </tr>
-                   <tr>
-                       <td class="question-column">
-                           <div class="question-text">What does HTML stand for?</div>
-                           <div class="choices-container">
-                               <span class="choice">A- Hyperlinks and Text Markup Language</span>
-                               <span class="choice">B- Home Tool Markup Language</span>
-                               <span class="choice correct">C- Hyper Text Markup Language</span>
-                               <span class="choice">D- Hyper Tool Markup Language</span>
-                           </div>
-                       </td>
-                       <td class="actions-column">
-                           <a href="" class="btn btn-edit action-button">Edit</a>
-                       </td>
-                       <td class="actions-column">
-                           <a href="#" class="btn btn-delete action-button">Delete</a>
-                       </td>
-                   </tr>
-                   <tr>
-                       <td class="question-column">
-                           <div class="question-text">Which tag is used to display the largest heading?</div>
-                           <div class="choices-container">
-                               <span class="choice">A- &lt;h6&gt;</span>
-                               <span class="choice correct">B- &lt;h1&gt;</span>
-                               <span class="choice">C- &lt;title&gt;</span>
-                               <span class="choice">D- &lt;head&gt;</span>
-                           </div>
-                       </td>
-                       <td class="actions-column">
-                           <a href="" class="btn btn-edit action-button">Edit</a>
-                       </td>
-                       <td class="actions-column">
-                           <a href="#" class="btn btn-delete action-button" >Delete</a>
-                       </td>
-                   </tr>
-                   <tr>
-                       <td class="question-column">
-                           <div class="question-text">The &lt;br&gt; tag is used to insert a line break.</div>
-                           <div class="choices-container">
-                               <span class="choice correct">A- True</span>
-                               <span class="choice">B- False</span>
-                           </div>
-                       </td>
-                       <td class="actions-column">
-                           <a href="" class="btn btn-edit action-button">Edit</a>
-                       </td>
-                       <td class="actions-column">
-                           <a href="" class="btn btn-delete action-button">Delete</a>
-                       </td>
-                   </tr>
-               </tbody>
-           </table>
-       </section>
-   </div>   
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 id="quiz-title">HTML101 Quiz Questions</h1>
+            <a href="add-question.html" id="add-question-btn" class="btn">+ Add Question</a>
+        </section>
+
+        <!-- Questions Table -->
+        <section class="table-section">
+            <table class="table" id="questions-table">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="question-column">
+                            <div class="question-text">Which HTML tag is used to create a hyperlink?</div>
+                            <div class="choices-container">
+                                <span class="choice correct">A- &lt;a&gt;</span>
+                                <span class="choice">B- &lt;link&gt;</span>
+                                <span class="choice">C- &lt;href&gt;</span>
+                                <span class="choice">D- &lt;url&gt;</span>
+                            </div>
+                        </td>
+                        <td class="actions-column">
+                            <a href="edit-question.html" class="btn btn-edit action-button">Edit</a>
+                        </td>
+                        <td class="actions-column">
+                            <a href="Quiz.html" class="btn btn-delete action-button">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="question-column">
+                            <div class="question-text">What would be the output for this code? (Lists question with image)</div>
+                            <div class="choices-container">
+                                <span class="choice">A- Option A</span>
+                                <span class="choice correct">B- Option B</span>
+                                <span class="choice">C- Option C</span>
+                                <span class="choice">D- Option D</span>
+                            </div>
+                        </td>
+                        <td class="actions-column">
+                            <a href="edit-question.html" class="btn btn-edit action-button">Edit</a>
+                        </td>
+                        <td class="actions-column">
+                            <a href="Quiz.html" class="btn btn-delete action-button">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="question-column">
+                            <div class="question-text">What does HTML stand for?</div>
+                            <div class="choices-container">
+                                <span class="choice">A- Hyperlinks and Text Markup Language</span>
+                                <span class="choice">B- Home Tool Markup Language</span>
+                                <span class="choice correct">C- Hyper Text Markup Language</span>
+                                <span class="choice">D- Hyper Tool Markup Language</span>
+                            </div>
+                        </td>
+                        <td class="actions-column">
+                            <a href="edit-question.html" class="btn btn-edit action-button">Edit</a>
+                        </td>
+                        <td class="actions-column">
+                            <a href="Quiz.html" class="btn btn-delete action-button">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="question-column">
+                            <div class="question-text">Which tag is used to display the largest heading?</div>
+                            <div class="choices-container">
+                                <span class="choice">A- &lt;h6&gt;</span>
+                                <span class="choice correct">B- &lt;h1&gt;</span>
+                                <span class="choice">C- &lt;title&gt;</span>
+                                <span class="choice">D- &lt;head&gt;</span>
+                            </div>
+                        </td>
+                        <td class="actions-column">
+                            <a href="edit-question.html" class="btn btn-edit action-button">Edit</a>
+                        </td>
+                        <td class="actions-column">
+                            <a href="Quiz.html" class="btn btn-delete action-button" >Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="question-column">
+                            <div class="question-text">The &lt;br&gt; tag is used to insert a line break.</div>
+                            <div class="choices-container">
+                                <span class="choice correct">A- True</span>
+                                <span class="choice">B- False</span>
+                            </div>
+                        </td>
+                        <td class="actions-column">
+                            <a href="edit-question.html" class="btn btn-edit action-button">Edit</a>
+                        </td>
+                        <td class="actions-column">
+                            <a href="Quiz.html" class="btn btn-delete action-button">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        </div> 
+    </main>
+      
+    <!-- ====== FOOTER ====== -->
+    <footer class="cl-footer">
+        <p>© <span id="year"></span> Codeland</p>
+        <div class="social">
+        <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+        <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+        <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+        </div>
+    </footer>
+
 </body>
 </html>

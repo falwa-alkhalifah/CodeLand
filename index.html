@@ -3,28 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>CodeLand</title>
-  <link rel="stylesheet" href="HF.css">
   <link rel="stylesheet" href="HomeStyle.css">
+  <link rel="stylesheet" href="HF.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
 <!-- ====== HEADER ====== -->
-<header class="public-header">
-  <a href="index.html" class="brand">
-    <img src="images/logo.png" alt="CodeLand Logo" class="logo">
+<header class="cl-header">
+    <a href="index.html" class="brand">
+     <img src="images/logo.png" alt="Logo">
     <span>Codeland</span>
-  </a>
-
-  <div class="right-side">
+    </a>
     <nav class="main-nav">
-      <a href="login.html">Log In</a>
+      <a href="login.html">Login</a>
       <a href="signup.html">Sign Up</a>
     </nav>
-    <button class="mode-toggle">🌙 Dark</button>
-  </div>
-</header>
+  </header>
 
+
+<!-- ====== MAIN SECTION ====== -->
 <main class="section">
   <div class="text-side">
     <h2>Welcome to CodeLand</h2>
@@ -39,7 +37,9 @@
 
 <!-- ====== FOOTER ====== -->
 <footer class="cl-footer">
-  <p>© <span id="year"></span> Codeland</p>
+ <p>OUR VISION</p>
+ <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+  <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
   <div class="social">
     <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
     <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
@@ -47,24 +47,7 @@
   </div>
 </footer>
 
-  <script>
-(function () {
-  const btn = document.querySelector('.mode-toggle');
-  if (!btn) return;
-
-  function apply() {
-    const isLight = localStorage.getItem('cl-mode') === 'light';
-    document.body.classList.toggle('light', isLight);
-    btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
-  }
-
-  apply();
-  btn.addEventListener('click', () => {
-    const isLight = !document.body.classList.contains('light');
-    localStorage.setItem('cl-mode', isLight ? 'light' : 'dark');
-    apply();
-  });
-})();
-</script>
 
 </body>
+</html>
+

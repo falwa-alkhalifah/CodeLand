@@ -4,275 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Results - HTML101</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        :root {
-           --radius: 16px;
-           --shadow: 0 10px 30px rgba(0,0,0,.25);
-           --font: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-       }
-
-       * {
-           box-sizing: border-box;
-       }
-
-       html, body {
-           height: 100%;
-       }
-
-       body {
-           margin: 0;
-           background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-           color: #2c3e50;
-           font-family: var(--font);
-           padding: 20px;
-       }
-
-        .container {
-           max-width: 1100px;
-           margin: 32px auto;
-           padding: 0 16px;
-       }
-
-        /* Score Section */
-        .score-section {
-            background: white;
-            padding: 18px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .score-display {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c3e50;
-            margin: 8px 0 14px;
-        }
-
-        .video-container {
-            max-width: 450px;
-            margin: 0 auto;
-        }
-
-        .video-container video {
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Feedback Section */
-        .feedback-section {
-            background: white;
-            padding: 18px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        .feedback-title {
-            color: #2c3e50;
-            font-size: 28px;
-            margin: 8px 0 14px;
-            text-align: center;
-        }
-
-        /* Star Rating */
-        .rating-container {
-            text-align: center;
-            margin: 8px 0 14px;
-        }
-
-        .star-rating {
-            display: inline-flex;
-            gap: 5px;
-            font-size: 2em;
-        }
-
-        .star {
-            color: #ddd;
-            cursor: pointer;
-            transition: color 0.2s ease;
-            position: relative;
-            user-select: none;
-        }
-
-        .star:hover,
-        .star.active {
-            color: #daa520;
-        }
-
-        .star.half {
-            background: linear-gradient(90deg, #daa520 50%, #ddd 50%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Textarea */
-        .feedback-textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 2px solid #e1e8ed;
-            font-size: 1em;
-            font-family: var(--font);
-            resize: vertical;
-            margin: 8px 0 14px;
-            transition: border-color 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .feedback-textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-        }
-
-        .feedback-textarea::placeholder {
-            color: #95a5a6;
-        }
-
-        /* Submit Button */
-        .submit-container {
-            text-align: center;
-        }
-
-        .submit-btn {
-            display: inline-block;
-            padding: 10px 16px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: .2s;
-            box-shadow: var(--shadow);
-            margin: 8px 0 14px;
-        }
-
-        .submit-btn:hover {
-            background: #2980b9;
-            transform: translateY(-1px);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Skip Link */
-        .skip-link {
-            color: #7f8c8d;
-            text-decoration: none;
-            font-size: 1em;
-            transition: color 0.3s ease;
-        }
-
-        .skip-link:hover {
-            color: #3498db;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .container {
-                padding: 0 10px;
-            }
-            
-            .score-section, .feedback-section {
-                padding: 16px;
-            }
-            
-            .score-display {
-                font-size: 2.5em;
-            }
-            
-            .feedback-title {
-                font-size: 24px;
-            }
-            
-            .star-rating {
-                font-size: 1.8em;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="HF.css">
+    <link rel="stylesheet" href="H-style.css">
 </head>
 <body>
-    <header>
-       <div class="header-container">
-           <img src="images/logo.png" alt="Codeland Logo" class="logo">
-           
-           <div class="search-bar">
-               <input type="text" placeholder="Search courses, topics...">
-           </div>
-           
-           <nav class="nav-links">
+        <!-- ====== HEADER ====== -->
+    <header class="cl-header">
+        <div class="brand">
+            <img src="images/logo.png" alt="Logo">
+            <span>Codeland</span>
+        </div>
 
-               <div class="profile-dropdown">
-                   <button class="profile-btn" onclick="toggleDropdown()">
-                       <img src="images/user.png" alt="Profile">
-                   </button>
-                   <div class="dropdown-menu" id="profileDropdown">
-                       <a href="#" onclick="signOut()">Sign Out</a>
-                   </div>
-               </div>
-               
-               <button class="theme-toggle" onclick="toggleTheme()">
-                   <span id="themeIcon">🌙</span>
-                   <span id="themeText">Dark</span>
-               </button>
-           </nav>
-       </div>
-   </header>
-    <div class="container">
-        <!-- Score Section -->
-        <div class="score-section">
-            <div style="font-size: 1.5em; color: #2c3e50; margin: 8px 0 14px; font-weight: 600;">Well done Sara 👏</div>
-            <div class="score-display">5 out of 5</div>
-            <div class="video-container">
-                <video autoplay controls>
-                    <source src="images/video.MP4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+        </nav>
+
+        <div class="actions">
+            <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+            <a href="login.html" class="logout-btn">Logout</a>
+            <button class="mode-toggle">🌙 Dark</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Score Section -->
+            <div class="score-section">
+                <div style="font-size: 1.5em; color: #2c3e50; margin: 8px 0 14px; font-weight: 600;">Well done Sara 👏</div>
+                <div class="score-display">5 out of 5</div>
+                <div class="video-container">
+                    <video autoplay controls>
+                        <source src="images/video.MP4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="feedback-section">
+                <h2 class="feedback-title">We value your opinion</h2>
+                
+                <form action="LernerHomePage.Html" method="get">
+                    <!-- Star Rating -->
+                    <div class="rating-container">
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <input type="hidden" name="rating" id="ratingValue" value="0">
+                    </div>
+
+                    <!-- Feedback Textarea -->
+                    <textarea 
+                        class="feedback-textarea" 
+                        name="feedback" 
+                        placeholder="Please share your feedback"
+                    ></textarea>
+
+                    <!-- Submit Container -->
+                    <div class="submit-container">
+                        <button type="submit" class="submit-btn">Send</button>
+                        <br>
+                        <a href="LernerHomePage.Html" class="skip-link">Skip feedback</a> 
+                    </div>
+                </form>
             </div>
         </div>
+    </main>
 
-        <!-- Feedback Section -->
-        <div class="feedback-section">
-            <h2 class="feedback-title">We value your opinion</h2>
-            
-            <form action="homepage.html" method="post">
-                <!-- Star Rating -->
-                <div class="rating-container">
-                    <div class="star-rating" id="starRating">
-                        <span class="star" data-rating="1">★</span>
-                        <span class="star" data-rating="2">★</span>
-                        <span class="star" data-rating="3">★</span>
-                        <span class="star" data-rating="4">★</span>
-                        <span class="star" data-rating="5">★</span>
-                    </div>
-                    <input type="hidden" name="rating" id="ratingValue" value="0">
-                </div>
-
-                <!-- Feedback Textarea -->
-                <textarea 
-                    class="feedback-textarea" 
-                    name="feedback" 
-                    placeholder="Please share your feedback"
-                ></textarea>
-
-                <!-- Submit Container -->
-                <div class="submit-container">
-                    <button type="submit" class="submit-btn">Send</button>
-                    <br>
-                    <a href="" class="skip-link">Skip feedback</a> 
-                </div>
-            </form>
+    <!-- ====== FOOTER ====== -->
+    <footer class="cl-footer">
+        <p>© <span id="year"></span> Codeland</p>
+        <div class="social">
+        <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+        <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+        <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
         </div>
-    </div>
+    </footer>
 
     <script>
         // Star rating functionality
