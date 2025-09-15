@@ -115,20 +115,11 @@ body.light .cl-header{
   border-color:#e5e7eb;
 }
 
-body.light{
-  --bg: #f5f7fb;        /* خلفية أساسية فاتحة */
-  --card: #ffffff;      /* خلفية البطاقات */
-  --text: #1a1a1a;      /* النصوص الأساسية – غامق */
-  --muted: #444444;     /* النصوص الثانوية – رمادي غامق */
-  --accent: #e85c5b;    /* ممكن تتركيه نفسه */
-  --accent-2: #2aa6a0;
-  --danger: #ef4444;
-}
 
 .main-nav a {
   margin-right: 20px;
   text-decoration: none;
-  color: var(--text);
+  color: #1a2d32;
   font-weight: 500;
 }
 .main-nav a:hover {
