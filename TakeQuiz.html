@@ -4,28 +4,25 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>HTML101 Quiz</title>
-   <link rel="stylesheet" href="HF.css">
    <link rel="stylesheet" href="H-style.css">
+   <link rel="stylesheet" href="HF.css">
 </head>
 
 <body>
 
     <!-- ====== HEADER ====== -->
-<header class="cl-header">
-    <div class="brand">
-        <img src="images/logo.png" alt="Logo">
-        <span>Codeland</span>
-    </div>
+    <header class="cl-header">
+        <div class="brand">
+            <img src="images/logo.png" alt="Logo">
+            <span>Codeland</span>
+        </div>
 
-    <nav class="main-nav">
-        <a href="index.html">Home</a>
-    </nav>
-
-    <div class="actions">
-        <img src="images/educatorUser.jpeg" alt="User" class="avatar">
-        <a href="login.html" class="logout-btn">Logout</a>
-        <button class="mode-toggle">🌙 Dark</button>
-    </div>
+        <div class="actions">
+            <a href="educator.html">
+                <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+            </a>
+            <a href="login.html" class="logout-btn">Logout</a>
+        </div>
     </header>
 
     <main> 
@@ -100,50 +97,15 @@
 
     <!-- ====== FOOTER ====== -->
     <footer class="cl-footer">
-        <p>© <span id="year"></span> Codeland</p>
+        <p>OUR VISION</p>
+        <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+        <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
         <div class="social">
-        <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
-        <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-        <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+            <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
         </div>
     </footer>
    
-        <!-- Scripts -->
-    
-    <script>
-        (function () {
-        const btn = document.querySelector('.mode-toggle');
-        if (!btn) return;
-
-        function apply() {
-            // Get stored mode, default to 'light' if nothing is stored
-            const storedMode = localStorage.getItem('cl-mode');
-            const isLight = storedMode === null ? true : storedMode === 'light';
-            
-            // For light mode, remove any 'light' class (since your CSS is dark by default)
-            // For dark mode, don't add any class (use default CSS)
-            if (isLight) {
-            document.body.classList.add('light');
-            } else {
-            document.body.classList.remove('light');
-            }
-            
-            btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
-        }
-
-        // Apply initial mode
-        apply();
-        
-        // Handle toggle click
-        btn.addEventListener('click', () => {
-            const currentlyLight = document.body.classList.contains('light');
-            const newMode = currentlyLight ? 'dark' : 'light';
-            
-            localStorage.setItem('cl-mode', newMode);
-            apply();
-        });
-        })();
-    </script>
-
 </body>
 </html>
