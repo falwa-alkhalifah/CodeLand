@@ -6,14 +6,31 @@
   <link rel="stylesheet" href="HF.css">
   <link rel="stylesheet" href="HomeStyle.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    .error-message {
+      color: #ff4d4f;
+      background-color: #ffe6e6;
+      border: 1px solid #ff4d4f;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none; 
+    }
+  </style>
+
   <script>
     function loginAs(role) {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
+      const errorMsg = document.getElementById('loginError');
 
       if (email === "" || password === "") {
-        alert("الرجاء إدخال البريد الإلكتروني وكلمة المرور أولاً");
+        errorMsg.textContent = "Please enter your email and passwordً";
+        errorMsg.style.display = "block";
         return; 
+      } else {
+        errorMsg.style.display = "none"; 
       }
 
       if (role === 'learner') {
@@ -37,7 +54,6 @@
   </nav>
 </header>
 
-<!-- ====== LOGIN SECTION ====== -->
 <main class="section">
   <div class="form-side">
     <h2>Log In</h2>
@@ -47,6 +63,8 @@
 
       <label for="password">Password:</label>
       <input id="password" type="password" required>
+
+      <p id="loginError" class="error-message"></p>
 
       <div class="btn-group">
         <button type="button" onclick="loginAs('learner')">Log In as Learner</button>
@@ -60,11 +78,9 @@
   </div>
 </main>
 
-<!-- ====== FOOTER ====== -->
 <footer class="cl-footer">
- <p>OUR VISION</p>
-      <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
-
+  <p>OUR VISION</p>
+  <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
   <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
   <div class="social">
     <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
