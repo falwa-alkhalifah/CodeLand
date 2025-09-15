@@ -10,30 +10,25 @@
   <script>
     function loginAs(role) {
       if (role === 'learner') {
-        window.location.href = "learner_home.html";
+        window.location.href = "LernerHomePage.Html";
       } else if (role === 'educator') {
-        window.location.href = "educator_home.html";
+        window.location.href = "educator.html";
       }
     }
   </script>
 </head>
 <body>
 
-<!-- ====== HEADER عام ====== -->
-<header class="public-header">
-  <a href="index.html" class="brand">
-    <img src="images/logo.png" alt="CodeLand Logo" class="logo">
+<header class="cl-header">
+    <a href="index.html" class="brand">
+     <img src="images/logo.png" alt="Logo">
     <span>Codeland</span>
-  </a>
-
-  <div class="right-side">
+    </a>
     <nav class="main-nav">
-      <a href="login.html">Log In</a>
+      <a href="login.html">Login</a>
       <a href="signup.html">Sign Up</a>
     </nav>
-    <button class="mode-toggle">🌙 Dark</button>
-  </div>
-</header>
+  </header>
 
 
 <!-- ====== LOGIN SECTION ====== -->
@@ -67,27 +62,6 @@
     <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
   </div>
 </footer>
-
-<!-- ====== SCRIPTS ====== -->
-<script>
-(function () {
-  const btn = document.querySelector('.mode-toggle');
-  if (!btn) return;
-
-  function apply() {
-    const isDark = localStorage.getItem('cl-mode') === 'dark';
-    document.body.classList.toggle('dark', isDark);
-    btn.textContent = isDark ? '☀️ Light' : '🌙 Dark';
-  }
-
-  apply();
-  btn.addEventListener('click', () => {
-    const isDark = !document.body.classList.contains('dark');
-    localStorage.setItem('cl-mode', isDark ? 'dark' : 'light');
-    apply();
-  });
-})();
-</script>
 
 </body>
 </html>
