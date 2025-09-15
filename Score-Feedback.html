@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Results - HTML101</title>
-    <link rel="stylesheet" href="HF.css">
     <link rel="stylesheet" href="H-style.css">
+    <link rel="stylesheet" href="HF.css">
 </head>
+
 <body>
-        <!-- ====== HEADER ====== -->
+    <!-- ====== HEADER ====== -->
     <header class="cl-header">
         <div class="brand">
             <img src="images/logo.png" alt="Logo">
             <span>Codeland</span>
         </div>
 
-        <nav class="main-nav">
-            <a href="index.html">Home</a>
-        </nav>
-
         <div class="actions">
-            <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+            <a href="educator.html">
+                <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+            </a>
             <a href="login.html" class="logout-btn">Logout</a>
-            <button class="mode-toggle">🌙 Dark</button>
         </div>
     </header>
 
@@ -30,7 +29,7 @@
         <div class="container">
             <!-- Score Section -->
             <div class="score-section">
-                <div style="font-size: 1.5em; color: #2c3e50; margin: 8px 0 14px; font-weight: 600;">Well done Sara 👏</div>
+                <div style="font-size: 1.5em; color: #a8c0d8; margin: 8px 0 14px; font-weight: 600;">Well done Sara 👏</div>
                 <div class="score-display">5 out of 5</div>
                 <div class="video-container">
                     <video autoplay controls>
@@ -77,11 +76,13 @@
 
     <!-- ====== FOOTER ====== -->
     <footer class="cl-footer">
-        <p>© <span id="year"></span> Codeland</p>
+        <p>OUR VISION</p>
+        <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+        <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
         <div class="social">
-        <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
-        <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-        <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+            <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
         </div>
     </footer>
 
@@ -135,6 +136,7 @@
         }
 
         highlightStars(0);
-    </script>
+    </script>    
+
 </body>
 </html>
