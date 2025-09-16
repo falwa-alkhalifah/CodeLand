@@ -8,27 +8,23 @@
   <link rel="stylesheet" href="HF.css">
 </head>
 <body>
-   <!-- ====== HEADER ====== -->
+<!-- ====== HEADER ====== -->
 <header class="cl-header">
   <div class="brand">
     <img src="images/logo.png" alt="Logo">
     <span>Codeland</span>
   </div>
 
-  <nav class="main-nav">
-    <a href="LernerHomePage.Html">Home</a>
-  </nav>
-
   <div class="actions">
-    <img src="images/user.png" alt="User" class="avatar">
+      <a href="educator.html">
+        <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+    </a>
     <a href="login.html" class="logout-btn">Logout</a>
-    <button class="mode-toggle">🌙 Dark</button>
   </div>
 </header>
 
 <main class="container main">
   <h1>Comments · <span class="badge">Databases</span> with <span class="badge">Dr. Amal</span></h1>
-  <p class="small">Anonymous feedback from newest to oldest.</p>
 
   <section class="card">
     <div class="comment">
@@ -48,34 +44,17 @@
 </main>
 
 <!-- ====== FOOTER ====== -->
-  <footer class="cl-footer">
-    <p>© <span id="year"></span> Codeland</p>
-    <div class="social">
-      <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
-      <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-      <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-    </div>
-  </footer>
+<footer class="cl-footer">
+ <p>OUR VISION</p>
+ <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+  <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
+  <div class="social">
+    <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+  </div>
+</footer>
 
-<script>
-(function () {
-  const btn = document.querySelector('.mode-toggle');
-  if (!btn) return;
-
-  function apply() {
-    const isDark = localStorage.getItem('cl-mode') === 'dark';
-    document.body.classList.toggle('dark', isDark);
-    btn.textContent = isDark ? '☀️ Light' : '🌙 Dark';
-  }
-
-  apply();
-  btn.addEventListener('click', () => {
-    const isDark = !document.body.classList.contains('dark');
-    localStorage.setItem('cl-mode', isDark ? 'dark' : 'light');
-    apply();
-  });
-})();
-</script>
 
 
 </body>

@@ -44,6 +44,14 @@ body {
 .cl-header .brand img {
   width: 40px; height: 40px; object-fit: contain;
 }
+
+.cl-header .actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;      /* space between avatar and logout */
+  margin-left: auto; /* push actions all the way to the right */
+}
+
 .main-nav a {
   margin-right: 20px;
   text-decoration: none;
@@ -89,6 +97,7 @@ body {
   font-size: 14px;
   color: var(--muted);
   background: var(--card);
+  border-radius: 12px;
 }
 .cl-footer .social {
   margin-top: 10px;
@@ -101,6 +110,9 @@ body {
   transition: transform 0.3s;
 }
 .cl-footer .social img:hover { transform: scale(1.2); }
+
+
+
 
 /* ====== Responsive ====== */
 @media (max-width: 768px) {

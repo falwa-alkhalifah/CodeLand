@@ -7,10 +7,34 @@
   <link rel="stylesheet" href="HomeStyle.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <style>
+    .error-message {
+      color: #ff4d4f;
+      background-color: #ffe6e6;
+      border: 1px solid #ff4d4f;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none; 
+    }
+  </style>
+
   <script>
     function loginAs(role) {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorMsg = document.getElementById('loginError');
+
+      if (email === "" || password === "") {
+        errorMsg.textContent = "Please enter your email and passwordً";
+        errorMsg.style.display = "block";
+        return; 
+      } else {
+        errorMsg.style.display = "none"; 
+      }
+
       if (role === 'learner') {
-        window.location.href = "LernerHomePage.Html";
+        window.location.href = "LernerHomePage.html";
       } else if (role === 'educator') {
         window.location.href = "educator.html";
       }
@@ -20,26 +44,27 @@
 <body>
 
 <header class="cl-header">
-    <a href="index.html" class="brand">
-     <img src="images/logo.png" alt="Logo">
+  <a href="index.html" class="brand">
+    <img src="images/logo.png" alt="Logo">
     <span>Codeland</span>
-    </a>
-    <nav class="main-nav">
-      <a href="login.html">Login</a>
-      <a href="signup.html">Sign Up</a>
-    </nav>
-  </header>
+  </a>
+  <nav class="main-nav">
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  </nav>
+</header>
 
-
-<!-- ====== LOGIN SECTION ====== -->
 <main class="section">
   <div class="form-side">
     <h2>Log In</h2>
     <form onsubmit="return false;">
-      <label>Email:</label>
-      <input type="email" required>
-      <label>Password:</label>
-      <input type="password" required>
+      <label for="email">Email:</label>
+      <input id="email" type="email" required>
+
+      <label for="password">Password:</label>
+      <input id="password" type="password" required>
+
+      <p id="loginError" class="error-message"></p>
 
       <div class="btn-group">
         <button type="button" onclick="loginAs('learner')">Log In as Learner</button>
@@ -53,10 +78,9 @@
   </div>
 </main>
 
-<!-- ====== FOOTER ====== -->
 <footer class="cl-footer">
- <p>OUR VISION</p>
- <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+  <p>OUR VISION</p>
+  <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
   <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
   <div class="social">
     <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>

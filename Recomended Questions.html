@@ -15,14 +15,11 @@
     <span>Codeland</span>
   </div>
 
-  <nav class="main-nav">
-    <a href="LernerHomePage.html">Home</a>
-  </nav>
-
   <div class="actions">
-    <img src="images/user.png" alt="User" class="avatar">
+      <a href="educator.html">
+        <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+    </a>
     <a href="login.html" class="logout-btn">Logout</a>
-    <button class="mode-toggle">🌙 Dark</button>
   </div>
 </header>
 
@@ -36,9 +33,9 @@
         <label for="topic">* Topic</label>
         <select id="topic" name="topic" class="select" required>
           <option value="">Choose a topic</option>
-          <option>Databases</option>
-          <option>Web Development</option>
-          <option>Computer Networks</option>
+          <option>HTML</option>
+          <option>Java</option>
+          <option>C++</option>
         </select>
       </div>
       <div>
@@ -107,35 +104,16 @@
 </main>
 
 <!-- ====== FOOTER ====== -->
-  <footer class="cl-footer">
-    <p>© <span id="year"></span> Codeland</p>
-    <div class="social">
-      <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
-      <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-      <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-    </div>
-  </footer>
-
-<script>
-(function () {
-  const btn = document.querySelector('.mode-toggle');
-  if (!btn) return;
-
-  function apply() {
-    const isDark = localStorage.getItem('cl-mode') === 'dark';
-    document.body.classList.toggle('dark', isDark);
-    btn.textContent = isDark ? '☀️ Light' : '🌙 Dark';
-  }
-
-  apply();
-  btn.addEventListener('click', () => {
-    const isDark = !document.body.classList.contains('dark');
-    localStorage.setItem('cl-mode', isDark ? 'dark' : 'light');
-    apply();
-  });
-})();
-</script>
-
+<footer class="cl-footer">
+ <p>OUR VISION</p>
+ <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+  <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
+  <div class="social">
+    <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+  </div>
+</footer>
 
 </body>
 </html>
