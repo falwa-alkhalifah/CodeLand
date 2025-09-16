@@ -57,39 +57,19 @@
       </form>
     </section>
   </div>
- <!-- ====== FOOTER ====== -->
-  <footer class="cl-footer">
-    <p>© <span id="year"></span> Codeland</p>
-    <div class="social">
-      <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
-      <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-      <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-    </div>
-  </footer>
+<!-- ====== FOOTER ====== -->
+<footer class="cl-footer">
+ <p>OUR VISION</p>
+ <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+  <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
+  <div class="social">
+    <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+  </div>
+</footer>
 
-  <script src="js-deema/utils.nomodule.js"></script>
-  <script src="js-deema/storage.nomodule.js"></script>
-  <script src="js-deema/data.nomodule.js"></script>
-  <script src="js-deema/add-question.nomodule.js"></script>
-  <script>
-(function () {
-  const btn = document.querySelector('.mode-toggle');
-  if (!btn) return;
 
-  function apply() {
-    const isLight = localStorage.getItem('cl-mode') === 'light';
-    document.body.classList.toggle('light', isLight);
-    btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
-  }
-
-  apply();
-  btn.addEventListener('click', () => {
-    const isLight = !document.body.classList.contains('light');
-    localStorage.setItem('cl-mode', isLight ? 'light' : 'dark');
-    apply();
-  });
-})();
-</script>
 
 </body>
 </html>
