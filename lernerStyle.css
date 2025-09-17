@@ -72,20 +72,19 @@ a:hover {
   align-items:center;
 }
 
-.avatar {
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  overflow:hidden;
-  border:3px solid var(--brand-hover);
-  background:#1e293b;
-  display:grid;
-  place-items:center;
-}
 img {
-  width:23px;
-  height:23px;
-  object-fit:fill;
+  width:40px;
+  height:40px;
+  object-fit: cover;
+  border-radius: 50%;
+
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,.15);
 }
 
 .badge {
