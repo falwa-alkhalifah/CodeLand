@@ -145,6 +145,79 @@
             <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
         </div>
     </footer>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // التقط ضغطات Edit وخزّن بيانات السؤال + رابط الرجوع + فهرس الصف + النص الأصلي
+  document.querySelectorAll('.btn-edit.action-button').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
 
+      const tr = btn.closest('tr');
+      if (!tr) return;
+
+      const rowIndex = Array.from(tr.parentElement.querySelectorAll('tr')).indexOf(tr);
+      const qTextEl = tr.querySelector('.question-text');
+      const originalText = (qTextEl?.textContent || '').trim();
+
+      const choiceEls = tr.querySelectorAll('.choices-container .choice');
+      const choices = Array.from(choiceEls).map(el =>
+        (el.textContent || '').replace(/^[A-D]\s*-\s*/i, '').trim()
+      );
+      let correctIndex = Array.from(choiceEls).findIndex(el => el.classList.contains('correct'));
+      if (correctIndex < 0) correctIndex = 0;
+
+      localStorage.setItem('currentQuestion', JSON.stringify({
+        text: originalText, choices, correctIndex, originalText
+      }));
+      localStorage.setItem('currentQuestionRowIndex', String(rowIndex));
+      localStorage.setItem('currentQuestionReturnUrl', location.href);
+
+      location.href = btn.getAttribute('href') || 'edit-question.html';
+    });
+  });
+
+  // عند الرجوع من صفحة التعديل طبّق التحديث على نفس الصف
+  (function applyUpdatedIfAny(){
+    if (!localStorage.getItem('currentQuestionUpdated')) return;
+
+    const payload = JSON.parse(localStorage.getItem('currentQuestion') || 'null');
+    const rowIndex = Number(localStorage.getItem('currentQuestionRowIndex'));
+    const rows = document.querySelectorAll('#questions-table tbody tr');
+
+    // ابحث أولاً بالنص الأصلي (أدق)، لو ما لقيته استخدم فهرس الصف
+    let targetRow = null;
+    if (payload?.originalText) {
+      for (const r of rows) {
+        const t = r.querySelector('.question-text')?.textContent?.trim() || '';
+        if (t === payload.originalText) { targetRow = r; break; }
+      }
+    }
+    if (!targetRow && rows[rowIndex]) targetRow = rows[rowIndex];
+
+    if (payload && targetRow) {
+      // عدّل نص السؤال
+      const textEl = targetRow.querySelector('.question-text');
+      if (textEl) textEl.textContent = payload.text || '';
+
+      // عدّل الخيارات والجواب الصحيح
+      const choiceEls = targetRow.querySelectorAll('.choices-container .choice');
+      choiceEls.forEach((el, i) => {
+        const label = String.fromCharCode(65 + i); // A,B,C,D
+        const text = payload.choices?.[i] ?? '';
+        el.textContent = `${label}- ${text}`;
+        el.classList.toggle('correct', i === payload.correctIndex);
+      });
+    }
+
+    // نظّف العلامات المؤقتة
+    localStorage.removeItem('currentQuestionUpdated');
+    localStorage.removeItem('currentQuestion');
+    localStorage.removeItem('currentQuestionRowIndex');
+    // اتركي currentQuestionReturnUrl مفيد لزر Cancel
+  })();
+});
+</script>
+
+    
 </body>
 </html>

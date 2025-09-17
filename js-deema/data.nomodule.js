@@ -1,8 +1,8 @@
 
 (function(){
   window.currentEducator = {
-    id: 1, firstName: "Deema", lastName: "Alfarhoud",
-    email: "deema@ksu.edu.sa", photo: "images/educatorUser.jpeg",
+    id: 1, firstName: "Dr. Amal", lastName: " Ahmed ",
+    email: "AmalSS@ksu.edu.sa", photo: "images/educatorUser.jpeg",
     topics: ["HTML 101","JAVA SCRIPT","PHP BASICS"]
   };
   window.quizzes = [
@@ -10,8 +10,8 @@
   ];
 
   window.recommendedQuestions = [
-    { id:9001, topic:"HTML 101", learner:{name:"Sara Abdullah.", photo:"images/WebSA.jpeg"},
-      figure:null, text:"Which HTML tag is used to define a paragraph?",
-      choices:["section","div","p","article"], correctIndex:2, status:"Pending" }
+    { id:9001, topic:"HTML 101", learner:{name:"Sara Al-Qahtani", photo:"images/WebSA.jpeg"},
+      figure:"images/code.png", text:"Which HTML tag is used to insert an image?",
+      choices:["<picture>","<img>","<figure>","<src>"], correctIndex:1, status:"Pending" }
   ];
 })();

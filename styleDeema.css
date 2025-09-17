@@ -53,3 +53,13 @@ hr.sep{ border:0; height:1px; background:linear-gradient(90deg,transparent,rgba(
 
 .header-user{ display:none !important; }
 
+/* لتنسيق صور الأسئلة المقترحة */
+#recommended-table .q-fig {
+  display: block;
+  max-width: 100%;       /* أو أي عرض يناسبك */
+  height: auto;
+  max-height: 220px;     /* حد أقصى للطول إذا احتجت */
+  object-fit: contain;
+  margin: 10px 0;
+  border-radius: 8px;    /* نفس الشكل السابق أو غيّره */
+}

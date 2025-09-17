@@ -45,20 +45,27 @@
       const tr=document.createElement('tr');
       tr.innerHTML=`
         <td><a href="quiz.html?id=${q.id}">${q.topic}</a></td>
-        <td>${5}</td>
+        <td>${q.questionCount}</td>
         <td>${formatStat(q.takers, q.avgScore)}</td>
         <td>${formatFeedback(q.avgRating)} • <a href="Comments Page.html?quizId=${q.id}">comments</a></td>`;
       tb.appendChild(tr);
     });
   }
   function recommendedTable(){
+    function esc(str){
+  return str
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
     const tb = qs('#recommended-table tbody'); tb.innerHTML='';
     recommendedQuestions.forEach(r=>{
-      const fig = r.figure ? `<img src="${r.figure}" style="max-width:120px;border-radius:8px">`
-                           : `<span class="badge">no figure</span>`;
+     const fig = r.figure ? `<img class="q-fig" src="${r.figure}">`
+                     : `<span class="badge">no figure</span>`;
       const ans = r.choices.map((c,i)=>{
         const cls = i===r.correctIndex ? 'badge success' : 'badge';
-        return `<span class="${cls}">${String.fromCharCode(65+i)}. ${c}</span>`;
+return `<span class="${cls}">${String.fromCharCode(65+i)}. ${esc(c)}</span>`;
       }).join(' ');
       const tr = document.createElement('tr');
       tr.innerHTML = `

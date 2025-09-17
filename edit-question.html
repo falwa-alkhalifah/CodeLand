@@ -66,6 +66,65 @@
   </div>
 </footer>
  
+<script src="js-deema/data.nomodule.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('question-form');
+  const cancelLink = document.getElementById('cancel-link');
+
+  const backUrl =
+    localStorage.getItem('currentQuestionReturnUrl') ||
+    (document.referrer && /quiz\.html/i.test(document.referrer) ? document.referrer : 'Quiz.html');
+
+  cancelLink.href = backUrl;
+
+  // حمّل السؤال المؤقت
+  const raw = localStorage.getItem('currentQuestion');
+  if (!raw) {
+    alert('لم يتم العثور على سؤال للتعديل. افتحي صفحة الكويز واضغطي Edit.');
+    location.href = backUrl;
+    return;
+  }
+  const q = JSON.parse(raw);
+
+  // عبّئي الحقول
+  form.elements['text'].value = q.text || '';
+  form.elements['c0'].value = q.choices?.[0] ?? '';
+  form.elements['c1'].value = q.choices?.[1] ?? '';
+  form.elements['c2'].value = q.choices?.[2] ?? '';
+  form.elements['c3'].value = q.choices?.[3] ?? '';
+  form.elements['correctIndex'].value = String(q.correctIndex ?? 0);
+
+  // حفظ التعديل
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const updated = {
+      // احتفظ بالنص الأصلي لتحديد الصف عند الرجوع
+      originalText: q.originalText || q.text || '',
+      text: form.elements['text'].value.trim(),
+      choices: [
+        form.elements['c0'].value,
+        form.elements['c1'].value,
+        form.elements['c2'].value,
+        form.elements['c3'].value
+      ],
+      correctIndex: Number(form.elements['correctIndex'].value)
+    };
+
+    localStorage.setItem('currentQuestion', JSON.stringify(updated));
+    localStorage.setItem('currentQuestionUpdated', '1'); // علَم للتطبيق في صفحة الكويز
+    location.href = backUrl;
+  });
+
+  // Cancel يرجّع بدون تغيير
+  cancelLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    location.href = backUrl;
+  });
+});
+</script>
+
 
 </body>
 </html>
