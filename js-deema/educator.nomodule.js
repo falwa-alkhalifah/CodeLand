@@ -45,7 +45,7 @@
       const tr=document.createElement('tr');
       tr.innerHTML=`
         <td><a href="quiz.html?id=${q.id}">${q.topic}</a></td>
-        <td>${q.questionCount}</td>
+        <td>${5}</td>
         <td>${formatStat(q.takers, q.avgScore)}</td>
         <td>${formatFeedback(q.avgRating)} • <a href="Comments Page.html?quizId=${q.id}">comments</a></td>`;
       tb.appendChild(tr);

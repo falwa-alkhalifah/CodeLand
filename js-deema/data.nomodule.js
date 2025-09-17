@@ -6,7 +6,7 @@
     topics: ["HTML 101","JAVA SCRIPT","PHP BASICS"]
   };
   window.quizzes = [
-    { id:101, topic:"HTML 101", educatorId:1, questionCount:5, takers:12, avgScore:78, avgRating:4.2 },
+    { id:101, topic:"HTML 101", educatorId:1, questionCount:5, takers:3, avgScore:78, avgRating:4.2 },
   ];
 
   window.recommendedQuestions = [
