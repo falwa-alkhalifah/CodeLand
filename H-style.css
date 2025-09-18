@@ -1,27 +1,49 @@
 /* Global Variables and Base Styles */
 
+:root {
+  --brand:#60a5fa;        
+  --brand-hover:#3b82f6;
+  --accent:#2dd4bf;       
+  --bg:#0f172a;           
+  --text:#f8fafc;         
+  --muted:#94a3b8;
+  --card:#1e293b;        
+  --border:#334155;
+}
 
+* {
+  box-sizing:border-box;
+}
+
+html,body {
+  margin:0;
+  padding:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
 
 .container {
     max-width: 1100px;
-    margin: 32px auto;
-    padding: 0 16px;
+    margin: 0 auto;
+    padding: 24px;
 }
 
 /* Button Styling */
 .btn {
-    display: inline-block;
-    padding: 10px 16px;
+    appearance: none;
+    border: 0;
     background: var(--brand);
     color: white;
+    font-weight: 700;
+    padding: 10px 14px;
     border-radius: 12px;
-    border: 0;
+    box-shadow: 0 8px 20px rgba(37,99,235,.25);
     cursor: pointer;
     transition: .2s;
-    box-shadow: var(--shadow);
     text-decoration: none;
     font-size: 16px;
-    font-weight: 600;
+    display: inline-block;
 }
 
 .btn:hover {
@@ -31,7 +53,7 @@
 
 .btn-edit {
     background: var(--accent);
-    padding: 6px 12px;
+    padding: 10px 14px;
     font-size: 14px;
 }
 
@@ -41,7 +63,7 @@
 
 .btn-delete {
     background: #ef4444;
-    padding: 6px 12px;
+    padding: 10px 14px;
     font-size: 14px;
 }
 
@@ -52,10 +74,11 @@
 /* Page 1 - Score Section */
 .score-section {
     background: var(--card);
-    padding: 12px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
     text-align: center;
 }
 
@@ -63,7 +86,7 @@
     font-size: 2em;
     font-weight: bold;
     color: var(--text);
-    margin: 8px 0 14px;
+    margin: 0 0 10px 0;
 }
 
 .video-container {
@@ -81,22 +104,23 @@
 /* Page 1 - Feedback Section */
 .feedback-section {
     background: var(--card);
-    padding: 12px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    border: 1px solid var(--border);
 }
 
 .feedback-title {
     color: var(--text);
-    font-size: 28px;
-    margin: 8px 0 14px;
+    font-size: 1.1rem;
+    margin: 0 0 10px 0;
     text-align: center;
 }
 
 /* Page 1 - Star Rating */
 .rating-container {
     text-align: center;
-    margin: 8px 0 14px;
+    margin: 0 0 10px 0;
 }
 
 .star-rating {
@@ -130,14 +154,14 @@
     width: 100%;
     min-height: 120px;
     padding: 10px 12px;
-    border-radius: 12px;
-    border: 2px solid var(--border);
-    background: var(--bg);
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
     color: var(--text);
     font-size: 1em;
     font-family: var(--font);
     resize: vertical;
-    margin: 8px 0 14px;
+    margin: 0 0 10px 0;
     transition: border-color 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -158,18 +182,19 @@
 }
 
 .submit-btn {
-    display: inline-block;
-    padding: 10px 16px;
+    appearance: none;
+    border: 0;
     background: var(--brand);
     color: white;
-    border: none;
+    font-weight: 700;
+    padding: 10px 14px;
     border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(37,99,235,.25);
     cursor: pointer;
     transition: .2s;
-    box-shadow: var(--shadow);
-    margin: 8px 0 14px;
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    display: inline-block;
 }
 
 .submit-btn:hover {
@@ -196,27 +221,27 @@
 /* Page 2 - Quiz Info Styling */
 .quiz-info {
     background: var(--card);
-    border: none;
-    padding: 12px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 16px;
 }
 
 .quiz-info h2 {
     color: var(--text);
-    font-size: 28px;
-    margin: 8px 0 14px;
+    font-size: 1.1rem;
+    margin: 0 0 10px 0;
 }
 
 .quiz-info p {
     color: var(--muted);
-    font-size: 20px;
-    margin: 8px 0 14px;
+    font-size: .92rem;
+    margin: 0 0 10px 0;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -225,18 +250,18 @@
 .quiz-info img {
     width: 40px;
     height: 40px;
-    border-radius: 999px;
+    border-radius: 50%;
     object-fit: cover;
-    border: 3px solid var(--brand);
+    border: 1px solid rgba(255,255,255,.15);
 }
 
 /* Page 2 - Form Styling */
 form {
     background: var(--card);
-    border: none;
-    padding: 12px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
 }
 
 /* Page 2 - Question Styling */
@@ -245,15 +270,15 @@ form {
     border: none;
     padding: 18px;
     border-radius: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     border-left: 4px solid var(--brand);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .question p {
-    font-size: 20px;
+    font-size: 1.1rem;
     color: var(--text);
-    margin: 8px 0 14px;
+    margin: 0 0 10px 0;
     font-weight: 600;
 }
 
@@ -267,7 +292,7 @@ form {
 /* Page 2 - Choices Grid Layout */
 .choices {
     display: grid;
-    gap: 16px;
+    gap: 12px;
     grid-template-columns: 1fr 1fr;
 }
 
@@ -275,10 +300,10 @@ form {
 .choices label {
     display: flex;
     align-items: center;
-    padding: 10px 16px;
+    padding: 10px 12px;
     background: var(--card);
-    border-radius: 12px;
-    border: 2px solid transparent;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
     cursor: pointer;
     transition: .2s;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -318,19 +343,19 @@ form {
 
 /* Page 2 - Submit Button */
 button[type="submit"] {
-    display: inline-block;
-    padding: 10px 16px;
+    appearance: none;
+    border: 0;
     background: var(--brand);
     color: white;
+    font-weight: 700;
+    padding: 10px 14px;
     border-radius: 12px;
-    border: 0;
+    box-shadow: 0 8px 20px rgba(37,99,235,.25);
     cursor: pointer;
     transition: .2s;
-    box-shadow: var(--shadow);
-    margin: 16px auto 0;
+    margin: 12px auto 0;
     display: block;
     font-size: 16px;
-    font-weight: 600;
 }
 
 button[type="submit"]:hover {
@@ -341,28 +366,30 @@ button[type="submit"]:hover {
 /* Page 3 - Header Section */
 .page-header {
     background: var(--card);
-    padding: 12px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 16px;
 }
 
 .page-header h1 {
     color: var(--text);
-    font-size: 28px;
-    margin: 8px 0 14px;
+    font-size: 1.1rem;
+    margin: 0 0 10px 0;
 }
 
 /* Page 3 - Questions Table Section */
 .table-section {
     background: var(--card);
-    padding: 12px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    border: 1px solid var(--border);
 }
 
 /* Page 3 - Table Styling */
@@ -373,14 +400,17 @@ button[type="submit"]:hover {
 
 .table th,
 .table td {
-    text-align: left;
     padding: 12px 10px;
-    border-bottom: 1px dashed var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: left;
     vertical-align: top;
 }
 
 .table th {
-    color: var(--text);
+    font-size: .9rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
     font-weight: 600;
     background: var(--bg);
 }
@@ -407,11 +437,13 @@ button[type="submit"]:hover {
 }
 
 .choice {
-    font-size: 14px;
-    padding: 2px 6px;
-    border-radius: 4px;
+    font-size: .8rem;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
     background: var(--bg);
-    color: var(--text);
+    color: var(--muted);
+    margin-right: 8px;
 }
 
 .choice.correct {
@@ -427,13 +459,12 @@ button[type="submit"]:hover {
 .table th.actions-column,
 .table td.actions-column {
     text-align: center;
-    width: 120px;  /* adjust if needed */
+    width: 120px;
 }
-
 
 .action-button {
     display: inline-block;   
-    width: auto;             /* instead of 100% */
+    width: auto;
     margin: 0 4px;           
 }
 
@@ -444,10 +475,10 @@ button[type="submit"]:hover {
     bottom: 18px;
     background: var(--card);
     color: var(--text);
-    padding: 10px 14px;
-    border-radius: 10px;
+    padding: 14px;
+    border-radius: 12px;
     border: 1px solid var(--border);
-    box-shadow: var(--shadow);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
     display: none;
 }
 
@@ -458,12 +489,12 @@ button[type="submit"]:hover {
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
-        padding: 0 10px;
+        padding: 24px;
     }
     
     /* Page 1 Responsive */
     .score-section, .feedback-section {
-        padding: 16px;
+        padding: 18px;
     }
     
     .score-display {
@@ -471,7 +502,7 @@ button[type="submit"]:hover {
     }
     
     .feedback-title {
-        font-size: 24px;
+        font-size: 1.1rem;
     }
     
     .star-rating {
@@ -481,44 +512,45 @@ button[type="submit"]:hover {
     /* Page 2 Responsive */
     .choices {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
     
     .quiz-info {
         flex-direction: column;
         text-align: center;
-        padding: 16px;
+        padding: 18px;
     }
     
     .quiz-info h2 {
-        font-size: 24px;
+        font-size: 1.1rem;
     }
     
     form {
-        padding: 16px;
+        padding: 18px;
     }
     
     /* Page 3 Responsive */
     .page-header {
         flex-direction: column;
         text-align: center;
-        padding: 16px;
+        padding: 18px;
     }
     
     .page-header h1 {
-        font-size: 24px;
+        font-size: 1.1rem;
     }
     
     .table-section {
-        padding: 16px;
+        padding: 18px;
     }
 
     .table {
-        font-size: 14px;
+        font-size: .9rem;
     }
 
     .table th,
     .table td {
-        padding: 8px 5px;
+        padding: 12px 10px;
     }
 
     .table .question-column {
@@ -535,11 +567,11 @@ button[type="submit"]:hover {
         width: 100%;
         margin-bottom: 4px;
         font-size: 12px;
-        padding: 4px 8px;
+        padding: 10px 14px;
     }
 
     .choices-container {
         flex-direction: column;
-        gap: 4px;
+        gap: 12px;
     }
 }
