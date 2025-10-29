@@ -1,3 +1,17 @@
+<?php 
+session_start();
+
+// Connect to the database
+$connect = mysqli_connect("localhost", "root", "root", "codeland");
+if(mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    exit();
+}
+// Fetch learner information
+//$result = mysqli_query($connect, "SELECT * FROM user WHERE id = " . $_SESSION['user_id']);
+//$learner = mysqli_fetch_assoc($result);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +38,7 @@
 </header>
 
 <main class="container main">
-  <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName">Sara</span> 👋</h1>
+  <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName"><?php echo $learner['firstName']; ?></span> 👋</h1>
   <p class="small">This is your learner dashboard. Browse quizzes, track your suggested questions, and keep learning.</p>
 
   <div class="grid">
@@ -32,28 +46,24 @@
     <section class="card">
       <h2>Your Info</h2>
       <div class="user">
-        <div class="avatar"><img src="images/WebSA.jpeg" alt="Profile"></div>
+        <div class="avatar"><img src="<?php echo $learner['photoFileName']; ?>" alt="Profile"></div>
         <div>
-          <div><strong id="fullName">Sara Al-Qahtani</strong></div>
-          <div class="muted">sara@example.edu</div>
-          <div style="margin-top:6px">
-            <span class="tag">CS</span>
-            <span class="tag">Level 6</span>
-          </div>
+          <div><strong id="fullName"><?php echo $learner['firstName']." ".$learner['lastName']; ?></strong></div>
+          <div class="muted"><?php echo $learner['emailAddress']; ?></div>
         </div>
       </div>
     </section>
 
     <!-- Right column -->
-    <section class="card">
+        <section class="card">
       <h2>Quick Actions</h2>
       <div class="row row-2">
-        <a class="btn" href="Recomended Questions.html">+ Recommend a Question</a>
-        <a class="btn btn-outline" href="Comments Page.html">View Quiz Comments</a>
+        <a class="btn" href="Recomended Questions.php">+ Recommend a Question</a>
+        <a class="btn btn-outline" href="Comments Page.php">View Quiz Comments</a>
       </div>
     </section>
   </div>
-
+  <!-- form -->
   <section class="card" style="margin-top:16px">
     <div class="inline" style="justify-content:space-between">
       <h2>Available Quizzes</h2>
@@ -66,7 +76,6 @@
         </select>
         <button class="btn" id="filterBtn" type="button">Filter</button>
       </div>
-    </div>
     <table class="table" id="quizzesTable">
       <thead>
         <tr><th>Topic</th><th>Educator</th><th># Questions</th><th>Take Quiz</th></tr>
