@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Open LernerHomePage.php",
-            "url": "http://localhost/CodeLand/LernerHomePage.php",
+            "url": "http://localhost/CodeLand/login.php",
             "webRoot": "${workspaceFolder}"
         }
     ]

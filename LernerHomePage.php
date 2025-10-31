@@ -2,14 +2,14 @@
 session_start();
 
 // Connect to the database
-$connect = mysqli_connect("localhost", "root", "root", "codeland");
+$connect = mysqli_connect("localhost", "root", "root", "database");
 if(mysqli_connect_errno()) {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
     exit();
 }
 // Fetch learner information
-//$result = mysqli_query($connect, "SELECT * FROM user WHERE id = " . $_SESSION['user_id']);
-//$learner = mysqli_fetch_assoc($result);
+$result = mysqli_query($connect, "SELECT * FROM user WHERE id = " . $_SESSION['user_id']);
+$learner = mysqli_fetch_assoc($result);
 ?>
 
 <!DOCTYPE html>
