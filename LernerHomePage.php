@@ -7,9 +7,21 @@ if(mysqli_connect_errno()) {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
     exit();
 }
+if($_SESSION['user_type'] != 'learner') {
+    header("Location: login.html");
+    exit();
+}
 // Fetch learner information
+if(isset($_SESSION['user_id'])) {
 $result = mysqli_query($connect, "SELECT * FROM user WHERE id = " . $_SESSION['user_id']);
 $learner = mysqli_fetch_assoc($result);
+}
+$topics = mysqli_query($connect, "SELECT DISTINCT topicName FROM topic");
+$topicsArray = [];
+while($row = mysqli_fetch_assoc($topics)) {
+    $topicsArray[] = $row['topicName'];
+}
+$topics = $topicsArray;
 ?>
 
 <!DOCTYPE html>
@@ -64,18 +76,20 @@ $learner = mysqli_fetch_assoc($result);
     </section>
   </div>
   <!-- form -->
+<form action="LernerHomePage.php" method="POST">
   <section class="card" style="margin-top:16px">
     <div class="inline" style="justify-content:space-between">
       <h2>Available Quizzes</h2>
       <div class="filterbar">
-        <select id="topicFilter" class="select">
-          <option value="all">All Topics</option>
-          <option value="databases">HTML101</option>
-          <option value="webdev">JAVA</option>
-          <option value="networks">C++</option>
+        <select id="topicFilter" name="topic" class="select">
+          <?php foreach ($topics as $topic) {
+            echo "<option value='$topic'>$topic</option>";
+          } ?>
         </select>
-        <button class="btn" id="filterBtn" type="button">Filter</button>
+        <button class="btn" id="filterBtn" type="submit">Filter</button>
       </div>
+    </div>
+
     <table class="table" id="quizzesTable">
       <thead>
         <tr><th>Topic</th><th>Educator</th><th># Questions</th><th>Take Quiz</th></tr>
@@ -102,6 +116,7 @@ $learner = mysqli_fetch_assoc($result);
       </tbody>
     </table>
   </section>
+</form>
 
   <section class="card" style="margin-top:16px">
     <h2>Your Recommended Questions</h2>
