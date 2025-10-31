@@ -7,7 +7,6 @@ $defaultPhoto = "default_user.png";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Receive data
     $firstName = $_POST['firstName'] ?? '';
     $lastName = $_POST['lastName'] ?? '';
     $email = $_POST['emailAddress'] ?? '';
@@ -15,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userType = $_POST['userType'] ?? '';
     $topics = ($userType == 'educator' && isset($_POST['topics'])) ? $_POST['topics'] : [];
 
-    $check_stmt = mysqli_prepare($conn, "SELECT id FROM User WHERE emailAddress = ?");
+    $check_stmt = mysqli_prepare($conn, "SELECT id FROM User WHERE emailAddress = ?"); 
     mysqli_stmt_bind_param($check_stmt, "s", $email);
     mysqli_stmt_execute($check_stmt);
     $check_result = mysqli_stmt_get_result($check_stmt);
@@ -35,11 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
         $fileExtension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $uniqueFileName = $email . "_" . uniqid() . "." . $fileExtension;
+        $uniqueFileName = uniqid('photo_', true) . '.' . $fileExtension;
         $targetFile = $targetDir . $uniqueFileName;
         
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
-            $photoFileName = $uniqueFileName;
+            $photoFileName = $uniqueFileName; // تخزين اسم الملف الفريد في قاعدة البيانات
         }
     }
     
@@ -51,10 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_user_id = mysqli_insert_id($conn); 
 
         if ($userType == 'educator' && !empty($topics)) {
-            $quiz_query = "INSERT INTO Quiz (educatorID, topicID) VALUES (?, ?)";
+            $quiz_query = "INSERT INTO Quiz (educatorID, topicID, quizName) VALUES (?, ?, ?)"; // تم إضافة quizName
             $quiz_stmt = mysqli_prepare($conn, $quiz_query);
+            $defaultQuizName = "Initial Quiz for Topic"; 
+
             foreach ($topics as $topicID) {
-                mysqli_stmt_bind_param($quiz_stmt, "ii", $new_user_id, $topicID);
+             
+                mysqli_stmt_bind_param($quiz_stmt, "iis", $new_user_id, $topicID, $defaultQuizName);
                 mysqli_stmt_execute($quiz_stmt);
             }
             mysqli_stmt_close($quiz_stmt);
@@ -73,12 +75,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
 
     } else {
-        $_SESSION['signup_error'] = "Registration failed. Please try again.";
+        $_SESSION['signup_error'] = "Registration failed. Please try again: " . mysqli_error($conn);
         header("Location: signup.php");
         mysqli_stmt_close($insert_stmt);
         mysqli_close($conn);
         exit();
     }
+
+} else {
+    header("Location: signup.php");
+    mysqli_close($conn);
+    exit();
 }
-mysqli_close($conn);
 ?>

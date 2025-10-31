@@ -30,7 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `quiz` (
   `id` int(11) NOT NULL,
   `educatorID` int(11) DEFAULT NULL,
-  `topicID` int(11) DEFAULT NULL
+  `topicID` int(11) DEFAULT NULL,
+  `quizName` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -120,7 +121,7 @@ CREATE TABLE `user` (
   `firstName` varchar(50) DEFAULT NULL,
   `lastName` varchar(50) DEFAULT NULL,
   `emailAddress` varchar(100) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `photoFileName` varchar(100) DEFAULT NULL,
   `userType` enum('educator','learner') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

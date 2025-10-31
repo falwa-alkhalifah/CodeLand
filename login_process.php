@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $query = "SELECT id, password, userType FROM User WHERE emailAddress = ? AND userType = ?";
-    $stmt = mysqli_prepare($conn, $query);
+    $stmt = mysqli_prepare($conn, $query); 
     
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, "ss", $email, $userType);
@@ -30,13 +30,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_type'] = $user['userType'];
                 
+                mysqli_stmt_close($stmt);
+                mysqli_close($conn); 
+                
                 if ($user['userType'] == 'educator') {
                     header("Location: educator_homepage.php");
                 } else { 
                     header("Location: learner_homepage.php");
                 }
-                mysqli_stmt_close($stmt);
-                mysqli_close($conn);
                 exit();
                 
             } else {
@@ -50,10 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $_SESSION['login_error'] = "System error. Please try again later.";
     }
-    
-    header("Location: login.php"); 
-    mysqli_close($conn);
-    exit();
+
+} else {
+    $_SESSION['login_error'] = "Invalid request method.";
 }
-mysqli_close($conn);
+
+header("Location: login.php");
+mysqli_close($conn); 
+exit();
 ?>
