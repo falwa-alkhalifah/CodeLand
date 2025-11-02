@@ -1,32 +1,31 @@
 <?php 
 session_start();
-require_once 'db_config.php'; 
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 'learner') {
-    header("Location: login.php");
+// Connect to the database
+$connect = mysqli_connect("localhost", "root", "root", "database");
+if(mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
     exit();
 }
-
-
-$result = mysqli_query($conn, "SELECT * FROM User WHERE id = " . $_SESSION['user_id']);
-$learner = mysqli_fetch_assoc($result);
-
-
-$topics_result = mysqli_query($conn, "SELECT id, topicName FROM Topic ORDER BY topicName");
-
-$quiz_query = "SELECT Q.id, Q.quizName, T.topicName, U.firstName, U.lastName 
-               FROM Quiz Q
-               JOIN Topic T ON Q.topicID = T.id
-               JOIN User U ON Q.educatorID = U.id";
-
-$where_clause = "";
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['topicID']) && $_POST['topicID'] != 'all') {
-    $topicID = mysqli_real_escape_string($conn, $_POST['topicID']);
-    $where_clause = " WHERE Q.topicID = '$topicID'";
+// 1- Check if user is logged in and is a learner
+if($_SESSION['user_type'] != 'learner') {
+    header("Location: login.html");
+    exit();
 }
+// 2- Checks the user’s id
+// Fetch learner information
+if(isset($_SESSION['user_id'])) {
+$result = mysqli_query($connect, "SELECT * FROM user WHERE id = " . $_SESSION['user_id']);
+$learner = mysqli_fetch_assoc($result);
+}
+// 3- Fetch distinct topics from the database
+$topics = mysqli_query($connect, "SELECT DISTINCT topicName FROM topic");
+$topicsArray = [];
+while($row = mysqli_fetch_assoc($topics)) {
+    $topicsArray[] = $row['topicName'];
+}
+$topics = $topicsArray;
 
-$quiz_query .= $where_clause . " ORDER BY Q.id DESC";
-$quizzes_result = mysqli_query($conn, $quiz_query);
 
 ?>
 
@@ -40,6 +39,7 @@ $quizzes_result = mysqli_query($conn, $quiz_query);
   <link rel="stylesheet" href="HF.css">
 </head>
 <body>
+<!-- ====== HEADER ====== -->
 <header class="cl-header">
   <div class="brand">
     <img src="images/logo.png" alt="Logo">
@@ -47,88 +47,206 @@ $quizzes_result = mysqli_query($conn, $quiz_query);
   </div>
 
   <div class="actions">
-      <a href="learner_homepage.php">
-        <img src="uploads/<?php echo htmlspecialchars($learner['photoFileName'] ?? 'default_user.png'); ?>" alt="User" class="avatar">
+      <a href="LernerHomePage.Html">
+        <img src="images/educatorUser.jpeg" alt="User" class="avatar">
     </a>
-    <a href="logout.php" class="logout-btn">Logout</a>
+    <a href="index.html" class="logout-btn">Logout</a>
   </div>
 </header>
 
 <main class="container main">
-  <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName"><?php echo htmlspecialchars($learner['firstName'] ?? 'Learner'); ?></span> 👋</h1>
-  <p class="small-text" style="color:#666;margin:0 0 20px 0"><?php echo htmlspecialchars($learner['emailAddress'] ?? 'No email'); ?></p>
+  <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName"><?php echo $learner['firstName']; ?></span> 👋</h1>
+  <p class="small">This is your learner dashboard. Browse quizzes, track your suggested questions, and keep learning.</p>
 
-  <section class="card" style="margin-top:20px">
-    <h2>Available Quizzes</h2>
-    
-    <form method="POST" action="learner_homepage.php" class="filterbar">
-        <select id="topicFilter" class="select" name="topicID">
+  <div class="grid">
+    <!-- Left column -->
+    <section class="card">
+      <h2>Your Info</h2>
+      <div class="user">
+        <div class="avatar"><img src="<?php echo $learner['photoFileName']; ?>" alt="Profile"></div>
+        <div>
+          <div><strong id="fullName"><?php echo $learner['firstName']." ".$learner['lastName']; ?></strong></div>
+          <div class="muted"><?php echo $learner['emailAddress']; ?></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right column -->
+        <section class="card">
+      <h2>Quick Actions</h2>
+      <div class="row row-2">
+        <a class="btn" href="Recomended Questions.php">+ Recommend a Question</a>
+        <a class="btn btn-outline" href="Comments Page.php">View Quiz Comments</a>
+      </div>
+    </section>
+  </div>
+  <!-- form -->
+<form action="learner_homePage.php" method="POST">
+  <section class="card" style="margin-top:16px">
+    <div class="inline" style="justify-content:space-between">
+      <h2>Available Quizzes</h2>
+      <div class="filterbar">
+        <!-- 3- Displays a form for filtering quizzes by topic -->
+        <select id="topicFilter" class="select" name="topicFilter">
           <option value="all">All Topics</option>
-          <?php while ($topic = mysqli_fetch_assoc($topics_result)): ?>
-            <option value="<?php echo htmlspecialchars($topic['id']); ?>" 
-                    <?php echo (isset($_POST['topicID']) && $_POST['topicID'] == $topic['id']) ? 'selected' : ''; ?>>
-                <?php echo htmlspecialchars($topic['topicName']); ?>
-            </option>
-          <?php endwhile; mysqli_free_result($topics_result); ?>
+          <?php foreach($topics as $topic) 
+            echo "<option value='$topic'>$topic</option>";
+            ?>
         </select>
-        <button type="submit" id="filterBtn" class="btn">Filter</button>
-    </form>
+        <button class="btn" id="filterBtn" type="submit">Filter</button>
+      </div>
+    </div>
 
-    <table id="quizzesTable" class="table">
+    <table class="table" id="quizzesTable">
       <thead>
-        <tr>
-          <th>Quiz Name</th>
-          <th>Topic</th>
-          <th>Educator</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if ($quizzes_result && mysqli_num_rows($quizzes_result) > 0): ?>
-            <?php while ($quiz = mysqli_fetch_assoc($quizzes_result)): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($quiz['quizName'] ?? 'Quiz ID: ' . $quiz['id']); ?></td>
-                <td><?php echo htmlspecialchars($quiz['topicName']); ?></td>
-                <td><?php echo htmlspecialchars($quiz['firstName'] . ' ' . $quiz['lastName']); ?></td>
-                <td>
-                    <a href="quiz_form.php?quizID=<?php echo htmlspecialchars($quiz['id']); ?>" class="btn">Take Quiz</a>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr><td colspan="4" style="text-align: center;">No quizzes found for the selected filter.</td></tr>
-        <?php endif; ?>
-        <?php if ($quizzes_result) mysqli_free_result($quizzes_result); ?>
+  <tr><th>Topic</th><th>Educator</th><th># Questions</th><th>Take Quiz</th></tr>
+</thead>
+<tbody>
+  <?php
+// Base query
+$query = "
+SELECT 
+  q.id AS quizID,
+  q.quizName,
+  t.topicName,
+  CONCAT(u.firstName, ' ', u.lastName) AS educatorName,
+  u.photoFileName AS educatorPhoto,
+  COUNT(qq.id) AS numberOfQuestions
+FROM quiz q
+LEFT JOIN topic t ON q.topicID = t.id
+LEFT JOIN user u ON q.educatorID = u.id
+LEFT JOIN quizquestion qq ON q.id = qq.quizID
+";
 
-      </tbody>
+// If the request is POST, filter by the selected topic
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['topicFilter']) && $_POST['topicFilter'] != 'all') {
+    $topic = mysqli_real_escape_string($connect, $_POST['topicFilter']);
+    $query .= " WHERE t.topicName = '$topic'";
+}
+
+$query .= "
+GROUP BY q.id, q.quizName, t.topicName, educatorName, educatorPhoto
+ORDER BY q.id;
+";
+
+$result = mysqli_query($connect, $query);
+
+// Display rows
+while ($quiz = mysqli_fetch_assoc($result)) {
+    echo "<tr>";
+    echo "<td>" . htmlspecialchars($quiz['topicName']) . "</td>";
+
+    // Educator info
+    $photo = !empty($quiz['educatorPhoto']) ? $quiz['educatorPhoto'] : 'educatorUser.jpeg';
+    echo "<td class='inline'><div class='avatar'><img src='images/" . htmlspecialchars($photo) . "' alt=''></div> " . htmlspecialchars($quiz['educatorName']) . "</td>";
+
+    // Number of questions
+    echo "<td>" . intval($quiz['numberOfQuestions']) . "</td>";
+
+    // Take quiz link
+    if ($quiz['numberOfQuestions'] > 0) {
+        echo "<td><a class='btn' href='TakeQuiz.php?quizID=" . $quiz['quizID'] . "'>Take Quiz</a></td>";
+    } else {
+        echo "<td class='muted'>—</td>";
+    }
+
+    echo "</tr>";
+}
+?>
+</tbody>
+
     </table>
   </section>
-  
-  <section class="card" style="margin-top:20px">
-    <h2>Recommended Questions Feedback</h2>
+</form>
+
+  <section class="card" style="margin-top:16px">
+    <h2>Your Recommended Questions</h2>
     <table class="table">
       <thead>
-        <tr>
-          <th>Question</th>
-          <th>Status</th>
-          <th>Educator Feedback</th>
-        </tr>
+        <tr><th>Topic</th><th>Educator</th><th>Question</th><th>Status</th><th>Educator Comments</th></tr>
       </thead>
       <tbody>
-        <tr>
-            <td>
-                <div><strong>How do you create a pointer in C++?</strong></div>
-                <ol style="margin:6px 0 0 18px">
-                    <li>&amp;</li>
-                    <li><span class="answer wrong" style="font-weight:800;padding:2px 6px;border-radius:6px">@ (Wrong)</span></li>
-                    <li>*</li>
-                    <li>%</li>
-                </ol>
-            </td>
-            <td><span class="status disapproved">Disapproved</span></td>
-            <td>Correct answer should be <span class="kbd">*</span>.</td>
-        </tr>
-      </tbody>
+  <tr>
+    <?php
+    $learnerID = intval($_SESSION['user_id']);
+
+$query = "
+SELECT 
+    rq.id AS recQuestionID,
+    t.topicName,
+    CONCAT(u.firstName, ' ', u.lastName) AS educatorName,
+    u.photoFileName AS educatorPhoto,
+    rq.question,
+    rq.questionFigureFileName,
+    rq.answerA,
+    rq.answerB,
+    rq.answerC,
+    rq.answerD,
+    rq.correctAnswer,      -- <--- add this line
+    rq.status,
+    rq.comments
+FROM recommendedquestion rq
+LEFT JOIN quiz q ON rq.quizID = q.id
+LEFT JOIN topic t ON q.topicID = t.id
+LEFT JOIN user u ON q.educatorID = u.id
+WHERE rq.learnerID = $learnerID
+ORDER BY rq.id DESC
+";
+
+
+$result = mysqli_query($connect, $query);
+while($row = mysqli_fetch_assoc($result)) {
+    echo "<tr>";
+    
+    // Topic
+    echo "<td>" . htmlspecialchars($row['topicName']) . "</td>";
+    
+    // Educator with photo
+    $photo = !empty($row['educatorPhoto']) ? $row['educatorPhoto'] : 'educatorUser.jpeg';
+    echo "<td class='inline'><div class='avatar'><img src='images/" . htmlspecialchars($photo) . "' alt=''></div> " . htmlspecialchars($row['educatorName']) . "</td>";
+    
+
+    // Question text and optional figure
+    echo "<td>";
+    if(!empty($row['questionFigureFileName'])) {
+        echo "<img src='images/" . htmlspecialchars($row['questionFigureFileName']) . "' class='figure' alt='Question Figure'>";
+    }
+    echo "<div><strong>" . htmlspecialchars($row['question']) . "</strong></div>";
+    
+        $correct = $row['correctAnswer']; //error
+
+    // Prepare answers
+    $answers = [
+        'A' => $row['answerA'],
+        'B' => $row['answerB'],
+        'C' => $row['answerC'],
+        'D' => $row['answerD']
+    ];
+
+    echo "<ol style='margin:6px 0 0 18px'>";
+    foreach ($answers as $key => $text) {
+        // Highlight correct answer in green and bold
+        $style = ($key === $correct) ? "color:green; font-weight:bold;" : "";
+        echo "<li style='$style'>" . htmlspecialchars($text) . "</li>";
+    }
+    echo "</ol>";
+
+    echo "</td>";
+    
+    // Status
+    $statusClass = strtolower($row['status']); // pending, approved, disapproved
+    echo "<td><span class='status " . htmlspecialchars($statusClass) . "'>" . htmlspecialchars(ucfirst($row['status'])) . "</span></td>";
+    
+    // Educator comments
+    echo "<td>" . (!empty($row['comments']) ? htmlspecialchars($row['comments']) : '—') . "</td>";
+    
+    echo "</tr>";
+}
+
+?>
+
+</tbody>
+
     </table>
     <div class="right" style="margin-top:10px">
       <a class="btn" href="Recomended Questions.html">Recommend another question</a>
@@ -136,6 +254,7 @@ $quizzes_result = mysqli_query($conn, $quiz_query);
   </section>
 </main>
 
+<!-- ====== FOOTER ====== -->
 <footer class="cl-footer">
  <p>OUR VISION</p>
  <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
@@ -147,12 +266,6 @@ $quizzes_result = mysqli_query($conn, $quiz_query);
   </div>
 </footer>
 
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
-</body>
-</html>
 
-<?php 
-mysqli_close($conn); 
-?>
+</body>
+</html> 
