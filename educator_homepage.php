@@ -1,34 +1,28 @@
 <?php
-// ================== Auth (ضعه في أعلى الصفحة دائمًا) ==================
+// ===== Auth guard =====
+
+$conn = new mysqli('localhost','root','root','database'); // غيّري اسم القاعدة
+if ($conn->connect_error) { die('DB error: '.$conn->connect_error); }
+$conn->set_charset('utf8mb4');
+
 session_start();
 
-if (!isset($_SESSION['user_id'])) { 
-  header("Location: login.php"); 
-  exit();
-}
+// خلال التشخيص فقط؛ احذفيه بعد ما يشتغل
+ini_set('display_errors',1); error_reporting(E_ALL);
 
-// توجيه إن لم يكن Educator
-if (basename($_SERVER['PHP_SELF']) === 'educator_homepage.php' && (($_SESSION['user_type'] ?? '') !== 'educator')) {
-  header("Location: LearnerHomePage.php");
-  exit();
-}
-// ======================================================================
+if (empty($_SESSION['user_id'])) { header("Location: login.php"); exit; }
+if (($_SESSION['user_type'] ?? '') !== 'educator') { header("Location: LearnerHomePage.php"); exit; }
 
-// فعّلي السطرين التاليين مؤقتًا لو أردتِ رؤية تفاصيل أي خطأ 500 أثناء التطوير
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
-
-// ======== الاتصال بقاعدة البيانات ========
-// استخدمي اتصال PDO عبر db.php (المتغير $pdo)
-// أو استبدلي السطر التالي بملف اتصالك (مثلاً db_config.php) وعدّلي الاستعلامات إن كنتِ تستخدمين mysqli
-require_once 'db_config.php'; // يوفر $pdo (PDO)
+require_once 'db_config.php'; // يجب أن يعرّف $conn (mysqli)
+if (!isset($conn) || !($conn instanceof mysqli)) { die('DB connection ($conn) not found.'); }
 
 $educatorId = (int)$_SESSION['user_id'];
 
-// فلتر XSS بسيط
 function h($s){ return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); }
 
-/* ========== مراجعة الأسئلة الموصى بها (POST من نفس الصفحة) ========== */
+
+
+/* ================== معالجة مراجعة الأسئلة الموصى بها ================== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rq_id'], $_POST['action'])) {
   $rqId     = (int)($_POST['rq_id'] ?? 0);
   $quizId   = (int)($_POST['quiz_id'] ?? 0);
@@ -36,28 +30,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rq_id'], $_POST['acti
   $comments = trim($_POST['comments'] ?? '');
 
   if ($rqId > 0 && $quizId > 0 && in_array($action, ['approved','disapproved'], true)) {
-    // تأكيد أن السؤال يتبع لهذا المعلّم
-    $chk = $pdo->prepare("
-      SELECT rq.*, q.educatorID
-      FROM RecommendedQuestion rq
-      JOIN Quiz q ON q.id = rq.quizID
-      WHERE rq.id = ?
-    ");
-    $chk->execute([$rqId]);
-    $row = $chk->fetch(PDO::FETCH_ASSOC);
+    // تأكد أن هذا السؤال يتبع كويز يملكه نفس المعلّم
+    $sql = "SELECT rq.*, q.educatorID FROM RecommendedQuestion rq JOIN Quiz q ON q.id=rq.quizID WHERE rq.id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $rqId);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $row = $res->fetch_assoc();
+    $stmt->close();
 
     if ($row && (int)$row['educatorID'] === $educatorId) {
-      // تحديث الحالة والتعليق
-      $upd = $pdo->prepare("UPDATE RecommendedQuestion SET status=?, comments=? WHERE id=?");
-      $upd->execute([$action, $comments, $rqId]);
+      // تحديث الحالة + التعليق
+      $sql = "UPDATE RecommendedQuestion SET status=?, comments=? WHERE id=?";
+      $stmt = $conn->prepare($sql);
+      $stmt->bind_param("ssi", $action, $comments, $rqId);
+      $stmt->execute();
+      $stmt->close();
 
-      // عند الموافقة → أضف السؤال لجدول QuizQuestion
+      // لو موافق → انسخ للسؤال الفعلي
       if ($action === 'approved') {
-        $ins = $pdo->prepare("
-          INSERT INTO QuizQuestion (quizID, question, questionFigureFileName, answerA, answerB, answerC, answerD, correctAnswer)
-          VALUES (?,?,?,?,?,?,?,?)
-        ");
-        $ins->execute([
+        $sql = "INSERT INTO QuizQuestion
+                  (quizID, question, questionFigureFileName, answerA, answerB, answerC, answerD, correctAnswer)
+                VALUES (?,?,?,?,?,?,?,?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param(
+          "isssssss",
           $row['quizID'],
           $row['question'],
           $row['questionFigureFileName'],
@@ -66,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rq_id'], $_POST['acti
           $row['answerC'],
           $row['answerD'],
           $row['correctAnswer']
-        ]);
+        );
+        $stmt->execute();
+        $stmt->close();
       }
       $message = "✅ Review processed successfully.";
     } else {
@@ -76,133 +75,133 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rq_id'], $_POST['acti
     $message = "⚠️ Invalid form submission.";
   }
 }
-/* ==================================================================== */
+/* ====================================================================== */
 
-// ======== معلومات المعلّم ========
-$userStmt = $pdo->prepare("SELECT firstName,lastName,emailAddress,photoFileName FROM User WHERE id=?");
-$userStmt->execute([$educatorId]);
-$me = $userStmt->fetch(PDO::FETCH_ASSOC);
+/* ================== معلومات المعلّم ================== */
+$sql = "SELECT firstName,lastName,emailAddress,photoFileName FROM User WHERE id=?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $educatorId);
+$stmt->execute();
+$me = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
-// ======== الكويزات الخاصة بالمعلّم + اسم الموضوع ========
-$qzStmt = $pdo->prepare("
-  SELECT q.id AS quiz_id, t.topicName
-  FROM Quiz q 
-  JOIN Topic t ON t.id = q.topicID
-  WHERE q.educatorID = ?
-  ORDER BY q.id DESC
-");
-$qzStmt->execute([$educatorId]);
-$quizzes = $qzStmt->fetchAll(PDO::FETCH_ASSOC);
+/* ================== الكويزات + اسم الموضوع ================== */
+$sql = "SELECT q.id AS quiz_id, t.topicName
+        FROM Quiz q JOIN Topic t ON t.id=q.topicID
+        WHERE q.educatorID=?
+        ORDER BY q.id DESC";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $educatorId);
+$stmt->execute();
+$qres = $stmt->get_result();
+$quizzes = [];
+while ($r = $qres->fetch_assoc()) { $quizzes[] = $r; }
+$stmt->close();
 
-// ======== إحصائيات لكل كويز ========
-$qCount = $pdo->prepare("SELECT COUNT(*) FROM QuizQuestion WHERE quizID=?");
-$tkStat = $pdo->prepare("SELECT COUNT(*) c, AVG(score) a FROM TakenQuiz WHERE quizID=?");
-$fbStat = $pdo->prepare("SELECT COUNT(*) c, AVG(rating) a FROM QuizFeedback WHERE quizID=?");
-$stats  = [];
+/* ================== الإحصائيات ================== */
+$stats = [];
+if ($quizzes) {
+  $sqlCount = $conn->prepare("SELECT COUNT(*) AS c FROM QuizQuestion WHERE quizID=?");
+  $sqlTaken = $conn->prepare("SELECT COUNT(*) AS c, AVG(score) AS a FROM TakenQuiz WHERE quizID=?");
+  $sqlFb    = $conn->prepare("SELECT COUNT(*) AS c, AVG(rating) AS a FROM QuizFeedback WHERE quizID=?");
 
-foreach ($quizzes as $q) {
-  $qid = (int)$q['quiz_id'];
+  foreach ($quizzes as $q) {
+    $qid = (int)$q['quiz_id'];
 
-  $qCount->execute([$qid]);
-  $numQ = (int)$qCount->fetchColumn();
+    $sqlCount->bind_param("i", $qid);
+    $sqlCount->execute();
+    $numQ = $sqlCount->get_result()->fetch_assoc()['c'] ?? 0;
 
-  $tkStat->execute([$qid]);
-  $tk = $tkStat->fetch(PDO::FETCH_ASSOC);
-  $takenText = ((int)$tk['c'] > 0) ? ($tk['c']." attempts, avg ".round((float)$tk['a'],1)) : "quiz not taken yet";
+    $sqlTaken->bind_param("i", $qid);
+    $sqlTaken->execute();
+    $tk = $sqlTaken->get_result()->fetch_assoc();
+    $takenText = ((int)($tk['c'] ?? 0) > 0) ? ($tk['c']." attempts, avg ".round((float)($tk['a'] ?? 0),1)) : "quiz not taken yet";
 
-  $fbStat->execute([$qid]);
-  $fb = $fbStat->fetch(PDO::FETCH_ASSOC);
-  $fbText = ((int)$fb['c'] > 0) ? ("avg ".round((float)$fb['a'],1)." ★") : "no feedback yet";
+    $sqlFb->bind_param("i", $qid);
+    $sqlFb->execute();
+    $fb = $sqlFb->get_result()->fetch_assoc();
+    $fbText = ((int)($fb['c'] ?? 0) > 0) ? ("avg ".round((float)($fb['a'] ?? 0),1)." ★") : "no feedback yet";
 
-  $stats[$qid] = ['num'=>$numQ,'taken'=>$takenText,'fb'=>$fbText];
+    $stats[$qid] = ['num'=>$numQ,'taken'=>$takenText,'fb'=>$fbText];
+  }
+
+  $sqlCount->close();
+  $sqlTaken->close();
+  $sqlFb->close();
 }
 
-// ======== الأسئلة الموصى بها (Pending) ========
-$rec = $pdo->prepare("
-  SELECT rq.id AS rq_id, rq.quizID, rq.question, rq.questionFigureFileName,
-         rq.answerA, rq.answerB, rq.answerC, rq.answerD, rq.correctAnswer,
-         u.firstName AS learnerFirst, u.lastName AS learnerLast, t.topicName
-  FROM RecommendedQuestion rq
-  JOIN Quiz  q ON q.id = rq.quizID
-  JOIN Topic t ON t.id = q.topicID
-  JOIN User  u ON u.id = rq.learnerID
-  WHERE q.educatorID = ? AND rq.status = 'pending'
-  ORDER BY rq.id DESC
-");
-$rec->execute([$educatorId]);
-$pending = $rec->fetchAll(PDO::FETCH_ASSOC);
+/* ================== الأسئلة الموصى بها (pending) ================== */
+$sql = "SELECT rq.id AS rq_id, rq.quizID, rq.question, rq.questionFigureFileName,
+               rq.answerA, rq.answerB, rq.answerC, rq.answerD, rq.correctAnswer,
+               u.firstName AS learnerFirst, u.lastName AS learnerLast, t.topicName
+        FROM RecommendedQuestion rq
+        JOIN Quiz q   ON q.id=rq.quizID
+        JOIN Topic t  ON t.id=q.topicID
+        JOIN User  u  ON u.id=rq.learnerID
+        WHERE q.educatorID=? AND rq.status='pending'
+        ORDER BY rq.id DESC";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $educatorId);
+$stmt->execute();
+$pres = $stmt->get_result();
+$pending = [];
+while ($r = $pres->fetch_assoc()) { $pending[] = $r; }
+$stmt->close();
 ?>
-<!doctype html> 
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Codeland • Educator</title>
   <link rel="stylesheet" href="styleDeema.css">
   <link rel="stylesheet" href="HF.css">
 </head>
 <body>
-<!-- ====== HEADER ====== -->
 <header class="cl-header">
   <div class="brand">
     <img src="images/logo.png" alt="Logo">
     <span>Codeland</span>
   </div>
-
   <div class="actions">
-    <a href="Educator.php">
+    <a href="educator_homepage.php">
       <img src="<?= 'uploads/users/'.h($me['photoFileName'] ?: 'default.png') ?>" alt="User" class="avatar">
     </a>
-    <a href="signout.php" class="logout-btn">Logout</a>
+    <a href="logout.php" class="logout-btn">Logout</a>
   </div>
 </header>
 
-<!-- ====== MAIN CONTENT ====== -->
 <div class="container">
-  <div class="header header-user"></div>
-  <div id="toast" class="toast"></div>
-
   <?php if (!empty($message)): ?>
     <div style="background:#e7ffe7;border:1px solid #b7ebb7;padding:10px;border-radius:8px;margin:12px 0;">
       <?= h($message) ?>
     </div>
   <?php endif; ?>
 
-  <!-- Welcome -->
   <section id="welcome">
     <h1>Welcome back, <?= h($me['firstName'].' '.$me['lastName']) ?></h1>
   </section>
 
-  <!-- Educator info -->
   <section class="card" id="educator-info">
     <p><strong>Name:</strong> <?= h($me['firstName'].' '.$me['lastName']) ?></p>
     <p><strong>Email:</strong> <?= h($me['emailAddress']) ?></p>
   </section>
 
-  <!-- Quizzes table -->
   <section class="card">
     <h2>Your Quizzes</h2>
-    <table class="table" id="quizzes-table">
-      <thead>
-        <tr>
-          <th>Topic</th>
-          <th>#Questions</th>
-          <th>Stats</th>
-          <th>Feedback</th>
-        </tr>
-      </thead>
+    <table class="table">
+      <thead><tr><th>Topic</th><th>#Questions</th><th>Stats</th><th>Feedback</th></tr></thead>
       <tbody>
       <?php if (!$quizzes): ?>
         <tr><td colspan="4">You have no quizzes yet.</td></tr>
       <?php else: foreach ($quizzes as $q): $qid=(int)$q['quiz_id']; ?>
         <tr>
           <td><a href="quiz.php?quiz_id=<?= $qid ?>"><?= h($q['topicName']) ?></a></td>
-          <td><?= $stats[$qid]['num'] ?></td>
+          <td><?= (int)$stats[$qid]['num'] ?></td>
           <td><?= h($stats[$qid]['taken']) ?></td>
           <td>
             <?= h($stats[$qid]['fb']) ?>
             <?php if ($stats[$qid]['fb'] !== 'no feedback yet'): ?>
-              &nbsp;|&nbsp;<a href="comments.php?quiz_id=<?= $qid ?>">comments</a>
+              | <a href="comments.php?quiz_id=<?= $qid ?>">comments</a>
             <?php endif; ?>
           </td>
         </tr>
@@ -211,18 +210,10 @@ $pending = $rec->fetchAll(PDO::FETCH_ASSOC);
     </table>
   </section>
 
-  <!-- Recommended questions -->
   <section class="card">
     <h2>Recommended Questions</h2>
-    <table class="table" id="recommended-table">
-      <thead>
-        <tr>
-          <th>Topic</th>
-          <th>Learner</th>
-          <th>Question</th>
-          <th>Review</th>
-        </tr>
-      </thead>
+    <table class="table">
+      <thead><tr><th>Topic</th><th>Learner</th><th>Question</th><th>Review</th></tr></thead>
       <tbody>
       <?php if (!$pending): ?>
         <tr><td colspan="4">No pending recommendations.</td></tr>
@@ -233,9 +224,7 @@ $pending = $rec->fetchAll(PDO::FETCH_ASSOC);
           <td>
             <b><?= h($p['question']) ?></b><br>
             <?php if (!empty($p['questionFigureFileName'])): ?>
-              <div style="margin:8px 0;">
-                <img src="uploads/questions/<?= h($p['questionFigureFileName']) ?>" width="120" alt="">
-              </div>
+              <img src="uploads/questions/<?= h($p['questionFigureFileName']) ?>" width="120" alt=""><br>
             <?php endif; ?>
             A) <?= h($p['answerA']) ?><br>
             B) <?= h($p['answerB']) ?><br>
@@ -261,7 +250,6 @@ $pending = $rec->fetchAll(PDO::FETCH_ASSOC);
   </section>
 </div>
 
-<!-- ====== FOOTER ====== -->
 <footer class="cl-footer">
   <p>OUR VISION</p>
   <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
