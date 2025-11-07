@@ -33,12 +33,12 @@ html,body {
 .btn {
     appearance: none;
     border: 0;
-    background: var(--brand);
+    background: #e85c5b;
     color: white;
     font-weight: 700;
     padding: 10px 14px;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(37,99,235,.25);
+    box-shadow: 0 8px 20px rgba(232,92,91,.25);
     cursor: pointer;
     transition: .2s;
     text-decoration: none;
@@ -47,28 +47,96 @@ html,body {
 }
 
 .btn:hover {
-    background: var(--brand-hover);
+    background: #c94a4a;
     transform: translateY(-1px);
+    text-decoration: none;
+}
+
+.btn-outline {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,.2);
+    background: transparent;
+    color: var(--text);
+    font-weight: 600;
+    padding: 9px 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: .2s;
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.btn-outline:hover {
+    background: rgba(255,255,255,.05);
+    border-color: rgba(255,255,255,.3);
+    text-decoration: none;
 }
 
 .btn-edit {
-    background: var(--accent);
+    background: #2aa6a0;
     padding: 10px 14px;
     font-size: 14px;
+    appearance: none;
+    border: 0;
+    color: white;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(42,166,160,.25);
+    cursor: pointer;
+    transition: .2s;
+    text-decoration: none;
+    display: inline-block;
+
+    /* FIX: make same width as delete */
+    min-width: 110px;
+    text-align: center;
 }
 
 .btn-edit:hover {
-    background: #16a34a;
+    background: #238a84;
+    transform: translateY(-1px);
+    text-decoration: none;
 }
 
 .btn-delete {
     background: #ef4444;
     padding: 10px 14px;
     font-size: 14px;
+    appearance: none;
+    border: 0;
+    color: white;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(239,68,68,.25);
+    cursor: pointer;
+    transition: .2s;
+    text-decoration: none;
+    display: inline-block;
+
+    /* FIX: make same width as edit */
+    min-width: 110px;
+    text-align: center;
 }
 
 .btn-delete:hover {
     background: #dc2626;
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+/* FIX: remove glowing box behind delete caused by form */
+.table td form {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+/* FIX: align edit + delete in same line */
+.table td:last-child {
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
 /* Page 1 - Score Section */
@@ -169,7 +237,7 @@ html,body {
 .feedback-textarea:focus {
     outline: none;
     border-color: var(--brand);
-    box-shadow: 0 4px 15px rgba(96, 165, 250, 0.2);
+    box-shadow: 0 4px 15px rgba(96,165,250,0.2);
 }
 
 .feedback-textarea::placeholder {
@@ -406,6 +474,18 @@ button[type="submit"]:hover {
     vertical-align: top;
 }
 
+/* ✅ FIX: Keep horizontal line even */
+.table tr {
+    height: auto;
+    vertical-align: top;
+}
+
+/* ✅ FIX: Normalize row padding to avoid uneven heights */
+.table td {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
 .table th {
     font-size: .9rem;
     color: var(--muted);
@@ -451,6 +531,21 @@ button[type="submit"]:hover {
     color: var(--bg);
 }
 
+/* NEW: Choice Item Styling for Quiz.php */
+.choice-item {
+    padding: 6px 0;
+    margin: 4px 0;
+}
+
+.correct-choice {
+    background: rgba(42,166,160,.15);
+    border-left: 3px solid #2aa6a0;
+    padding: 6px 8px;
+    margin: 4px 0;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
 .table .actions-column {
     text-align: center;
     width: 100px;
@@ -484,6 +579,58 @@ button[type="submit"]:hover {
 
 .toast.show {
     display: block;
+}
+
+/* NEW: Card styling for quiz.php compatibility */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    margin: 8px 0 14px;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #82b6db;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* NEW: Make question images display clearly */
+.table img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+/* Remove the faint line under the action buttons */
+td:last-child::after,
+td:last-child::before {
+    content: none !important;
+}
+
+td:last-child {
+    box-shadow: none !important;
+}
+
+/* ✅ Remove the bottom border (line) under the action buttons column */
+.table td:last-child {
+    border-bottom: none !important;
 }
 
 /* Responsive Design */
