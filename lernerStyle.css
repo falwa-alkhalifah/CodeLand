@@ -1,261 +1,625 @@
 :root {
+
   --brand:#60a5fa;        
+
   --brand-hover:#3b82f6;
+
   --accent:#2dd4bf;       
+
   --bg:#0f172a;           
+
   --text:#f8fafc;         
+
   --muted:#94a3b8;
+
   --card:#1e293b;        
+
   --border:#334155;
+
 }
+
+
 
 * {
+
   box-sizing:border-box;
+
 }
+
+
 
 html,body {
+
   margin:0;
+
   padding:0;
+
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+
   color:var(--text);
+
   background:var(--bg);
+
 }
+
+
 
 a {
+
   color:var(--brand);
+
   text-decoration:none;
+
 }
+
 a:hover {
+
   text-decoration:underline;
+
 }
+
+
 
 .container {
+
   max-width:1100px;
+
   margin:0 auto;
+
   padding:24px;
+
 }
+
+
 
 .main {
+
   padding:24px;
+
 }
+
+
 
 .grid {
+
   display:grid;
+
   grid-template-columns:1fr;
+
   gap:16px;
+
 }
+
 .card {
+
   background:var(--card);
+
   border-radius:16px;
+
   padding:18px;
+
   box-shadow:0 10px 30px rgba(0,0,0,.25);
+
   border:1px solid var(--border);
+
 }
+
 .card h2 {
+
   margin:0 0 10px 0;
+
   font-size:1.1rem;
+
 }
+
 .card .muted {
+
   color:var(--muted);
+
   font-size:.92rem;
+
 }
+
+
 
 .user {
+
   display:flex;
+
   gap:16px;
+
   align-items:center;
+
 }
+
+
+
+/* Base image styling (e.g., logos, question figures) */
 
 img {
-  width:40px;
-  height:40px;
-  object-fit: cover;
-  border-radius: 50%;
+
+    max-width: 100%;
+
+    height: auto;
+
+    object-fit: cover;
+
+    border-radius: 8px; /* General rounded corners for figures/non-avatars */
 
 }
+
+
+
+/* --- IMPROVED AVATAR STYLING --- */
+
+
+
+/* Avatar Container: Sets size and the branded ring */
+
 .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid rgba(255,255,255,.15);
+
+    width: 44px; /* Default size for User Info section */
+
+    height: 44px;
+
+    border-radius: 50%;
+
+    overflow: hidden; /* Ensures the image stays within the circle */
+
+    flex-shrink: 0;
+
+    /* Crucial fix: provide a solid background color to mask any image transparency */
+
+    background-color: var(--card); 
+
+    /* Creates a subtle ring effect */
+
+    box-shadow: 
+
+        0 0 0 2px var(--card), /* Inner shadow layer for spacing */
+
+        0 0 0 4px var(--brand); /* Outer ring using brand color */
+
+    transition: transform 0.2s ease-in-out;
+
 }
+
+
+
+/* Image inside the Avatar Container */
+
+.avatar img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 50%; /* Ensure the image itself is rounded (if not clipped by parent) */
+
+}
+
+
+
+/* Small Avatar version (used in tables and headers) */
+
+.cl-header .avatar,
+
+.table .avatar {
+
+    width: 38px; /* Slightly adjusted size for header/table */
+
+    height: 38px;
+
+    box-shadow: 
+
+        0 0 0 1.5px var(--card), 
+
+        0 0 0 3px var(--muted); /* Use muted border color for less emphasis in tables */
+
+}
+
+/* --- END AVATAR STYLING --- */
+
+
+
+
 
 .badge {
+
   display:inline-block;
+
   padding:4px 10px;
+
   border-radius:999px;
+
   background:#1e40af;
+
   color:var(--brand);
+
   font-weight:700;
+
   font-size:.75rem;
+
 }
+
+
 
 .table {
+
   width:100%;
+
   border-collapse:collapse;
+
 }
+
 .table th,
+
 .table td {
+
   padding:12px 10px;
+
   border-bottom:1px solid var(--border);
+
   text-align:left;
+
   vertical-align:top;
+
 }
+
 .table th {
+
   font-size:.9rem;
+
   color:var(--muted);
+
   text-transform:uppercase;
+
   letter-spacing:.04em;
+
 }
+
+
 
 .kbd {
+
   font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+
   background:#1e293b;
+
   border:1px solid #334155;
+
   border-bottom-width:2px;
+
   padding:2px 6px;
+
   border-radius:6px;
+
 }
+
+
 
 .btn {
+
   appearance:none;
+
   border:0;
+
   background:var(--brand);
+
   color:white;
+
   font-weight:700;
+
   padding:10px 14px;
+
   border-radius:12px;
+
   box-shadow:0 8px 20px rgba(37,99,235,.25);
+
   cursor:pointer;
+
+  transition: background 0.2s, box-shadow 0.2s;
+
 }
+
 .btn:hover {
+
   background:var(--brand-hover);
+
+  box-shadow:0 6px 15px rgba(37,99,235,.35);
+
 }
+
 .btn-outline {
+
   background:transparent;
+
   color:var(--brand);
+
   border:2px solid var(--brand);
+
+  box-shadow:none;
+
 }
+
+.btn-outline:hover {
+
+    background: rgba(96, 165, 250, 0.1);
+
+    box-shadow:none;
+
+}
+
+
 
 .input,.select,textarea {
+
   width:100%;
+
   padding:10px 12px;
+
   border-radius:10px;
+
   border:1.5px solid var(--border);
+
   background:var(--card);
+
   color:var(--text);
+
 }
+
 label {
+
   font-weight:600;
+
   font-size:.92rem;
+
   margin-bottom:6px;
+
   display:block;
+
 }
+
+
 
 .row {
+
   display:grid;
+
   grid-template-columns:1fr;
+
   gap:12px;
+
 }
+
 @media(min-width:700px){
+
   .row-2 {
+
     grid-template-columns:1fr 1fr;
+
   }
+
   .row-3 {
+
     grid-template-columns:repeat(3,1fr);
+
   }
+
 }
+
+
 
 .helper {
+
   font-size:.85rem;
+
   color:var(--muted);
+
 }
+
+
 
 .status {
+
   font-weight:800;
+
 }
+
 .status.pending {
+
   color:#facc15;
+
 }
+
 .status.approved {
+
   color:#4ade80;
+
 }
+
 .status.disapproved {
+
   color:#f87171;
+
 }
+
+
 
 .tag {
+
   display:inline-block;
+
   border:1px solid var(--border);
+
   padding:4px 8px;
+
   border-radius:999px;
+
   font-size:.8rem;
+
   margin-right:8px;
+
   color:var(--muted);
+
 }
+
+
 
 .right {
+
   display:flex;
+
   justify-content:flex-end;
+
 }
+
 .inline {
+
   display:flex;
+
   align-items:center;
+
   gap:10px;
+
 }
+
+
 
 .filterbar {
+
   display:flex;
+
   gap:10px;
+
   align-items:center;
+
   margin:6px 0 10px 0;
+
 }
+
+
 
 .small {
+
   font-size:.9rem;
+
   color:var(--muted);
+
 }
+
+
 
 .comment {
+
   padding:14px;
+
   border:1px solid var(--border);
+
   border-radius:12px;
+
   margin-bottom:12px;
+
   background:var(--card);
+
 }
+
 .comment .meta {
+
   font-size:.85rem;
+
   color:var(--muted);
+
   margin-bottom:6px;
+
 }
+
 .star {
+
   font-size:18px;
+
 }
+
+
 
 hr {
+
   border:0;
+
   border-top:1px solid var(--border);
+
   margin:12px 0;
+
 }
+
+
 
 .answer.correct {
-  background:#064e3b;   /* dark teal */
-  color:#99f6e4;        /* light teal text */
+
+  background:#064e3b;   
+
+  color:#99f6e4;        
+
   border:1px solid #0d9488;
+
 }
+
+
 
 .answer.wrong {
-  background:#450a0a;   /* dark red */
-  color:#fecaca;        /* light red text */
+
+  background:#450a0a;   
+
+  color:#fecaca;        
+
   border:1px solid #dc2626;
+
 }
 
+
+
 .figure {
+
   width: 150px;
+
   max-width: 120px;   
+
   height: auto;       
+
   display: block;
+
   margin: 8px 0;      
+
   border-radius: 6px; 
+
+}
+
+
+
+/* Ensure images in the header/footer (e.g., logo, social icons) are styled */
+
+.cl-header img, .cl-footer img {
+
+    width: auto;
+
+    height: 30px; /* Use a fixed height for consistency */
+
+    border-radius: 0;
+
+    box-shadow: none;
+
+}
+
+/* Re-specify image behavior in the header for the *logo* */
+
+.cl-header .brand img {
+
+    width: auto;
+
+    height: 30px;
+
 }

@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
   <div class="actions">
       <a href="learner_homePage.php">
-        <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+        <div class="avatar"><img src="images/<?php echo htmlspecialchars($learner['photoFileName']); ?>" alt="Profile"></div>
     </a>
     <a href="index.html" class="logout-btn">Logout</a>
   </div>
