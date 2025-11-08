@@ -96,7 +96,6 @@ $topics = $topicsArray;
 $query = "
 SELECT 
   q.id AS quizID,
-  q.quizName,
   t.topicName,
   CONCAT(u.firstName, ' ', u.lastName) AS educatorName,
   u.photoFileName AS educatorPhoto,
@@ -114,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['topicFilter']) && $_P
 }
 
 $query .= "
-GROUP BY q.id, q.quizName, t.topicName, educatorName, educatorPhoto
+GROUP BY q.id, t.topicName, educatorName, educatorPhoto
 ORDER BY q.id;
 ";
 
