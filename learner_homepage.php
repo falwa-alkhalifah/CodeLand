@@ -237,7 +237,7 @@ while($row = mysqli_fetch_assoc($result)) {
 
     </table>
     <div class="right" style="margin-top:10px">
-      <a class="btn" href="Recomended Questions.html">Recommend another question</a>
+      <a class="btn" href="recommend_question.php">Recommend another question</a>
     </div>
   </section>
 </main>
