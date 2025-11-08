@@ -19,12 +19,23 @@
       display: block; 
     }
     <?php if (!isset($_SESSION['signup_error'])) echo '.error-message { display: none; }'; ?>
+
+    .topic-error {
+      color: #ff4d4f; 
+      margin-top: 5px;
+      font-size: 0.9em;
+      font-weight: bold;
+      display: none;
+    }
   </style>
 
   <script>
     function showForm(role) {
       document.getElementById("learnerForm").classList.add("hidden");
       document.getElementById("educatorForm").classList.add("hidden");
+      
+      document.getElementById("topicError").style.display = 'none'; 
+      
       if(role === "learner") {
         document.getElementById("learnerForm").classList.remove("hidden");
       } else if(role === "educator") {
@@ -34,6 +45,7 @@
 
     function validateEducatorForm() {
       var checkboxes = document.querySelectorAll('#educatorForm input[name="topics[]"]');
+      var topicErrorElement = document.getElementById("topicError");
       var isChecked = false;
 
       for (var i = 0; i < checkboxes.length; i++) {
@@ -44,10 +56,12 @@
       }
 
       if (!isChecked) {
-        alert("Please select at least one Topic."); 
-        return false; 
+        topicErrorElement.style.display = 'block'; 
+        return false;
+      } else {
+        topicErrorElement.style.display = 'none'; 
+        return true;
       }
-      return true; 
     }
   </script>
 </head>
@@ -119,7 +133,10 @@
         <label><input type="checkbox" name="topics[]" value="2"> CSS</label>
         <label><input type="checkbox" name="topics[]" value="3"> Python</label>
         <label><input type="checkbox" name="topics[]" value="4"> Java</label>
-        </div>
+      </div>
+      
+      <span id="topicError" class="topic-error">Please select at least one Topic.</span>
+      
       <button type="submit">Sign Up as Educator</button>
     </form>
   </div>
