@@ -22,6 +22,8 @@
     <a href="index.html" class="logout-btn">Logout</a>
   </div>
 </header>
+
+
 <?php ?>
 <main class="container main">
   <h1>Comments · <span class="badge">Databases</span> with <span class="badge">Dr. Amal</span></h1>
@@ -54,8 +56,6 @@
     <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
   </div>
 </footer>
-
-
 
 </body>
 </html>

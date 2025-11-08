@@ -44,12 +44,6 @@ a:hover {
   grid-template-columns:1fr;
   gap:16px;
 }
-@media(min-width:900px){
-  .grid {
-    grid-template-columns:1.2fr .8fr;
-  }
-}
-
 .card {
   background:var(--card);
   border-radius:16px;

@@ -47,8 +47,8 @@ $topics = $topicsArray;
   </div>
 
   <div class="actions">
-      <a href="LernerHomePage.Html">
-        <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+      <a href="learner_homepage.php">
+        <div class="avatar"><img src="<?php echo $learner['photoFileName']; ?>" alt="Profile"></div>
     </a>
     <a href="index.html" class="logout-btn">Logout</a>
   </div>
@@ -58,8 +58,7 @@ $topics = $topicsArray;
   <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName"><?php echo $learner['firstName']; ?></span> 👋</h1>
   <p class="small">This is your learner dashboard. Browse quizzes, track your suggested questions, and keep learning.</p>
 
-  <div class="grid">
-    <!-- Left column -->
+   <!-- Left column -->
     <section class="card">
       <h2>Your Info</h2>
       <div class="user">
@@ -70,16 +69,6 @@ $topics = $topicsArray;
         </div>
       </div>
     </section>
-
-    <!-- Right column -->
-        <section class="card">
-      <h2>Quick Actions</h2>
-      <div class="row row-2">
-        <a class="btn" href="Recomended Questions.php">+ Recommend a Question</a>
-        <a class="btn btn-outline" href="Comments Page.php">View Quiz Comments</a>
-      </div>
-    </section>
-  </div>
   <!-- form -->
 <form action="learner_homePage.php" method="POST">
   <section class="card" style="margin-top:16px">
