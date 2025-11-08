@@ -31,6 +31,24 @@
         document.getElementById("educatorForm").classList.remove("hidden");
       }
     }
+
+    function validateEducatorForm() {
+      var checkboxes = document.querySelectorAll('#educatorForm input[name="topics[]"]');
+      var isChecked = false;
+
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          isChecked = true;
+          break;
+        }
+      }
+
+      if (!isChecked) {
+        alert("Please select at least one Topic."); 
+        return false; 
+      }
+      return true; 
+    }
   </script>
 </head>
 <body>
@@ -81,7 +99,7 @@
       <button type="submit">Sign Up as Learner</button>
     </form>
 
-    <form id="educatorForm" class="hidden" action="signup_process.php" method="POST" enctype="multipart/form-data">
+    <form id="educatorForm" class="hidden" action="signup_process.php" method="POST" enctype="multipart/form-data" onsubmit="return validateEducatorForm()">
       <input type="hidden" name="userType" value="educator">
       
       <label>First Name:</label>
@@ -95,7 +113,7 @@
       <label>Profile Image (optional):</label>
       <input type="file" name="photo" accept="image/*">
       
-      <label>Topics:</label>
+      <label>Topics (Required):</label>
       <div class="checkbox-group">
         <label><input type="checkbox" name="topics[]" value="1"> HTML</label>
         <label><input type="checkbox" name="topics[]" value="2"> CSS</label>
