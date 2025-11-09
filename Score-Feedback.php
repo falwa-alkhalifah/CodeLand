@@ -1,6 +1,12 @@
 <?php
+// Start session and security check
+session_start();
+
 // Security check: Only logged-in learners can access this page
-require_once 'check_learner.php';
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'learner' || !isset($_SESSION['user_id'])) {
+    header("Location: index.html");
+    exit();
+}
 
 // Database connection configuration
 $host = 'localhost';
@@ -21,10 +27,48 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['quizID']) || !isset(
     die("Error: Invalid request. Quiz data not provided.");
 }
 
-// Get quiz ID and question IDs from the form submission
+// Get data from form submission
 $quizID = intval($_POST['quizID']);
 $questionIDsString = $_POST['questionIDs'];
-$questionIDs = explode(',', $questionIDsString); // Convert comma-separated string to array
+$questionIDs = array_map('intval', explode(',', $questionIDsString));
+$learnerID = intval($_SESSION['user_id']);
+
+// Get learner information
+$learnerQuery = "SELECT firstName, photoFileName FROM user WHERE id = ?";
+$stmt = $conn->prepare($learnerQuery);
+$stmt->bind_param("i", $learnerID);
+$stmt->execute();
+$result = $stmt->get_result();
+$learner = $result->fetch_assoc();
+$stmt->close();
+
+if (!$learner) {
+    die("Error: Learner not found.");
+}
+
+// Function to get image path
+function getImagePath($fileName) {
+    $defaultAvatar = 'images/default_avatar.jpeg';
+    
+    if (empty($fileName)) {
+        return $defaultAvatar;
+    }
+
+    $baseDir = __DIR__;
+    $userUploadsDir = $baseDir . '/uploads/users/';
+    $userRelativePath = 'uploads/users/';
+
+    if (is_file($userUploadsDir . $fileName)) {
+        return $userRelativePath . htmlspecialchars($fileName) . '?v=' . @filemtime($userUploadsDir . $fileName);
+    } else if (is_file($baseDir . '/images/' . $fileName)) {
+        return 'images/' . htmlspecialchars($fileName);
+    }
+    
+    return $defaultAvatar;
+}
+
+// Set learner photo path for header
+$learnerPhotoPath = getImagePath($learner['photoFileName']);
 
 // Retrieve quiz information with topic name and educator details
 $quizQuery = "
@@ -32,8 +76,7 @@ $quizQuery = "
         Quiz.id AS quizID,
         Topic.topicName,
         User.firstName AS educatorFirstName,
-        User.lastName AS educatorLastName,
-        User.photoFileName AS educatorPhoto
+        User.lastName AS educatorLastName
     FROM Quiz
     INNER JOIN Topic ON Quiz.topicID = Topic.id
     INNER JOIN User ON Quiz.educatorID = User.id
@@ -63,37 +106,61 @@ $correctAnswersQuery = "
 ";
 
 $stmt = $conn->prepare($correctAnswersQuery);
-
-// Bind parameters dynamically (all question IDs are integers)
 $types = str_repeat('i', count($questionIDs));
 $stmt->bind_param($types, ...$questionIDs);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Store correct answers in an associative array [questionID => correctAnswer]
+// Store correct answers in an associative array
 $correctAnswers = [];
 while ($row = $result->fetch_assoc()) {
-    $correctAnswers[$row['id']] = $row['correctAnswer'];
+    // Store correct answer in lowercase for comparison
+    $correctAnswers[$row['id']] = strtolower(trim($row['correctAnswer']));
 }
 $stmt->close();
 
-// Calculate the score by comparing learner's answers with correct answers
+// Calculate the score
 $score = 0;
 $totalQuestions = count($questionIDs);
+$debugInfo = []; // For debugging
 
 foreach ($questionIDs as $questionID) {
-    $questionID = intval($questionID);
-    
-    // Check if learner submitted an answer for this question
     if (isset($_POST["q$questionID"])) {
-        $learnerAnswer = $_POST["q$questionID"];
+        // Get learner's answer and convert to lowercase for comparison
+        $learnerAnswer = strtolower(trim($_POST["q$questionID"]));
+        $correctAnswer = isset($correctAnswers[$questionID]) ? $correctAnswers[$questionID] : 'N/A';
+        $isCorrect = ($learnerAnswer === $correctAnswer);
         
-        // Check if answer is correct
-        if (isset($correctAnswers[$questionID]) && $learnerAnswer === $correctAnswers[$questionID]) {
+        // Store debug info
+        $debugInfo[] = [
+            'questionID' => $questionID,
+            'learnerAnswer' => $learnerAnswer,
+            'correctAnswer' => $correctAnswer,
+            'isCorrect' => $isCorrect
+        ];
+        
+        // Compare answers (both are now lowercase)
+        if ($isCorrect) {
             $score++;
         }
     }
 }
+
+// TEMPORARY DEBUG - Remove this after testing
+// Uncomment the lines below to see what's being compared
+/*
+echo "<pre>DEBUG INFO:\n";
+echo "Total Questions: $totalQuestions\n";
+echo "Score: $score\n\n";
+foreach ($debugInfo as $info) {
+    echo "Question ID: " . $info['questionID'] . "\n";
+    echo "Your Answer: '" . $info['learnerAnswer'] . "'\n";
+    echo "Correct Answer: '" . $info['correctAnswer'] . "'\n";
+    echo "Is Correct: " . ($info['isCorrect'] ? 'YES' : 'NO') . "\n\n";
+}
+echo "</pre>";
+exit; // Stop here to see debug info
+*/
 
 // Insert the quiz score into TakenQuiz table
 $insertScoreQuery = "INSERT INTO TakenQuiz (quizID, score) VALUES (?, ?)";
@@ -106,11 +173,11 @@ $stmt->close();
 if ($score === $totalQuestions) {
     // Full marks - show celebration video
     $videoFile = "images/Fullmark_video.mp4";
-    $congratsMessage = "Perfect Score! Well done " . htmlspecialchars($_SESSION['firstName']) . " 👏";
+    $congratsMessage = "Perfect Score! Well done " . htmlspecialchars($learner['firstName']) . " 🎉";
 } else {
     // Not full marks - show encouragement video
     $videoFile = "images/Almost_video.mp4";
-    $congratsMessage = "Great effort " . htmlspecialchars($_SESSION['firstName']) . "! 👏";
+    $congratsMessage = "Great effort " . htmlspecialchars($learner['firstName']) . "! 💪";
 }
 
 // Close database connection
@@ -137,10 +204,10 @@ $conn->close();
         </div>
 
         <div class="actions">
-            <a href="LernerHomePage.Html">
-                <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+            <a href="learner_homepage.php">
+                <img src="<?php echo $learnerPhotoPath; ?>" alt="Profile" class="avatar">
             </a>
-            <a href="logout.php" class="logout-btn">Logout</a>
+            <a href="index.html" class="logout-btn">Logout</a>
         </div>
     </header>
 
@@ -197,7 +264,7 @@ $conn->close();
                     <div class="submit-container">
                         <button type="submit" class="submit-btn">Send</button>
                         <br>
-                        <a href="LernerHomePage.Html" class="skip-link">Skip feedback</a> 
+                        <a href="learner_homepage.php" class="skip-link">Skip feedback</a> 
                     </div>
                 </form>
             </div>
@@ -208,7 +275,7 @@ $conn->close();
     <footer class="cl-footer">
         <p>OUR VISION</p>
         <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
-        <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
+        <p>© <span id="year"></span> Website. All rights reserved.</p>
         <div class="social">
             <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
             <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
@@ -217,6 +284,8 @@ $conn->close();
     </footer>
 
     <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
         // Star rating functionality - allows half-star ratings (0.5 increments)
         const stars = document.querySelectorAll('.star');
         const ratingValue = document.getElementById('ratingValue');
