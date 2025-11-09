@@ -18,7 +18,7 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'learner' || !iss
 }
 
 $learnerID = intval($_SESSION['user_id']);
-$selectedTopic = 'all'; // Default filter value
+$selectedTopic = 'all'; 
 $availableQuizzes = [];
 $recommendedQuestions = [];
 $learner = null;
@@ -35,6 +35,19 @@ if (!$learner) {
     session_destroy();
     header("Location: index.html"); 
     exit();
+}
+
+$defaultAvatar = 'images/default_avatar.jpeg'; 
+$storedPhoto = $learner['photoFileName'] ?? '';
+$learnerPhotoPath = $defaultAvatar;
+$photoUploadsDir = __DIR__ . '/uploads/users/';
+
+if ($storedPhoto && is_file($photoUploadsDir . $storedPhoto)) {
+    $learnerPhotoPath = 'uploads/users/' . htmlspecialchars($storedPhoto) . '?v=' . @filemtime($photoUploadsDir . $storedPhoto);
+} else {
+    if (is_file(__DIR__ . '/images/' . $storedPhoto)) {
+        $learnerPhotoPath = 'images/' . htmlspecialchars($storedPhoto);
+    }
 }
 
 $topicsResult = mysqli_query($connect, "SELECT DISTINCT topicName FROM topic ORDER BY topicName");
@@ -119,149 +132,190 @@ function renderAnswerList($answers, $correct) {
     return $html;
 }
 
+function getImagePath($fileName, $isFigure = false) {
+    global $defaultAvatar;
+    $filePath = $defaultAvatar; 
+
+    if (empty($fileName)) {
+        return $filePath;
+    }
+
+    $baseDir = __DIR__;
+    
+    $userUploadsDir = $baseDir . '/uploads/users/';
+    $userRelativePath = 'uploads/users/';
+    
+    $figureUploadsDir = $baseDir . '/uploads/figures/'; 
+    $figureRelativePath = 'uploads/figures/';
+
+    if ($isFigure) {
+        if (is_file($figureUploadsDir . $fileName)) {
+            $filePath = $figureRelativePath . htmlspecialchars($fileName) . '?v=' . @filemtime($figureUploadsDir . $fileName);
+        } else if (is_file($baseDir . '/images/' . $fileName)) {
+            $filePath = 'images/' . htmlspecialchars($fileName);
+        }
+    } else {
+        if (is_file($userUploadsDir . $fileName)) {
+            $filePath = $userRelativePath . htmlspecialchars($fileName) . '?v=' . @filemtime($userUploadsDir . $fileName);
+        } else if (is_file($baseDir . '/images/' . $fileName)) {
+            $filePath = 'images/' . htmlspecialchars($fileName);
+        }
+    }
+
+    return $filePath;
+}
+
+
 mysqli_close($connect);
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Learner Home Page</title>
-  <link rel="stylesheet" href="lernerStyle.css">
-  <link rel="stylesheet" href="HF.css">
-  
-  <style>
-    .status.pending { background-color: #fef3c7; color: #b45309; padding: 4px 8px; border-radius: 4px; }
-    .status.approved { background-color: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; }
-    .status.disapproved { background-color: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; }
-    .figure { max-width: 100px; height: auto; margin-bottom: 5px; border-radius: 4px; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Learner Home Page</title>
+    <link rel="stylesheet" href="lernerStyle.css">
+    <link rel="stylesheet" href="HF.css">
+    
+    <style>
+        .status.pending { background-color: #fef3c7; color: #b45309; padding: 4px 8px; border-radius: 4px; }
+        .status.approved { background-color: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; }
+        .status.disapproved { background-color: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; }
+        .figure { max-width: 100px; height: auto; margin-bottom: 5px; border-radius: 4px; }
+    </style>
 
 </head>
 
 <body>
 
 <header class="cl-header">
-  <div class="brand">
-    <img src="images/logo.png" alt="Logo">
-    <span>Codeland</span>
-  </div>
-  <div class="actions">
-      <a href="learner_homepage.php">
-        <img src="images/<?php echo htmlspecialchars($learner['photoFileName']); ?>" alt="Profile" class="avatar">
-    </a>
-    <a href="index.html" class="logout-btn">Logout</a>
-  </div>
+    <div class="brand">
+        <img src="images/logo.png" alt="Logo">
+        <span>Codeland</span>
+    </div>
+    <div class="actions">
+        <a href="learner_homepage.php">
+            <img src="<?php echo $learnerPhotoPath; ?>" alt="Profile" class="avatar">
+        </a>
+        <a href="index.html" class="logout-btn">Logout</a>
+    </div>
 </header>
 
 <main class="container main">
-  <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName"><?php echo htmlspecialchars($learner['firstName']); ?></span> 👋</h1>
-  <p class="small">This is your learner dashboard. Browse quizzes, track your suggested questions, and keep learning.</p>
+    <h1 style="margin:0 0 12px 0">Welcome, <span id="firstName"><?php echo htmlspecialchars($learner['firstName']); ?></span> 👋</h1>
+    <p class="small">This is your learner dashboard. Browse quizzes, track your suggested questions, and keep learning.</p>
     <section class="card">
-      <h2>Your Info</h2>
-      <div class="user">
-        <img src="images/<?php echo htmlspecialchars($learner['photoFileName']); ?>" alt="Profile" class="avatar">
-        <div>
-          <div><strong id="fullName"><?php echo htmlspecialchars($learner['firstName'] . " " . $learner['lastName']); ?></strong></div>
-          <div class="muted"><?php echo htmlspecialchars($learner['emailAddress']); ?></div>
+        <h2>Your Info</h2>
+        <div class="user">
+            <img src="<?php echo $learnerPhotoPath; ?>" alt="Profile" class="avatar">
+            <div>
+                <div><strong id="fullName"><?php echo htmlspecialchars($learner['firstName'] . " " . $learner['lastName']); ?></strong></div>
+                <div class="muted"><?php echo htmlspecialchars($learner['emailAddress']); ?></div>
+            </div>
         </div>
-      </div>
     </section>
 <form action="learner_homePage.php" method="POST">
-  <section class="card" style="margin-top:16px">
+    <section class="card" style="margin-top:16px">
     <div class="inline" style="justify-content:space-between">
-      <h2>Available Quizzes</h2>
-      <div class="filterbar">
-        <select id="topicFilter" class="select" name="topicFilter">
-          <option value="all" <?php if ($selectedTopic == 'all') echo 'selected'; ?>>All Topics</option>
-          <?php foreach($topics as $t): ?>
-            <option value="<?php echo htmlspecialchars($t['topicName']); ?>" 
-                  <?php if ($selectedTopic == $t['topicName']) echo 'selected'; ?>>
-                <?php echo htmlspecialchars($t['topicName']); ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-        <button class="btn" id="filterBtn" type="submit">Filter</button>
-      </div>
+        <h2>Available Quizzes</h2>
+        <div class="filterbar">
+            <select id="topicFilter" class="select" name="topicFilter">
+                <option value="all" <?php if ($selectedTopic == 'all') echo 'selected'; ?>>All Topics</option>
+                <?php foreach($topics as $t): ?>
+                    <option value="<?php echo htmlspecialchars($t['topicName']); ?>" 
+                        <?php if ($selectedTopic == $t['topicName']) echo 'selected'; ?>>
+                        <?php echo htmlspecialchars($t['topicName']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <button class="btn" id="filterBtn" type="submit">Filter</button>
+        </div>
     </div>
     <table class="table" id="quizzesTable">
-      <thead>
-  <tr><th>Topic</th><th>Educator</th><th># Questions</th><th>Take Quiz</th></tr>
+        <thead>
+    <tr><th>Topic</th><th>Educator</th><th># Questions</th><th>Take Quiz</th></tr>
 </thead>
 <tbody>
-  <?php foreach ($availableQuizzes as $quiz): 
-      $photo = $quiz['educatorPhoto']; 
-      $questionCount = intval($quiz['numberOfQuestions']);
-  ?>
-    <tr>
-      <td><?php echo htmlspecialchars($quiz['topicName']); ?></td>
-      <td class='inline'>
-          <img src='images/<?php echo htmlspecialchars($photo); ?>' alt='<?php echo htmlspecialchars($quiz['educatorName']); ?> Profile Photo' class="avatar">
-          <?php echo htmlspecialchars($quiz['educatorName']); ?>
-      </td>
-      <td><?php echo $questionCount; ?></td>
-      <td>
-        <?php if ($questionCount > 0): ?>
-          <a class='btn' href='TakeQuiz.php?quizID=<?php echo htmlspecialchars($quiz['quizID']); ?>'>Take Quiz</a>
-        <?php else: ?>
-          <span class='muted'>—</span>
-        <?php endif; ?>
-      </td>
-    </tr>
-  <?php endforeach; ?>
-</tbody>
-    </table>
-  </section>
-</form>
-  <section class="card" style="margin-top:16px">
-    <h2>Your Recommended Questions</h2>
-    <table class="table">
-      <thead>
-        <tr><th>Topic</th><th>Educator</th><th>Question Details</th><th>Status</th><th>Educator Comments</th></tr>
-      </thead>
-      <tbody>
-    <?php foreach($recommendedQuestions as $row): 
-      $photo = $row['educatorPhoto']; 
-      $statusClass = strtolower($row['status']); 
-      $answers = [
-          'A' => $row['answerA'], 'B' => $row['answerB'],
-          'C' => $row['answerC'], 'D' => $row['answerD']
-      ];
+    <?php foreach ($availableQuizzes as $quiz): 
+        $photoFile = $quiz['educatorPhoto']; 
+        $photoPath = getImagePath($photoFile, false);
+        $questionCount = intval($quiz['numberOfQuestions']);
     ?>
-    <tr>
-      <td><?php echo htmlspecialchars($row['topicName']); ?></td>
-      <td class='inline'><img src='images/<?php echo htmlspecialchars($photo); ?>' alt='<?php echo htmlspecialchars($row['educatorName']); ?> Profile Photo' class="avatar"> <?php echo htmlspecialchars($row['educatorName']); ?></td>
-      <td>
-        <?php if(!empty($row['questionFigureFileName'])): ?>
-            <img src='images/<?php echo htmlspecialchars($row['questionFigureFileName']); ?>' class='figure' alt='Question Figure'>
-        <?php endif; ?>
-        <div><strong><?php echo htmlspecialchars($row['question']); ?></strong></div>
-        <?php echo renderAnswerList($answers, $row['correctAnswer']); ?>
-      </td>
-      <td><span class='status <?php echo $statusClass; ?>'><?php echo htmlspecialchars(ucfirst($row['status'])); ?></span></td>
-      <td><?php echo (!empty($row['comments']) ? htmlspecialchars($row['comments']) : '—'); ?></td>
-    </tr>
+        <tr>
+            <td><?php echo htmlspecialchars($quiz['topicName']); ?></td>
+            <td class='inline'>
+                <img src='<?php echo $photoPath; ?>' alt='<?php echo htmlspecialchars($quiz['educatorName']); ?> Profile Photo' class="avatar">
+                <?php echo htmlspecialchars($quiz['educatorName']); ?>
+            </td>
+            <td><?php echo $questionCount; ?></td>
+            <td>
+                <?php if ($questionCount > 0): ?>
+                    <a class='btn' href='TakeQuiz.php?quizID=<?php echo htmlspecialchars($quiz['quizID']); ?>'>Take Quiz</a>
+                <?php else: ?>
+                    <span class='muted'>—</span>
+                <?php endif; ?>
+            </td>
+        </tr>
     <?php endforeach; ?>
 </tbody>
     </table>
-    <div class="right" style="margin-top:10px">
-      <a class="btn" href="recommend_question.php">Recommend another question</a>
-    </div>
-  </section>
+    </section>
+</form>
+    <section class="card" style="margin-top:16px">
+        <h2>Your Recommended Questions</h2>
+        <table class="table">
+            <thead>
+                <tr><th>Topic</th><th>Educator</th><th>Question Details</th><th>Status</th><th>Educator Comments</th></tr>
+            </thead>
+            <tbody>
+        <?php foreach($recommendedQuestions as $row): 
+            $educatorPhotoFile = $row['educatorPhoto']; 
+            $educatorPhotoPath = getImagePath($educatorPhotoFile, false);
+
+            $statusClass = strtolower($row['status']); 
+            $answers = [
+                'A' => $row['answerA'], 'B' => $row['answerB'],
+                'C' => $row['answerC'], 'D' => $row['answerD']
+            ];
+            
+            $figureFileName = $row['questionFigureFileName'];
+            $figurePath = getImagePath($figureFileName, true);
+        ?>
+        <tr>
+            <td><?php echo htmlspecialchars($row['topicName']); ?></td>
+            <td class='inline'>
+                <img src='<?php echo $educatorPhotoPath; ?>' alt='<?php echo htmlspecialchars($row['educatorName']); ?> Profile Photo' class="avatar"> 
+                <?php echo htmlspecialchars($row['educatorName']); ?>
+            </td>
+            <td>
+                <?php if(!empty($figureFileName)): ?>
+                    <img src='<?php echo $figurePath; ?>' class='figure' alt='Question Figure'>
+                <?php endif; ?>
+                <div><strong><?php echo htmlspecialchars($row['question']); ?></strong></div>
+                <?php echo renderAnswerList($answers, $row['correctAnswer']); ?>
+            </td>
+            <td><span class='status <?php echo $statusClass; ?>'><?php echo htmlspecialchars(ucfirst($row['status'])); ?></span></td>
+            <td><?php echo (!empty($row['comments']) ? htmlspecialchars($row['comments']) : '—'); ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+        </table>
+        <div class="right" style="margin-top:10px">
+            <a class="btn" href="recommend_question.php">Recommend another question</a>
+        </div>
+    </section>
 </main>
 
 <footer class="cl-footer">
- <p>OUR VISION</p>
- <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
-  <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
-  <div class="social">
-    <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
-    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-  </div>
+    <p>OUR VISION</p>
+    <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+    <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
+    <div class="social">
+        <a href="#"><img src="images/xpng.jpg" alt="Twitter"></a>
+        <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+        <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+    </div>
 </footer>
 
 <script>

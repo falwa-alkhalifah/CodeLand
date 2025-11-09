@@ -1,7 +1,8 @@
 <?php
+session_start(); 
 
 $host = 'localhost'; 
-$db   = 'database'; 
+$db = 'database'; 
 $user = 'root'; 
 $pass = 'root';
 
@@ -11,6 +12,17 @@ $quiz_educator = 'Instructor Not Found';
 $error_message = null;
 $quiz_id = null;
 
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'educator' || !isset($_SESSION['user_id'])) {
+    header("Location: index.html"); 
+    exit();
+}
+$educatorID = intval($_SESSION['user_id']);
+
+$educator = []; 
+$defaultAvatar = 'images/educatorUser.jpeg';
+$avatar = $defaultAvatar;
+
+
 function render_rating($rating) {
     $full_star = '★';
     $empty_star = '☆';
@@ -18,15 +30,32 @@ function render_rating($rating) {
     $stars = str_repeat($full_star, $rating_int) . str_repeat($empty_star, 5 - $rating_int);
     return $stars;
 }
+
 try {
-    $quiz_id = filter_input(INPUT_GET, 'quizID', FILTER_VALIDATE_INT); 
-    if ($quiz_id === false || $quiz_id === null) {
-        throw new Exception("Invalid or missing Quiz ID.");
-    }
     $conn = mysqli_connect($host, $user, $pass, $db);
     if (!$conn) {
         throw new Exception("Database connection failed: " . mysqli_connect_error());
     }
+    
+    $stmt_educator = mysqli_prepare($conn, "SELECT photoFileName FROM user WHERE id = ?");
+    mysqli_stmt_bind_param($stmt_educator, "i", $educatorID);
+    mysqli_stmt_execute($stmt_educator);
+    $result_educator = mysqli_stmt_get_result($stmt_educator);
+    $educator = mysqli_fetch_assoc($result_educator);
+    mysqli_stmt_close($stmt_educator);
+    
+    $stored = $educator['photoFileName'] ?? '';
+    if ($stored && is_file(__DIR__ . '/uploads/users/' . $stored)) {
+        $avatar = 'uploads/users/' . htmlspecialchars($stored) . '?v=' . @filemtime(__DIR__ . '/uploads/users/' . $stored);
+    } else {
+        $avatar = 'images/' . htmlspecialchars($stored ?: 'educatorUser.jpeg');
+    }
+
+    $quiz_id = filter_input(INPUT_GET, 'quizID', FILTER_VALIDATE_INT); 
+    if ($quiz_id === false || $quiz_id === null) {
+        throw new Exception("Invalid or missing Quiz ID.");
+    }
+
     $quiz_info_sql = "
         SELECT 
             t.topicName, 
@@ -46,6 +75,7 @@ try {
         $quiz_educator = 'Dr. ' . htmlspecialchars($quiz_info['firstName']) . ' ' . htmlspecialchars($quiz_info['lastName']);
     }
     mysqli_stmt_close($stmt_quiz);
+    
     $comments_sql = "
         SELECT comments, rating, date 
         FROM quizfeedback 
@@ -60,11 +90,15 @@ try {
         $comments[] = $row;
     }
     mysqli_stmt_close($stmt_comments);
-    mysqli_close($conn);
+    
 } catch (Exception $e) {
     $comments = []; 
     $error_message = "An error occurred while loading quiz data or comments.";
     error_log("Application Error (MySQLi): " . $e->getMessage()); 
+} finally {
+    if (isset($conn) && $conn) {
+        mysqli_close($conn);
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -85,8 +119,8 @@ try {
         <span>Codeland</span>
     </div>
     <div class="actions">
-        <a href="LernerHomePage.Html">
-            <img src="images/educatorUser.jpeg" alt="User" class="avatar">
+        <a href="educator_homepage.php">
+            <img src="<?php echo $avatar; ?>" alt="User" class="avatar">
         </a>
         <a href="index.html" class="logout-btn">Logout</a>
     </div>
@@ -124,6 +158,10 @@ try {
         <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
     </div>
 </footer>
+
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 </body>
 </html>
