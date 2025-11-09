@@ -176,7 +176,7 @@ if ($score === $totalQuestions) {
     $congratsMessage = "Perfect Score! Well done " . htmlspecialchars($learner['firstName']) . " 🎉";
 } else {
     // Not full marks - show encouragement video
-    $videoFile = "images/Almost_video.mp4";
+    $videoFile = "images/Almost_video.MOV";
     $congratsMessage = "Great effort " . htmlspecialchars($learner['firstName']) . "! 💪";
 }
 
