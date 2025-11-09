@@ -1,6 +1,4 @@
 <?php
-// quiz.php — إدارة أسئلة الكويز للمعلم (سكيمة lowercase) + حذف مباشر بـ POST
-
 session_start();
 require_once 'db_config.php';
 
@@ -10,7 +8,27 @@ $conn->set_charset('utf8mb4');
 
 function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
-/* ========= 1) التقاط quizID ========= */
+/* ========= Helper to get correct image path ========= */
+function getImagePath($fileName) {
+    if (empty($fileName)) return '';
+
+    $baseDir = __DIR__;
+    $figureUploadsDir = $baseDir . '/uploads/figures/';
+    $figureRelativePath = 'uploads/figures/';
+    $imagesDir = $baseDir . '/images/';
+
+    // Check uploads/figures first
+    if (is_file($figureUploadsDir . $fileName)) {
+        return $figureRelativePath . h($fileName) . '?v=' . @filemtime($figureUploadsDir . $fileName);
+    }
+    // Fallback to images folder
+    if (is_file($imagesDir . $fileName)) {
+        return 'images/' . h($fileName) . '?v=' . @filemtime($imagesDir . $fileName);
+    }
+    return '';
+}
+
+/* ========= 1) quizID ========= */
 $quizID = filter_input(INPUT_GET, 'quizID', FILTER_VALIDATE_INT);
 if (!$quizID) { $quizID = filter_input(INPUT_GET, 'quiz_id', FILTER_VALIDATE_INT); }
 if (!$quizID) { header("Location: educator_homepage.php?error=missingQuizId"); exit; }
@@ -35,11 +53,10 @@ $tRow = $tStmt->get_result()->fetch_assoc();
 $tStmt->close();
 $topicName = $tRow['topicName'] ?? 'Untitled';
 
-/* ========= 4) حذف سؤال (POST) ========= */
+/* ========= 4) حذف سؤال ========= */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_question_id'])) {
   $deleteID = (int)$_POST['delete_question_id'];
 
-  // تأكيد تبعية السؤال للكويز + جلب الصورة
   $imgQ = $conn->prepare(
     "SELECT qq.questionFigureFileName
      FROM quizquestion qq
@@ -58,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_question_id'])
     $del->close();
 
     if ($ok && !empty($imgR['questionFigureFileName'])) {
-      $path = __DIR__ . '/uploads/questions/' . $imgR['questionFigureFileName'];
+      $path = __DIR__ . '/uploads/figures/' . $imgR['questionFigureFileName'];
       if (is_file($path)) { @unlink($path); }
     }
   }
@@ -119,11 +136,8 @@ $deleted = !empty($_GET['deleted']);
   <section class="card page-header" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
     <div>
       <h1><?= h($topicName) ?> — Quiz</h1>
-      <!-- إن حبيتي ترجعي سطر رقم الكويز سهل -->
-      <!-- <p class="muted">Quiz #<?= (int)$quizID ?></p> -->
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <!-- ملاحظة: الملف اسمه add-question.php (بداش) حسب طلبك -->
       <a class="btn" href="add-question.php?quizID=<?= (int)$quizID ?>">+ Add Question</a>
       <a class="btn-outline" href="educator_homepage.php">Back</a>
     </div>
@@ -146,16 +160,17 @@ $deleted = !empty($_GET['deleted']);
         <?php foreach ($questions as $i => $q): ?>
           <tr>
             <td><?= $i+1 ?></td>
-
             <td>
               <div><strong><?= h($q['question']) ?></strong></div>
-              <?php if (!empty($q['questionFigureFileName'])): ?>
-                <div style="margin-top:6px">
-                  <img src="uploads/questions/<?= h($q['questionFigureFileName']) ?>"
-                       alt=""
-                       style="max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px;padding:4px;">
-                </div>
-              <?php endif; ?>
+              <?php if (!empty($q['questionFigureFileName'])): 
+                $figPath = getImagePath($q['questionFigureFileName']);
+                if ($figPath): ?>
+                  <div style="margin-top:6px">
+                    <img src="<?= $figPath ?>" alt="Question Figure"
+                         style="max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px;padding:4px;">
+                  </div>
+                <?php endif;
+              endif; ?>
             </td>
 
             <td>
@@ -166,10 +181,7 @@ $deleted = !empty($_GET['deleted']);
             </td>
 
             <td>
-              <!-- اسم الملف edit-question.php (بداش) حسب لينكك -->
               <a class="btn btn-edit" href="edit-question.php?questionID=<?= (int)$q['id'] ?>&quizID=<?= (int)$quizID ?>">Edit</a>
-
-              <!-- حذف مباشر بنفس الصفحة -->
               <form action="" method="post" style="display:inline;">
                 <input type="hidden" name="delete_question_id" value="<?= (int)$q['id'] ?>">
                 <button class="btn btn-delete" onclick="return confirm('Delete this question?');">Delete</button>
