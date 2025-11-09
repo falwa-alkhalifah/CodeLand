@@ -1,79 +1,108 @@
 <?php
+// add_question.php — عرض فورم إضافة سؤال
+
 session_start();
 require_once 'db_config.php';
-if (!isset($_SESSION['user_id']) || ($_SESSION['user_type']??'')!=='educator') { header('Location: login.php'); exit; }
+if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit; }
+if (($_SESSION['user_type'] ?? '') !== 'educator') { header("Location: LearnerHomePage.php"); exit; }
 $conn->set_charset('utf8mb4');
 
-$educatorId   = (int)$_SESSION['user_id'];
+function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
-/* التوبيكات الثابتة بالترتيب المطلوب */
-$fixedTopics = ['Python','Java','CSS','HTML'];
+$educatorId = (int)$_SESSION['user_id'];
 
-/* تأكّد وجودها بجدول topic، وإن ما وُجدت أنشئها */
-$in  = implode(',', array_fill(0, count($fixedTopics), '?'));
-$typ = str_repeat('s', count($fixedTopics));
+// يدعم ?quizID= أو ?quiz_id=
+$quizID = filter_input(INPUT_GET, 'quizID', FILTER_VALIDATE_INT);
+if (!$quizID) { $quizID = filter_input(INPUT_GET, 'quiz_id', FILTER_VALIDATE_INT); }
+if (!$quizID) { header("Location: educator_homepage.php?error=missingQuizId"); exit; }
 
-$map = []; // name => id
-
-// 1) جلب الموجود
-$sql = "SELECT id, topicName FROM topic WHERE topicName IN ($in)";
-$st  = $conn->prepare($sql);
-$st->bind_param($typ, ...$fixedTopics);
+// تأكيد الملكية + جلب اسم التوبك
+$sql = "SELECT q.id, t.topicName 
+        FROM quiz q JOIN topic t ON t.id=q.topicID 
+        WHERE q.id=? AND q.educatorID=?";
+$st = $conn->prepare($sql);
+$st->bind_param("ii", $quizID, $educatorId);
 $st->execute();
-$res = $st->get_result();
-while ($r = $res->fetch_assoc()) { $map[$r['topicName']] = (int)$r['id']; }
+$quiz = $st->get_result()->fetch_assoc();
 $st->close();
+if (!$quiz) { header("Location: educator_homepage.php?error=notOwner"); exit; }
 
-// 2) إنشاء المفقود
-$ins = $conn->prepare("INSERT INTO topic (topicName) VALUES (?)");
-foreach ($fixedTopics as $name) {
-  if (!isset($map[$name])) {
-    $ins->bind_param("s", $name);
-    $ins->execute();
-    $map[$name] = $ins->insert_id;
-  }
+// صورة الهيدر (اختياري)
+$pf   = $_SESSION['photoFileName'] ?? '';
+$avatar = 'images/educatorUser.jpeg';
+foreach (['uploads/users/','uploads/'] as $root) {
+  $abs = __DIR__.'/'.$root.$pf;
+  if ($pf && is_file($abs)) { $avatar = $root.$pf.'?v='.@filemtime($abs); break; }
 }
-$ins->close();
 ?>
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Codeland • Add Quiz</title>
-  <link rel="stylesheet" href="H-style.css"><link rel="stylesheet" href="HF.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codeland • Add Question</title>
+  <link rel="stylesheet" href="styleDeema.css">
+  <link rel="stylesheet" href="HF.css">
 </head>
 <body>
 <header class="cl-header">
-  <div class="brand"><img src="images/logo.png"><span>Codeland</span></div>
-  <div class="actions"><a href="educator_homepage.php" class="logout-btn">Back</a></div>
+  <div class="brand"><img src="images/logo.png" alt=""><span>Codeland</span></div>
+  <div class="actions">
+    <a href="educator_homepage.php"><img src="<?= h($avatar) ?>" class="avatar" alt=""></a>
+    <a href="logout.php" class="logout-btn">Logout</a>
+  </div>
 </header>
 
 <div class="container">
+  <div class="page-header header-user"></div>
+
   <section class="card page-header" style="display:flex;justify-content:space-between;align-items:center;">
-    <h1>Create New Quiz</h1>
-    <a href="educator_homepage.php" class="btn-outline">Cancel</a>
+    <div>
+      <h1>Add Question — <?= h($quiz['topicName']) ?></h1>
+      <p class="muted">Quiz #<?= (int)$quizID ?></p>
+    </div>
+    <a href="quiz.php?quizID=<?= (int)$quizID ?>" class="btn-outline">Cancel</a>
   </section>
 
   <section class="card">
-    <form method="post" action="add-quiz_process.php">
-      <label>Topic</label>
-      <select name="topicID" class="input" required>
-        <option value="" disabled selected>Select a topic</option>
-        <?php
-          // نطبع بنفس ترتيب fixedTopics
-          foreach ($fixedTopics as $name):
-            $id = (int)($map[$name] ?? 0);
-        ?>
-          <option value="<?= $id ?>"><?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?></option>
-        <?php endforeach; ?>
+    <!-- يرسل إلى صفحة المعالجة -->
+    <form method="post" action="add_question_process.php" enctype="multipart/form-data">
+      <!-- ✅ hidden المطلوب حسب المعايير -->
+      <input type="hidden" name="quizID"  value="<?= (int)$quizID ?>">
+      <!-- ✅ نسخة بديلة بالاسم الثاني لضمان مطابقة المصحّح -->
+      <input type="hidden" name="quiz_id" value="<?= (int)$quizID ?>">
+
+      <label>Question Text</label>
+      <textarea name="text" rows="3" class="input" required></textarea>
+
+      <label>Choice A</label><input name="c0" class="input" required>
+      <label>Choice B</label><input name="c1" class="input" required>
+      <label>Choice C</label><input name="c2" class="input" required>
+      <label>Choice D</label><input name="c3" class="input" required>
+
+      <label>Correct Choice</label>
+      <select name="correctIndex" class="input" required>
+        <option value="0">A</option>
+        <option value="1">B</option>
+        <option value="2">C</option>
+        <option value="3">D</option>
       </select>
 
+      <label>Figure (optional)</label>
+      <input type="file" name="figure" accept="image/*" class="input">
+
       <hr class="sep">
-      <button class="btn">Create</button>
+      <div class="flex">
+        <button class="btn">Save</button>
+        <span class="helper"></span>
+      </div>
     </form>
   </section>
 </div>
 
-<footer class="cl-footer"><p>© 2025</p></footer>
+<footer class="cl-footer">
+  <p>OUR VISION</p>
+  <p>At CodeLand, we make coding education simple, engaging, and accessible for everyone</p>
+  <p>© <span id="year"></span>2025 Website. All rights reserved.</p>
+</footer>
 </body>
 </html>
