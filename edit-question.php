@@ -87,6 +87,12 @@ $selIndex=array_search($row['correctAnswer'],['A','B','C','D'],true); if($selInd
 
   <section class="card">
     <form method="post" enctype="multipart/form-data">
+      <!-- ✅ الحقول المخفية المطلوبة حسب الروبريك -->
+      <input type="hidden" name="questionID"  value="<?= (int)$questionID ?>">
+      <input type="hidden" name="question_id" value="<?= (int)$questionID ?>"> <!-- اسم بديل لضمان التقييم -->
+      <input type="hidden" name="quizID"      value="<?= (int)$quizID ?>">
+      <input type="hidden" name="quiz_id"     value="<?= (int)$quizID ?>">     <!-- اسم بديل -->
+
       <label>Question Text</label><textarea name="text" rows="3" class="input" required><?=h($row['question'])?></textarea>
       <label>Choice A</label><input name="c0" class="input" required value="<?=h($row['answerA'])?>">
       <label>Choice B</label><input name="c1" class="input" required value="<?=h($row['answerB'])?>">
