@@ -18,10 +18,6 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'educator' || !is
 }
 $educatorID = intval($_SESSION['user_id']);
 
-$educator = []; 
-$defaultAvatar = 'images/educatorUser.jpeg';
-$avatar = $defaultAvatar;
-
 
 function render_rating($rating) {
     $full_star = '★';
@@ -100,6 +96,20 @@ try {
         mysqli_close($conn);
     }
 }
+
+$defaultAvatar = 'images/default_avatar.jpeg'; 
+$storedPhoto = $educator['photoFileName'] ?? '';
+$avatar = $defaultAvatar;
+$photoUploadsDir = __DIR__ . '/uploads/users/';
+
+if ($storedPhoto && is_file($photoUploadsDir . $storedPhoto)) {
+    $avatar = 'uploads/users/' . htmlspecialchars($storedPhoto) . '?v=' . @filemtime($photoUploadsDir . $storedPhoto);
+} else {
+    if (is_file(__DIR__ . '/images/' . $storedPhoto)) {
+        $avatar = 'images/' . htmlspecialchars($storedPhoto);
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

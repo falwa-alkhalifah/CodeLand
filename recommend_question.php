@@ -74,11 +74,19 @@ if (!$learner) {
 
 // Prioritize 'uploads/users/' if educator_homepage.php logic is followed, otherwise assume 'images/'
 
-$defaultAvatar = 'learnerUser.jpeg';
 
-$stored = $learner['photoFileName'] ?? '';
+$defaultAvatar = 'images/default_avatar.jpeg'; 
+$storedPhoto = $learner['photoFileName'] ?? '';
+$learnerPhotoPath = $defaultAvatar;
+$photoUploadsDir = __DIR__ . '/uploads/users/';
 
-$learnerPhotoPath = 'images/' . htmlspecialchars($stored ?: $defaultAvatar);
+if ($storedPhoto && is_file($photoUploadsDir . $storedPhoto)) {
+    $learnerPhotoPath = 'uploads/users/' . htmlspecialchars($storedPhoto) . '?v=' . @filemtime($photoUploadsDir . $storedPhoto);
+} else {
+    if (is_file(__DIR__ . '/images/' . $storedPhoto)) {
+        $learnerPhotoPath = 'images/' . htmlspecialchars($storedPhoto);
+    }
+}
 
 // ---------------------------------------------
 
