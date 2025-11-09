@@ -53,36 +53,7 @@ $tRow = $tStmt->get_result()->fetch_assoc();
 $tStmt->close();
 $topicName = $tRow['topicName'] ?? 'Untitled';
 
-/* ========= 4) حذف سؤال ========= */
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_question_id'])) {
-  $deleteID = (int)$_POST['delete_question_id'];
-
-  $imgQ = $conn->prepare(
-    "SELECT qq.questionFigureFileName
-     FROM quizquestion qq
-     JOIN quiz q ON q.id = qq.quizID
-     WHERE qq.id=? AND qq.quizID=? AND q.educatorID=?"
-  );
-  $imgQ->bind_param("iii", $deleteID, $quizID, $educatorId);
-  $imgQ->execute();
-  $imgR = $imgQ->get_result()->fetch_assoc();
-  $imgQ->close();
-
-  if ($imgR) {
-    $del = $conn->prepare("DELETE FROM quizquestion WHERE id=? AND quizID=?");
-    $del->bind_param("ii", $deleteID, $quizID);
-    $ok = $del->execute();
-    $del->close();
-
-    if ($ok && !empty($imgR['questionFigureFileName'])) {
-      $path = __DIR__ . '/uploads/figures/' . $imgR['questionFigureFileName'];
-      if (is_file($path)) { @unlink($path); }
-    }
-  }
-  header("Location: quiz.php?quizID={$quizID}&deleted=1"); exit;
-}
-
-/* ========= 5) صورة البروفايل ========= */
+/* ========= 4) صورة البروفايل ========= */
 $avatar = 'images/educatorUser.jpeg';
 $pf = $_SESSION['photoFileName'] ?? '';
 foreach (['uploads/users/','uploads/'] as $root) {
@@ -90,7 +61,7 @@ foreach (['uploads/users/','uploads/'] as $root) {
   if ($pf && is_file($abs)) { $avatar = $root.$pf.'?v='.@filemtime($abs); break; }
 }
 
-/* ========= 6) جلب الأسئلة ========= */
+/* ========= 5) جلب الأسئلة ========= */
 $questions = [];
 $st = $conn->prepare(
   "SELECT id, question, questionFigureFileName, answerA, answerB, answerC, answerD, correctAnswer
@@ -102,7 +73,7 @@ $rs = $st->get_result();
 while ($r = $rs->fetch_assoc()) { $questions[] = $r; }
 $st->close();
 
-/* ========= 7) فلاش رسائل ========= */
+/* ========= 6) فلاش رسائل ========= */
 $added   = !empty($_GET['added']);
 $updated = !empty($_GET['updated']);
 $deleted = !empty($_GET['deleted']);
@@ -182,10 +153,13 @@ $deleted = !empty($_GET['deleted']);
 
             <td>
               <a class="btn btn-edit" href="edit-question.php?questionID=<?= (int)$q['id'] ?>&quizID=<?= (int)$quizID ?>">Edit</a>
-              <form action="" method="post" style="display:inline;">
-                <input type="hidden" name="delete_question_id" value="<?= (int)$q['id'] ?>">
-                <button class="btn btn-delete" onclick="return confirm('Delete this question?');">Delete</button>
-              </form>
+
+              <!-- ✅ New delete link that calls separate PHP page -->
+              <a class="btn btn-delete"
+                 href="delete-question.php?questionID=<?= (int)$q['id'] ?>&quizID=<?= (int)$quizID ?>"
+                 onclick="return confirm('Are you sure you want to delete this question?');">
+                 Delete
+              </a>
             </td>
           </tr>
         <?php endforeach; ?>
