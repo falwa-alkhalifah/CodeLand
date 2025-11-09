@@ -78,7 +78,7 @@ if (!$learner) {
 
 $defaultAvatar = 'images/default_avatar.jpeg'; 
 
-$defaultFigure = 'images/figure_placeholder.png'; // Dedicated placeholder for question figures
+$defaultFigure = 'images/figure_placeholder.png';
 
 
 
@@ -270,17 +270,6 @@ function renderAnswerList($answers, $correct) {
 
 
 
-/**
-
- * Generates the correct image path, supporting both avatars and question figures.
-
- * @param string $fileName The filename from the database.
-
- * @param bool $isFigure True if the file is a recommended question figure.
-
- * @return string The relative path to the image or a placeholder.
-
- */
 
 function getImagePath($fileName, $isFigure = false) {
 
@@ -288,7 +277,6 @@ function getImagePath($fileName, $isFigure = false) {
 
     
 
-    // Set the appropriate initial fallback path
 
     $filePath = $isFigure ? $defaultFigure : $defaultAvatar; 
 
@@ -306,11 +294,9 @@ function getImagePath($fileName, $isFigure = false) {
 
     
 
-    // --- Figure Logic (Uses 'uploads/questions/' as per working code) ---
 
     if ($isFigure) {
 
-        // *** FIX: Use the correct directory 'uploads/questions/' ***
 
         $figureUploadsDir = $baseDir . '/uploads/questions/'; 
 
@@ -318,7 +304,6 @@ function getImagePath($fileName, $isFigure = false) {
 
         
 
-        // Check if the file exists in the dedicated uploads folder
 
         if (is_file($figureUploadsDir . $fileName)) {
 
@@ -326,19 +311,16 @@ function getImagePath($fileName, $isFigure = false) {
 
         } else if (is_file($baseDir . '/images/' . $fileName)) {
 
-            // Fallback to images directory (e.g., if it's a fixed app image)
 
             $filePath = 'images/' . htmlspecialchars($fileName);
 
         }
 
-        // If file is not found, $filePath remains $defaultFigure.
 
         
 
     } else {
 
-        // --- Avatar Logic ---
 
         $userUploadsDir = $baseDir . '/uploads/users/';
 
@@ -615,8 +597,6 @@ mysqli_close($connect);
             <td>
 
                 <?php 
-
-                    // Render the image tag ONLY if a filename was stored in the database.
 
                     if(!empty($figureFileName)): 
 

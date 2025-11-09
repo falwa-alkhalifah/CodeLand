@@ -42,7 +42,6 @@ $learnerID = intval($_SESSION['user_id']);
 
 
 
-// --- Fetch Learner Info for Header Display ---
 
 $stmt = mysqli_prepare($connect, "SELECT photoFileName FROM user WHERE id = ?");
 
@@ -70,9 +69,7 @@ if (!$learner) {
 
 }
 
-// --- Define Learner Photo Path ---
 
-// Prioritize 'uploads/users/' if educator_homepage.php logic is followed, otherwise assume 'images/'
 
 
 $defaultAvatar = 'images/default_avatar.jpeg'; 
@@ -88,7 +85,6 @@ if ($storedPhoto && is_file($photoUploadsDir . $storedPhoto)) {
     }
 }
 
-// ---------------------------------------------
 
 
 
@@ -112,7 +108,6 @@ $message_type = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Collect inputs
 
     $topicID = $_POST['topic'];
 
@@ -132,7 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-    // --- 1. Find the QuizID (Using Prepared Statement for security) ---
 
     $quizID = null;
 
@@ -174,13 +168,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             
 
-            // === FIX 1: Change upload directory to match educator review page logic ===
 
             $UPLOAD_DIR = __DIR__ . '/uploads/questions/';
 
             if (!is_dir($UPLOAD_DIR)) {
 
-                // Attempt to create the directory if it doesn't exist
 
                 @mkdir($UPLOAD_DIR, 0755, true); 
 
@@ -220,13 +212,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         
 
-        // --- 2. Insert Recommended Question (Using Prepared Statement for security) ---
 
         if ($message_type !== 'error') {
 
-            // Note: We list 10 columns, but only use 9 placeholders, relying on 'pending' being hardcoded as the 10th value.
-
-            // This is a common pattern, but requires the bind string to match the 9 placeholders.
 
             $insertQuery = "
 
@@ -249,10 +237,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = mysqli_prepare($connect, $insertQuery);
 
             
-
-            // === FIX 2: Corrected 9-character bind string. ===
-
-            // Types: i (quizID), i (learnerID), s (question), s (figure), s (A), s (B), s (C), s (D), s (correct)
 
             mysqli_stmt_bind_param($stmt, "iississss", 
 
