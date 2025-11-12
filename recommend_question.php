@@ -19,7 +19,8 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'learner' || !iss
 
 $learnerID = intval($_SESSION['user_id']);
 
-if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' && isset($_POST['topicID'])) {
+
+if (isset($_POST['topicID'])) {
     
     $topicID = intval($_POST['topicID']);
     
@@ -79,9 +80,6 @@ if ($storedPhoto && is_file($photoUploadsDir . $storedPhoto)) {
 $topicsResult = mysqli_query($connect, "SELECT id, topicName FROM topic ORDER BY topicName");
 $topics = mysqli_fetch_all($topicsResult, MYSQLI_ASSOC);
 
-$educatorsResult = mysqli_query($connect, "SELECT id, firstName, lastName FROM user WHERE userType = 'educator' ORDER BY lastName");
-$educators = mysqli_fetch_all($educatorsResult, MYSQLI_ASSOC);
-
 $message = '';
 $message_type = ''; 
 
@@ -116,7 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg');
             
-            
             $UPLOAD_DIR = __DIR__ . '/uploads/questions/';
             if (!is_dir($UPLOAD_DIR)) {
                 @mkdir($UPLOAD_DIR, 0755, true); 
@@ -138,9 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         
-        
         if ($message_type !== 'error') {
-
             $insertQuery = "
                 INSERT INTO recommendedquestion 
                 (quizID, learnerID, question, questionFigureFileName, answerA, answerB, answerC, answerD, correctAnswer, status) 
@@ -191,6 +186,7 @@ mysqli_close($connect);
     <title>Recommend Question</title>
     <link rel="stylesheet" href="lernerStyle.css">
     <link rel="stylesheet" href="HF.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -231,11 +227,11 @@ mysqli_close($connect);
                 <label for="educator">* Educator</label>
                 <select id="educator" name="educator" class="select" required disabled>
                     <option value="">Select a topic first</option>
-                    </select>
+                </select>
                 <script>
                     document.getElementById('educator').setAttribute('data-initial-html', 
                         '<option value="">Select a topic first</option>'
-                        );
+                    );
                 </script>
             </div>
         </div>
@@ -302,91 +298,64 @@ mysqli_close($connect);
 
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 
-<script>
-    const topicSelect = document.getElementById('topic');
-    const educatorSelect = document.getElementById('educator');
-    const initialEducatorHTML = educatorSelect.getAttribute('data-initial-html');
-
-    function fetchEducators(topicID) {
-        if (!topicID) {
-            educatorSelect.innerHTML = initialEducatorHTML;
-            educatorSelect.disabled = true;
-            return;
-        }
-
-        educatorSelect.innerHTML = '<option value="">Loading...</option>';
-        educatorSelect.disabled = true;
-
-        const xhr = new XMLHttpRequest();
+    $(document).ready(function() {
+        const topicSelect = $('#topic');
+        const educatorSelect = $('#educator');
         
-        xhr.open('POST', 'recommend_question.php', true);
-        
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        const initialEducatorHTML = educatorSelect.attr('data-initial-html') || '<option value="">Select a topic first</option>';
 
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                try {
-                    const educators = JSON.parse(xhr.responseText);
-                    updateEducatorDropdown(educators);
-                } catch (e) {
-                    console.error('Error parsing JSON response:', e);
-                    updateEducatorDropdown([]); 
-                }
+        function updateEducatorDropdown(educators) {
+            let optionsHtml = '<option value="">Choose an educator</option>';
+            
+            if (educators.length === 0) {
+                optionsHtml = '<option value="">No educators found for this topic</option>';
+                educatorSelect.prop('disabled', true);
             } else {
-                console.error('AJAX request failed. Status:', xhr.status);
-                updateEducatorDropdown([]); 
+                $.each(educators, function(index, educator) {
+                    const fullName = educator.firstName + ' ' + educator.lastName;
+                    optionsHtml += `<option value="${educator.id}">${fullName}</option>`;
+                });
+                educatorSelect.prop('disabled', false);
             }
-        };
 
-        xhr.onerror = function() {
-            console.error('AJAX request failed entirely.');
-            updateEducatorDropdown([]); 
-        };
-
-        const data = `topicID=${encodeURIComponent(topicID)}`;
-        xhr.send(data);
-    }
-
-    function updateEducatorDropdown(educators) {
-        let optionsHtml = '<option value="">Choose an educator</option>';
-        
-        if (educators.length === 0) {
-            optionsHtml = '<option value="">No educators found for this topic</option>';
-            educatorSelect.disabled = true;
-        } else {
-            educators.forEach(educator => {
-                const fullName = educator.firstName + ' ' + educator.lastName;
-                optionsHtml += `<option value="${educator.id}">${escapeHtml(fullName)}</option>`;
-            });
-            educatorSelect.disabled = false;
+            educatorSelect.html(optionsHtml);
         }
 
-        educatorSelect.innerHTML = optionsHtml;
-    }
+        topicSelect.on('change', function() {
+            const selectedTopicID = $(this).val();
 
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
+            if (!selectedTopicID) {
+                educatorSelect.html(initialEducatorHTML);
+                educatorSelect.prop('disabled', true);
+                return;
+            }
 
-    topicSelect.addEventListener('change', function() {
-        const selectedTopicID = this.value;
-        fetchEducators(selectedTopicID);
+            educatorSelect.html('<option value="">Loading...</option>');
+            educatorSelect.prop('disabled', true);
+
+            $.ajax({
+                url: 'recommend_question.php', 
+                type: 'POST',                  
+                data: {                        
+                    topicID: selectedTopicID
+                },
+                dataType: 'json',              
+                
+                success: function(educators) {
+                    updateEducatorDropdown(educators);
+                },
+                
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    educatorSelect.html('<option value="">Error loading educators</option>');
+                    educatorSelect.prop('disabled', true);
+                }
+            });
+        });
+        
+        topicSelect.trigger('change'); 
     });
-    
-    document.addEventListener('DOMContentLoaded', (event) => {
-        fetchEducators(topicSelect.value); 
-    });
-
 </script>
 
 </body>

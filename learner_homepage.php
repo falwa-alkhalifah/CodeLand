@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 
 $db_host = "localhost";
@@ -22,11 +22,9 @@ $availableQuizzes = [];
 $recommendedQuestions = [];
 $learner = null;
 
-
 function getImagePath($fileName, $isFigure = false) {
-    global $defaultAvatar, $defaultFigure; 
     $defaultAvatar = 'images/default_avatar.jpeg'; 
-    $defaultFigure = 'images/figure_placeholder.png';
+    $defaultFigure = 'images/figure_placeholder.png'; 
     $filePath = $isFigure ? $defaultFigure : $defaultAvatar; 
 
     if (empty($fileName)) {
@@ -99,12 +97,9 @@ if ($storedPhoto && is_file($photoUploadsDir . $storedPhoto)) {
 $topicsResult = mysqli_query($connect, "SELECT DISTINCT topicName FROM topic ORDER BY topicName");
 $topics = mysqli_fetch_all($topicsResult, MYSQLI_ASSOC);
 
-
-if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+if (isset($_POST['topicFilter'])) {
     
-    if (isset($_POST['topicFilter'])) {
-        $selectedTopic = $_POST['topicFilter'];
-    }
+    $selectedTopic = $_POST['topicFilter'];
 
     $query = "
         SELECT 
@@ -176,7 +171,6 @@ $result = mysqli_stmt_get_result($stmt);
 $availableQuizzes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_stmt_close($stmt);
 
-// Fetch Recommended Questions (Keep as is)
 $query = "
     SELECT 
         t.topicName,
@@ -216,6 +210,7 @@ mysqli_close($connect);
     <title>Learner Home Page</title>
     <link rel="stylesheet" href="lernerStyle.css">
     <link rel="stylesheet" href="HF.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     
     <style>
         .status.pending { background-color: #fef3c7; color: #b45309; padding: 4px 8px; border-radius: 4px; }
@@ -260,7 +255,7 @@ mysqli_close($connect);
         <h2>Available Quizzes</h2>
         <div class="filterbar">
             <select id="topicFilter" class="select" name="topicFilter">
-                <option value="all" <?php if ($selectedTopic == 'all') echo 'selected'; ?>>All Topics</option>
+                <option value="all">All Topics</option>
                 <?php foreach($topics as $t): ?>
                     <option value="<?php echo htmlspecialchars($t['topicName']); ?>">
                         <?php echo htmlspecialchars($t['topicName']); ?>
@@ -359,91 +354,67 @@ mysqli_close($connect);
 
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 
-<script>
-    const topicFilter = document.getElementById('topicFilter');
-    const quizzesTableBody = document.querySelector('#quizzesTable tbody');
+    $(document).ready(function() {
+        const topicFilter = $('#topicFilter');
+        const quizzesTableBody = $('#quizzesTable tbody');
 
-    function updateQuizzesTable(quizzes) {
-        let newTbodyContent = '';
+        function buildQuizRow(quiz) {
+            const questionCount = parseInt(quiz.numberOfQuestions);
+            const takeQuizCell = questionCount > 0 
+                ? `<a class='btn' href='TakeQuiz.php?quizID=${quiz.quizID}'>Take Quiz</a>`
+                : `<span class='muted'>—</span>`;
 
-        if (quizzes.length === 0) {
-            newTbodyContent = `<tr><td colspan="4" style="text-align: center;">No quizzes found for this topic.</td></tr>`;
-        } else {
-            quizzes.forEach(quiz => {
-                const questionCount = parseInt(quiz.numberOfQuestions);
-                const takeQuizCell = questionCount > 0 
-                    ? `<a class='btn' href='TakeQuiz.php?quizID=${quiz.quizID}'>Take Quiz</a>`
-                    : `<span class='muted'>—</span>`;
-
-                const row = `
-                    <tr>
-                        <td>${escapeHtml(quiz.topicName)}</td>
-                        <td class='inline'>
-                            <img src='${quiz.educatorPhotoPath}' alt='${escapeHtml(quiz.educatorName)} Profile Photo' class="avatar">
-                            ${escapeHtml(quiz.educatorName)}
-                        </td>
-                        <td>${questionCount}</td>
-                        <td>${takeQuizCell}</td>
-                    </tr>
-                `;
-                newTbodyContent += row;
-            });
+            return `
+                <tr>
+                    <td>${$('<div>').text(quiz.topicName).html()}</td>
+                    <td class='inline'>
+                        <img src='${quiz.educatorPhotoPath}' alt='${$('<div>').text(quiz.educatorName).html()} Profile Photo' class="avatar">
+                        ${$('<div>').text(quiz.educatorName).html()}
+                    </td>
+                    <td>${questionCount}</td>
+                    <td>${takeQuizCell}</td>
+                </tr>
+            `;
         }
-        
-        quizzesTableBody.innerHTML = newTbodyContent;
-    }
 
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
+        function updateQuizzesTable(quizzes) {
+            let newTbodyContent = '';
 
-    topicFilter.addEventListener('change', function() {
-        const selectedTopic = this.value;
-
-        quizzesTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Loading quizzes...</td></tr>'; 
-
-        const xhr = new XMLHttpRequest();
-        
-        xhr.open('POST', 'learner_homePage.php', true);
-        
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) { 
-                if (xhr.status === 200) { 
-                    try {
-                        const quizzes = JSON.parse(xhr.responseText);
-                        updateQuizzesTable(quizzes);
-                    } catch (e) {
-                        console.error('Error parsing JSON response:', e);
-                        console.log('Raw response:', xhr.responseText);
-                        quizzesTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color:red;">An error occurred while processing data.</td></tr>`;
-                    }
-                } else {
-                    console.error('AJAX Error: ' + xhr.status + ' ' + xhr.statusText);
-                    quizzesTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color:red;">Failed to load data (Status: ${xhr.status}).</td></tr>`;
-                }
+            if (quizzes.length === 0) {
+                newTbodyContent = `<tr><td colspan="4" style="text-align: center;">No quizzes found for this topic.</td></tr>`;
+            } else {
+                $.each(quizzes, function(index, quiz) {
+                    newTbodyContent += buildQuizRow(quiz);
+                });
             }
-        };
+            
+            quizzesTableBody.html(newTbodyContent);
+        }
 
-        const data = `topicFilter=${encodeURIComponent(selectedTopic)}`;
-        xhr.send(data);
+        topicFilter.on('change', function() {
+            const selectedTopic = $(this).val();
+
+            quizzesTableBody.html('<tr><td colspan="4" style="text-align: center;">Loading quizzes...</td></tr>'); 
+
+            $.ajax({
+                url: 'learner_homePage.php',
+                type: 'POST',
+                data: { topicFilter: selectedTopic }, 
+                dataType: 'json', 
+                
+                success: function(quizzes) {
+                    updateQuizzesTable(quizzes);
+                },
+                
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    quizzesTableBody.html(`<tr><td colspan="4" style="text-align: center; color:red;">Failed to load quizzes. Please try again.</td></tr>`);
+                }
+            });
+        });
+        
     });
-
-    const filterBtn = document.getElementById('filterBtn');
-    if (filterBtn) {
-        filterBtn.remove();
-    }
 </script>
 
 </body>
