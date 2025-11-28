@@ -1,24 +1,30 @@
 <?php
-// delete-question.php — removes a quiz question and its figure image
+// delete-question.php — removes a quiz question and its figure image (AJAX version)
 session_start();
 require_once 'db_config.php';
 
-if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit; }
-if (($_SESSION['user_type'] ?? '') !== 'educator') { header("Location: LearnerHomePage.php"); exit; }
+header("Content-Type: application/json");
+
+// Security check
+if (!isset($_SESSION['user_id']) || ($_SESSION['user_type'] ?? '') !== 'educator') {
+    echo json_encode(false);
+    exit;
+}
+
 $conn->set_charset('utf8mb4');
 
-// Validate input
-$quizID = filter_input(INPUT_GET, 'quizID', FILTER_VALIDATE_INT);
-$questionID = filter_input(INPUT_GET, 'questionID', FILTER_VALIDATE_INT);
+// Validate input — AJAX uses POST
+$quizID = filter_input(INPUT_POST, 'quizID', FILTER_VALIDATE_INT);
+$questionID = filter_input(INPUT_POST, 'questionID', FILTER_VALIDATE_INT);
 
 if (!$quizID || !$questionID) {
-    header("Location: educator_homepage.php?error=missingParams");
+    echo json_encode(false);
     exit;
 }
 
 $educatorId = (int)$_SESSION['user_id'];
 
-// Verify the question belongs to this educator
+// Verify question belongs to educator
 $sql = "
     SELECT qq.questionFigureFileName
     FROM quizquestion qq
@@ -32,21 +38,21 @@ $result = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$result) {
-    header("Location: quiz.php?quizID={$quizID}&error=notFound");
+    echo json_encode(false);
     exit;
 }
 
-// Delete the question record
+// Delete question
 $deleteStmt = $conn->prepare("DELETE FROM quizquestion WHERE id=? AND quizID=?");
 $deleteStmt->bind_param("ii", $questionID, $quizID);
 $ok = $deleteStmt->execute();
 $deleteStmt->close();
 
-// Delete the associated image if present
+// Delete associated figure
 if ($ok && !empty($result['questionFigureFileName'])) {
     $baseDir = __DIR__;
     $figurePath = $baseDir . '/uploads/figures/' . $result['questionFigureFileName'];
-    $imagePath = $baseDir . '/images/' . $result['questionFigureFileName'];
+    $imagePath  = $baseDir . '/images/' . $result['questionFigureFileName'];
 
     if (is_file($figurePath)) { @unlink($figurePath); }
     elseif (is_file($imagePath)) { @unlink($imagePath); }
@@ -54,7 +60,7 @@ if ($ok && !empty($result['questionFigureFileName'])) {
 
 $conn->close();
 
-// Redirect back to quiz page
-header("Location: quiz.php?quizID={$quizID}&deleted=1");
+// Return TRUE or FALSE as required
+echo json_encode($ok);
 exit;
 ?>
