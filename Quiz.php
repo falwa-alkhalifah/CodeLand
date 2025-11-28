@@ -2,6 +2,26 @@
 session_start();
 require_once 'db_config.php';
 
+function getUserPhoto($fileName) {
+    $defaultAvatar = 'images/default_avatar.jpeg';
+    if (empty($fileName)) return $defaultAvatar;
+
+    $baseDir = __DIR__;
+    $uploadDir = $baseDir . '/uploads/users/';
+    $uploadRel = 'uploads/users/';
+
+    if (is_file($uploadDir . $fileName)) {
+        return $uploadRel . htmlspecialchars($fileName) . '?v=' . @filemtime($uploadDir . $fileName);
+    }
+
+    if (is_file($baseDir . '/images/' . $fileName)) {
+        return 'images/' . htmlspecialchars($fileName);
+    }
+
+    return $defaultAvatar;
+}
+
+
 if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit; }
 if (($_SESSION['user_type'] ?? '') !== 'educator') { header("Location: LearnerHomePage.php"); exit; }
 $conn->set_charset('utf8mb4');
@@ -54,12 +74,16 @@ $tStmt->close();
 $topicName = $tRow['topicName'] ?? 'Untitled';
 
 /* ========= 4) صورة البروفايل ========= */
-$avatar = 'images/educatorUser.jpeg';
-$pf = $_SESSION['photoFileName'] ?? '';
-foreach (['uploads/users/','uploads/'] as $root) {
-  $abs = __DIR__ . '/' . $root . $pf;
-  if ($pf && is_file($abs)) { $avatar = $root.$pf.'?v='.@filemtime($abs); break; }
-}
+$educatorId = (int)$_SESSION['user_id'];
+
+$stmt = $conn->prepare("SELECT photoFileName FROM user WHERE id=?");
+$stmt->bind_param("i", $educatorId);
+$stmt->execute();
+$row = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+$avatar = getUserPhoto($row['photoFileName'] ?? '');
+
 
 /* ========= 5) جلب الأسئلة ========= */
 $questions = [];
