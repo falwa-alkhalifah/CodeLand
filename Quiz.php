@@ -53,17 +53,17 @@ function getImagePath($fileName) {
     // Image folder
     $imagesDirAbs = $baseDir . '/images/';
 
-    // 1️⃣ Check uploads/questions/
+    // 1 Check uploads/questions/
     if (is_file($questionDirAbs . $fileName)) {
         return $questionDirRel . h($fileName) . '?v=' . @filemtime($questionDirAbs . $fileName);
     }
 
-    // 2️⃣ Check uploads/figures/
+    // 2 Check uploads/figures/
     if (is_file($figureDirAbs . $fileName)) {
         return $figureDirRel . h($fileName) . '?v=' . @filemtime($figureDirAbs . $fileName);
     }
 
-    // 3️⃣ Check images/
+    // 3 Check images/
     if (is_file($imagesDirAbs . $fileName)) {
         return 'images/' . h($fileName);
     }
@@ -203,12 +203,14 @@ $deleted = !empty($_GET['deleted']);
             <td>
               <a class="btn btn-edit" href="edit-question.php?questionID=<?= (int)$q['id'] ?>&quizID=<?= (int)$quizID ?>">Edit</a>
 
-              <!-- ✅ New delete link that calls separate PHP page -->
-              <a class="btn btn-delete"
-                 href="delete-question.php?questionID=<?= (int)$q['id'] ?>&quizID=<?= (int)$quizID ?>"
-                 onclick="return confirm('Are you sure you want to delete this question?');">
-                 Delete
-              </a>
+              <a class="btn btn-delete delete-btn"
+                data-question-id="<?= (int)$q['id'] ?>"
+                data-quiz-id="<?= (int)$quizID ?>"
+                href="#"
+             >
+                Delete
+             </a>
+
             </td>
           </tr>
         <?php endforeach; ?>
@@ -227,5 +229,57 @@ $deleted = !empty($_GET['deleted']);
     <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
   </div>
 </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+
+        $(".delete-btn").click(function (e) {
+            e.preventDefault();
+
+            if (!confirm("Are you sure you want to delete this question?")) {
+                return;
+            }
+
+            let btn = $(this);
+            let qid = btn.data("question-id");
+            let quiz = btn.data("quiz-id");
+
+            $.post("delete-question.php",
+            {
+                questionID: qid,
+                quizID: quiz
+            },
+            function(response) {
+
+                try { response = JSON.parse(response); } catch(e){}
+
+                if (response === true || response === "true") {
+
+                    // Fade row
+                    btn.closest("tr").fadeOut(300, function(){
+                        $(this).remove();
+                    });
+
+                    // Show success toast
+                    let msg = $("<div class='toast' style='display:block;margin-top:10px;'>")
+                              .text(" Question deleted successfully.");
+
+                    $(".container").prepend(msg);
+
+                } else {
+                    alert("️ Could not delete the question.");
+                }
+
+            }).fail(function(){
+                alert("️ Server error.");
+            });
+
+        });
+
+    });
+    </script>
+
 </body>
 </html>
