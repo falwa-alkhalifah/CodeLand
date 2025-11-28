@@ -2,6 +2,14 @@
 session_start();
 require_once 'db_config.php';
 
+//Security: Only logged-in educators can access this page
+if (!isset($_SESSION['user_id']) || ($_SESSION['user_type'] ?? '') !== 'educator') {
+    $_SESSION['login_error'] = "You must log in as an educator.";
+    header("Location: login.php");
+    exit;
+}
+
+
 function getUserPhoto($fileName) {
     $defaultAvatar = 'images/default_avatar.jpeg';
     if (empty($fileName)) return $defaultAvatar;
