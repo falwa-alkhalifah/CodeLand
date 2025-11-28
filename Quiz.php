@@ -33,20 +33,37 @@ function getImagePath($fileName) {
     if (empty($fileName)) return '';
 
     $baseDir = __DIR__;
-    $figureUploadsDir = $baseDir . '/uploads/figures/';
-    $figureRelativePath = 'uploads/figures/';
-    $imagesDir = $baseDir . '/images/';
 
-    // Check uploads/figures first
-    if (is_file($figureUploadsDir . $fileName)) {
-        return $figureRelativePath . h($fileName) . '?v=' . @filemtime($figureUploadsDir . $fileName);
+    // Question figure folders
+    $questionDirAbs  = $baseDir . '/uploads/questions/';
+    $questionDirRel  = 'uploads/questions/';
+
+    // Old/alternative folder
+    $figureDirAbs = $baseDir . '/uploads/figures/';
+    $figureDirRel = 'uploads/figures/';
+
+    // Image folder
+    $imagesDirAbs = $baseDir . '/images/';
+
+    // 1️⃣ Check uploads/questions/
+    if (is_file($questionDirAbs . $fileName)) {
+        return $questionDirRel . h($fileName) . '?v=' . @filemtime($questionDirAbs . $fileName);
     }
-    // Fallback to images folder
-    if (is_file($imagesDir . $fileName)) {
-        return 'images/' . h($fileName) . '?v=' . @filemtime($imagesDir . $fileName);
+
+    // 2️⃣ Check uploads/figures/
+    if (is_file($figureDirAbs . $fileName)) {
+        return $figureDirRel . h($fileName) . '?v=' . @filemtime($figureDirAbs . $fileName);
     }
+
+    // 3️⃣ Check images/
+    if (is_file($imagesDirAbs . $fileName)) {
+        return 'images/' . h($fileName);
+    }
+
+    // Not found
     return '';
 }
+
 
 /* ========= 1) quizID ========= */
 $quizID = filter_input(INPUT_GET, 'quizID', FILTER_VALIDATE_INT);
