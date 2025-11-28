@@ -2,11 +2,13 @@
 // Start session and security check
 session_start();
 
-// Security check: Only logged-in learners can access this page
-if(!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'learner' || !isset($_SESSION['user_id'])) {
-    header("Location: index.html");
-    exit();
+//  Security: Only logged-in learners can access this page
+if (!isset($_SESSION['user_id']) || ($_SESSION['user_type'] ?? '') !== 'learner') {
+    $_SESSION['login_error'] = "You must log in as a learner.";
+    header("Location: login.php");
+    exit;
 }
+
 
 // Database connection configuration
 $host = 'localhost';
